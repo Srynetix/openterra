@@ -25,7 +25,7 @@ namespace Tiles
             // Get fg tile
             var thisPosition = World.GetTileCurrentGridPosition(this);
             var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.ForegroundOnly);
-            if (fgTile != null)
+            if (fgTile != null && fgTile.Warpable)
             {
                 var tWrap = GetTargetWarp(fgTile.NextDirection);
                 if (tWrap != null)

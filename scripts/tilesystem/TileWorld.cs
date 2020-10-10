@@ -201,6 +201,7 @@ namespace Tiles
         public void SpawnExplosionAtTile(Tile tile)
         {
             var cellPosition = GetTileCurrentGridPosition(tile);
+            tile.Updated = true;
             RemoveTile(tile);
 
             // Spawn explosion
@@ -226,6 +227,8 @@ namespace Tiles
                     }
                     else
                     {
+                        tTile.Destroyed = true;
+                        tTile.Updated = true;
                         RemoveTile(tTile);
                     }
                 }
@@ -325,7 +328,7 @@ namespace Tiles
         {
             foreach (Tile tile in tiles)
             {
-                if (tile.MoveState == Tile.State.WillMove)
+                if (tile.MoveState == Tile.State.WillMove && !tile.Destroyed)
                 {
                     tile.Move();
                 }
@@ -336,7 +339,7 @@ namespace Tiles
         {
             foreach (Tile tile in tiles)
             {
-                if (!tile.Updated)
+                if (!tile.Updated && !tile.Destroyed)
                 {
                     tile.Step();
                     tile.Updated = true;

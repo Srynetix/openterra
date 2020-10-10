@@ -17,6 +17,7 @@ namespace Tiles
                 "Egg" => new EggTile(),
                 "Dirt" => new DirtTile(),
                 "Wall" => new WallTile(),
+                "Dynamite" => new DynamiteTile(),
                 "Hint" => new HintTile(),
                 "MarbleFloor" => new MarbleFloorTile(),
                 "RoundedWall" => new RoundedWallTile(),

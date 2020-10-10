@@ -110,7 +110,9 @@ namespace Tiles
         public int WillExplodeAtTick = -1;
 
         public bool Picked;
+        public bool Destroyed;
         public int Priority;
+        public bool Warpable;
 
         /// <summary>Step ticks</summary>
         public int StepTicks = 10;
@@ -320,7 +322,10 @@ namespace Tiles
             TargetPosition = newTargetPosition;
             MoveState = State.Stopped;
             World.UpdateTilePosition(this);
+            EndMoveCallback();
         }
+
+        public virtual void EndMoveCallback() {}
 
         public virtual string GenerateTileDebugInfo(CollisionStatus status)
         {
@@ -346,6 +351,7 @@ namespace Tiles
         public StaticTile()
         {
             Movable = false;
+            Warpable = false;
         }
     }
 

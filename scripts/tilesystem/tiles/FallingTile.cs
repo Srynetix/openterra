@@ -7,6 +7,7 @@ namespace Tiles
     {
         public FallingTile()
         {
+            Warpable = true;
             CanFall = true;
             Movable = true;
             CanRotate = true;

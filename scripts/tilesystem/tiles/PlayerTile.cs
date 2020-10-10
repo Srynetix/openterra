@@ -8,6 +8,7 @@ namespace Tiles
         public PlayerTile()
         {
             Player = true;
+            Warpable = true;
         }
 
         public override void _Ready()
@@ -106,6 +107,24 @@ namespace Tiles
             }
 
             return false;
+        }
+
+        public override void EndMoveCallback()
+        {
+            if (Input.IsActionPressed("player_bomb")) {
+                var invDir = GetInvertedDirection();
+                if (invDir != Direction.None) {
+                    var tPos = World.GetNeighborPosition(this, invDir);
+                    var tTile = World.GetTileAtGridPosition(tPos);
+                    if (tTile == null) {
+                        // Spawn bomb
+                        var idx = World.TileMap.TileSet.FindTileByName("Dynamite");
+                        var bomb = (DynamiteTile)World.CreateTile(idx, tPos);
+                        bomb.Armed = true;
+                        bomb.ExplodeAtTick = World.GameTicks + 8;
+                    }
+                }
+            }
         }
 
         public override void Step()
