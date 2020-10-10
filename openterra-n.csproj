@@ -1,0 +1,8 @@
+﻿<Project Sdk="Godot.NET.Sdk/3.2.3">
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>./global.ruleset</CodeAnalysisRuleSet>
+    <RootNamespace>openterra</RootNamespace>
+    <AssemblyName>openterra-n</AssemblyName>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+</Project>

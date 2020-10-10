@@ -1,0 +1,66 @@
+{
+    "Dirt": {
+        "attributes": [
+            "is_pickable"
+        ]
+    },
+    "Egg": {
+        "attributes": [
+            "can_fall",
+            "make_roll"
+        ]
+    },
+    "Rock": {
+        "attributes": [
+            "can_fall",
+            "make_roll",
+            "is_heavy",
+            "is_pushable"
+        ]
+    },
+    "Spider": {
+        "attributes": [
+            "can_explode",
+            "can_detect"
+        ]
+    },
+    "Sapphire": {
+        "attributes": [
+            "can_fall",
+            "is_pickable",
+            "make_roll"
+        ]
+    },
+    "Emerald": {
+        "attributes": [
+            "can_fall",
+            "is_pickable",
+            "make_roll"
+        ]
+    },
+    "Ruby": {
+        "attributes": [
+            "can_fall",
+            "is_pickable",
+            "is_fragile",
+            "make_roll"
+        ]
+    },
+    "Wall": {
+        "attributes": [
+            "is_immovable"
+        ]
+    },
+    "RoundedWall": {
+        "attributes": [
+            "is_immovable",
+            "make_roll"
+        ]
+    },
+    "Player1": {
+        "attributes": [
+            "can_explode",
+            "is_player"
+        ]
+    }
+}
