@@ -1,4 +1,5 @@
 using Godot;
+using System.Text;
 
 namespace Tiles
 {
@@ -225,9 +226,14 @@ namespace Tiles
             WarpTarget = target;
         }
 
-        public void WillExplode()
+        public void WillExplode(int when = -1)
         {
-            WillExplodeAtTick = World.GameTicks + 1;
+            if (when == -1)
+            {
+                when = World.GameTicks + 1;
+            }
+
+            WillExplodeAtTick = when;
         }
 
         public void Explode()
@@ -325,7 +331,7 @@ namespace Tiles
             EndMoveCallback();
         }
 
-        public virtual void EndMoveCallback() {}
+        public virtual void EndMoveCallback() { }
 
         public virtual string GenerateTileDebugInfo(CollisionStatus status)
         {
@@ -433,6 +439,13 @@ namespace Tiles
         public RoundedWallTile()
         {
             RollDirection = RollDirectionEnum.Both;
+        }
+
+        public override string GenerateTileDebugInfo(CollisionStatus status)
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("* Roll direction: {0}\n", DebugDrawUtils.ShowWithColor(RollDirection, Colors.Yellow));
+            return sb.ToString();
         }
     }
 

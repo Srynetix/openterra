@@ -1,4 +1,5 @@
 using Godot;
+using System.Text;
 
 namespace Tiles
 {
@@ -77,7 +78,7 @@ namespace Tiles
                 return;
             }
 
-            var source = _targetPosition - World.GetDirectionVector(NextDirection) * World.TileMap.CellSize.x;
+            var source = _targetPosition - (World.GetDirectionVector(NextDirection) * World.TileMap.CellSize.x);
             float weight = (float)_currentTick / (float)StepTicks;
             Position = source.LinearInterpolate(_targetPosition, weight);
             _currentTick = Mathf.Clamp(_currentTick + 1, 0, StepTicks);
@@ -87,6 +88,13 @@ namespace Tiles
             {
                 _hasExpanded = true;
             }
+        }
+
+        public override string GenerateTileDebugInfo(CollisionStatus status)
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("* Extension direction: {0}\n", DebugDrawUtils.ShowWithColor(ExtensionDirection, Colors.Yellow));
+            return sb.ToString();
         }
     }
 }

@@ -160,6 +160,17 @@ namespace Tiles
             sb.AppendFormat("* State:           {0}\n", DebugDrawUtils.ShowTileState(tile.MoveState));
             sb.AppendFormat("* Direction:       {0}\n", DebugDrawUtils.ShowTileDirection(tile.NextDirection));
             sb.Append(GenerateCollisionDebugInfo(status));
+
+            // Explosion info
+            if (tile.CanExplode && tile.WillExplodeAtTick != -1)
+            {
+                sb.AppendFormat(
+                    "{0} {1}\n",
+                    DebugDrawUtils.ShowWithColor("* Will explode at tick: ", Colors.Red),
+                    DebugDrawUtils.ShowWithColor(tile.WillExplodeAtTick + 1, Colors.Red)
+                );
+            }
+
             sb.Append(tile.GenerateTileDebugInfo(status));
             return sb.ToString();
         }
@@ -176,19 +187,36 @@ namespace Tiles
 
         public override void _UnhandledInput(InputEvent @event)
         {
-            if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && (mouseEvent.ButtonIndex == (int)ButtonList.Left || mouseEvent.ButtonIndex == (int)ButtonList.Right))
+            if (@event is InputEventMouseButton mouseEvent && mouseEvent.Pressed && (mouseEvent.ButtonIndex == (int)ButtonList.Left))
             {
                 // Offset camera coordinates
                 var camera = _world.Camera;
                 var topLeftPosition = camera.GetCameraScreenCenter() - (GetViewportRect().Size / 2);
                 var tilePosition = _world.TileMap.WorldToMap(mouseEvent.Position + topLeftPosition);
-                var pickMode = TilePickEnum.ForegroundFirst;
-                if (mouseEvent.ButtonIndex == (int)ButtonList.Right)
-                {
-                    pickMode = TilePickEnum.BackgroundOnly;
-                }
 
-                SetCurrentDebugTile(_world.GetTileAtGridPosition(tilePosition, pickMode));
+                var tFgTile = _world.GetTileAtGridPosition(tilePosition, TilePickEnum.ForegroundOnly);
+                var tBgTile = _world.GetTileAtGridPosition(tilePosition, TilePickEnum.BackgroundOnly);
+
+                if (CurrentDebugTile == tFgTile && tBgTile != null)
+                {
+                    SetCurrentDebugTile(tBgTile);
+                }
+                else if (CurrentDebugTile == tBgTile && tFgTile != null)
+                {
+                    SetCurrentDebugTile(tFgTile);
+                }
+                else if (tFgTile != null)
+                {
+                    SetCurrentDebugTile(tFgTile);
+                }
+                else if (tBgTile != null)
+                {
+                    SetCurrentDebugTile(tBgTile);
+                }
+                else
+                {
+                    SetCurrentDebugTile(null);
+                }
             }
         }
 

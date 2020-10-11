@@ -46,14 +46,19 @@ namespace Tiles
             get => _camera;
         }
 
+        public PlayerInputHandler PlayerInput
+        {
+            get => _playerInput;
+        }
+
+        public VirtualKeyboard VKeyboard;
+
         private int _physicsTicks;
         private int _gameTicks;
         private bool _running;
         private TileWorldDebugDraw _debugDraw;
         private TileCamera _camera;
-        private Button _pauseButton;
-        private Button _stepButton;
-        private Button _restartButton;
+        private PlayerInputHandler _playerInput;
 
         private Vector2 _gridSize;
         private Tile[,] _backgroundTiles;
@@ -100,46 +105,24 @@ namespace Tiles
             _camera.Paused = !_running;
             _camera.ScanPlayers();
 
-            // GUI
-            var guiCanvasLayer = new CanvasLayer();
-            guiCanvasLayer.Name = "GUICanvasLayer";
-            AddChild(guiCanvasLayer);
-
-            var hbox = new HBoxContainer();
-            hbox.Alignment = BoxContainer.AlignMode.End;
-            hbox.AnchorRight = 1;
-            hbox.MouseFilter = Control.MouseFilterEnum.Ignore;
-            hbox.Set("custom_constants/separation", 10);
-
-            var buttonFont = Assets.SimpleDefaultFont.Monospace.CloneWithSize(16);
-            _restartButton = new Button();
-            _restartButton.Name = "RestartButton";
-            _restartButton.Text = "Restart (Return)";
-            _restartButton.AddFontOverride("font", buttonFont);
-            _restartButton.Connect("pressed", this, nameof(RestartLevel));
-
-            _pauseButton = new Button();
-            _pauseButton.Name = "PauseButton";
-            _pauseButton.Text = "Pause (F5)";
-            _pauseButton.AddFontOverride("font", buttonFont);
-            _pauseButton.Connect("pressed", this, nameof(DebugToggleRun));
-
-            _stepButton = new Button();
-            _stepButton.Name = "StepButton";
-            _stepButton.Text = "Step (F7)";
-            _stepButton.AddFontOverride("font", buttonFont);
-            _stepButton.Connect("pressed", this, nameof(DebugStepForward));
-            hbox.AddChild(_restartButton);
-            hbox.AddChild(_pauseButton);
-            hbox.AddChild(_stepButton);
-            guiCanvasLayer.AddChild(hbox);
-
             // Debug draw
             var canvasLayer = new CanvasLayer();
             canvasLayer.Name = "DebugDrawCanvasLayer";
             AddChild(canvasLayer);
             _debugDraw = new TileWorldDebugDraw(this);
             canvasLayer.AddChild(_debugDraw);
+
+            // Connect virtual keyboard
+            VKeyboard = (VirtualKeyboard)GD.Load<PackedScene>("res://ui/VirtualKeyboard.tscn").Instance();
+            VKeyboard.Connect(nameof(VirtualKeyboard.RestartPressed), this, nameof(RestartLevel));
+            VKeyboard.Connect(nameof(VirtualKeyboard.PausePressed), this, nameof(DebugToggleRun));
+            VKeyboard.Connect(nameof(VirtualKeyboard.StepPressed), this, nameof(DebugStepForward));
+            VKeyboard.Connect(nameof(VirtualKeyboard.DebugDrawToggled), this, nameof(DebugToggleDebugDraw));
+            AddChild(VKeyboard);
+
+            // Connect player input
+            _playerInput = new PlayerInputHandler(this);
+            AddChild(_playerInput);
         }
 
         private void UnsetTileAtPosition(Tile tile, Vector2 pos)
@@ -212,28 +195,35 @@ namespace Tiles
             foreach (Tile.Direction dir in Tile.AllDirections)
             {
                 var tPos = GetNeighborPosition(eTile, dir);
-                var tTile = GetTileAtGridPosition(tPos);
-                if (tTile != null)
+                var tTiles = ListTilesAtGridPosition(tPos);
+                bool shouldCreateTile = true;
+
+                if (tTiles.Count > 0)
                 {
-                    if (tTile.Indestructible || tTile.Type == "Explosion" || tTile.WillExplodeAtTick > 0)
+                    foreach (Tile tTile in tTiles)
                     {
-                        // Ignore
-                        continue;
-                    }
-                    else if (tTile.CanExplode)
-                    {
-                        tTile.WillExplode();
-                        continue;
-                    }
-                    else
-                    {
-                        tTile.Destroyed = true;
-                        tTile.Updated = true;
-                        RemoveTile(tTile);
+                        if (tTile.Indestructible || tTile.Type == "Explosion" || tTile.WillExplodeAtTick > 0)
+                        {
+                            shouldCreateTile = false;
+                        }
+                        else if (tTile.CanExplode)
+                        {
+                            tTile.WillExplode();
+                            shouldCreateTile = false;
+                        }
+                        else
+                        {
+                            tTile.Destroyed = true;
+                            tTile.Updated = true;
+                            RemoveTile(tTile);
+                        }
                     }
                 }
 
-                CreateTile(explosionIdx, tPos);
+                if (shouldCreateTile)
+                {
+                    CreateTile(explosionIdx, tPos);
+                }
             }
         }
 
@@ -460,8 +450,20 @@ namespace Tiles
             return null;
         }
 
+        public List<Tile> ListTilesAtGridPosition(Vector2 gridPosition)
+        {
+            var tiles = new List<Tile>();
+            var fgTile = GetTileAtGridPosition(gridPosition, TilePickEnum.ForegroundOnly);
+            var bgTile = GetTileAtGridPosition(gridPosition, TilePickEnum.BackgroundOnly);
+
+            if (fgTile != null) tiles.Add(fgTile);
+            if (bgTile != null) tiles.Add(bgTile);
+            return tiles;
+        }
+
         public void DebugStepForward()
         {
+            Running = false;
             GameStep();
             _gameTicks++;
         }
@@ -469,6 +471,13 @@ namespace Tiles
         public void DebugToggleRun()
         {
             Running = !Running;
+        }
+
+        public void DebugToggleDebugDraw(bool pressed)
+        {
+            _debugDraw.Visible = pressed;
+            _debugDraw.SetProcess(pressed);
+            _debugDraw.SetProcessUnhandledInput(pressed);
         }
 
         public void RestartLevel()
@@ -524,8 +533,7 @@ namespace Tiles
 
             if (Input.IsActionJustPressed("debug_toggle_info"))
             {
-                _debugDraw.Visible = !_debugDraw.Visible;
-                _debugDraw.SetProcess(!_debugDraw.IsProcessing());
+                DebugToggleDebugDraw(!_debugDraw.Visible);
             }
 
             if (Input.IsActionJustPressed("debug_toggle_run"))

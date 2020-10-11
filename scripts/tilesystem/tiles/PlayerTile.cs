@@ -1,4 +1,3 @@
-using Godot;
 using System.Text;
 
 namespace Tiles
@@ -9,6 +8,7 @@ namespace Tiles
         {
             Player = true;
             Warpable = true;
+            CanExplode = true;
         }
 
         public override void _Ready()
@@ -111,17 +111,19 @@ namespace Tiles
 
         public override void EndMoveCallback()
         {
-            if (Input.IsActionPressed("player_bomb")) {
+            if (World.PlayerInput.Bomb.Pressed)
+            {
                 var invDir = GetInvertedDirection();
-                if (invDir != Direction.None) {
+                if (invDir != Direction.None)
+                {
                     var tPos = World.GetNeighborPosition(this, invDir);
                     var tTile = World.GetTileAtGridPosition(tPos);
-                    if (tTile == null) {
+                    if (tTile == null)
+                    {
                         // Spawn bomb
                         var idx = World.TileMap.TileSet.FindTileByName("Dynamite");
                         var bomb = (DynamiteTile)World.CreateTile(idx, tPos);
-                        bomb.Armed = true;
-                        bomb.ExplodeAtTick = World.GameTicks + 8;
+                        bomb.WillExplode(World.GameTicks + 8);
                     }
                 }
             }
@@ -132,24 +134,24 @@ namespace Tiles
             base.Step();
 
             Direction playerDirection = Direction.None;
-            if (Input.IsActionPressed("player_right"))
+            if (World.PlayerInput.Right.Pressed)
             {
                 playerDirection = Direction.Right;
             }
-            else if (Input.IsActionPressed("player_left"))
+            else if (World.PlayerInput.Left.Pressed)
             {
                 playerDirection = Direction.Left;
             }
-            else if (Input.IsActionPressed("player_up"))
+            else if (World.PlayerInput.Up.Pressed)
             {
                 playerDirection = Direction.Up;
             }
-            else if (Input.IsActionPressed("player_down"))
+            else if (World.PlayerInput.Down.Pressed)
             {
                 playerDirection = Direction.Down;
             }
 
-            if (Input.IsActionPressed("player_die"))
+            if (World.PlayerInput.Explode.Pressed)
             {
                 Explode();
                 return;
@@ -163,7 +165,10 @@ namespace Tiles
                 {
                     if (CanGoLeft(status))
                     {
-                        WillMoveTowards(Direction.Left);
+                        if (!World.PlayerInput.Action.Pressed)
+                        {
+                            WillMoveTowards(Direction.Left);
+                        }
 
                         if (status.left?.Pickable == true)
                         {
@@ -175,14 +180,21 @@ namespace Tiles
                         var leftTile = status.left;
                         leftTile.WillMoveTowards(Direction.Left);
                         leftTile.Updated = true;
-                        WillMoveTowards(Direction.Left);
+
+                        if (!World.PlayerInput.Action.Pressed)
+                        {
+                            WillMoveTowards(Direction.Left);
+                        }
                     }
                 }
                 else if (playerDirection == Direction.Right)
                 {
                     if (CanGoRight(status))
                     {
-                        WillMoveTowards(Direction.Right);
+                        if (!World.PlayerInput.Action.Pressed)
+                        {
+                            WillMoveTowards(Direction.Right);
+                        }
 
                         if (status.right?.Pickable == true)
                         {
@@ -194,14 +206,21 @@ namespace Tiles
                         var rightTile = status.right;
                         rightTile.WillMoveTowards(Direction.Right);
                         rightTile.Updated = true;
-                        WillMoveTowards(Direction.Right);
+
+                        if (!World.PlayerInput.Action.Pressed)
+                        {
+                            WillMoveTowards(Direction.Right);
+                        }
                     }
                 }
                 else if (playerDirection == Direction.Up)
                 {
                     if (CanGoUp(status))
                     {
-                        WillMoveTowards(Direction.Up);
+                        if (!World.PlayerInput.Action.Pressed)
+                        {
+                            WillMoveTowards(Direction.Up);
+                        }
 
                         if (status.top?.Pickable == true)
                         {
@@ -213,14 +232,21 @@ namespace Tiles
                         var topTile = status.top;
                         topTile.WillMoveTowards(Direction.Up);
                         topTile.Updated = true;
-                        WillMoveTowards(Direction.Up);
+
+                        if (!World.PlayerInput.Action.Pressed)
+                        {
+                            WillMoveTowards(Direction.Up);
+                        }
                     }
                 }
                 else if (playerDirection == Direction.Down)
                 {
                     if (CanGoDown(status))
                     {
-                        WillMoveTowards(Direction.Down);
+                        if (!World.PlayerInput.Action.Pressed)
+                        {
+                            WillMoveTowards(Direction.Down);
+                        }
 
                         if (status.bottom?.Pickable == true)
                         {
@@ -232,7 +258,11 @@ namespace Tiles
                         var bottomTile = status.bottom;
                         bottomTile.WillMoveTowards(Direction.Down);
                         bottomTile.Updated = true;
-                        WillMoveTowards(Direction.Down);
+
+                        if (!World.PlayerInput.Action.Pressed)
+                        {
+                            WillMoveTowards(Direction.Down);
+                        }
                     }
                 }
             }
