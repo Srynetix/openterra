@@ -11,7 +11,7 @@ public static class FontAwesomeWrapper
         if (_loaded) return;
 
         var f = new File();
-        var err = f.Open("res://assets/fonts/fontawesome-icons.json", File.ModeFlags.Read);
+        var err = f.Open("res://addons/fontawesome/assets/fontawesome-icons.json", File.ModeFlags.Read);
         if (err != Error.Ok)
         {
             GD.PrintErr("Error while loading fontawesome file: ", err);

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://ui/IconTouchButton.cs" type="Script" id=1]
-[ext_resource path="res://resources/FontAwesome.tres" type="DynamicFont" id=2]
+[ext_resource path="res://addons/fontawesome/nodes/IconTouchButton.cs" type="Script" id=1]
+[ext_resource path="res://addons/fontawesome/resources/FontAwesome.tres" type="DynamicFont" id=2]
 
 [node name="IconTouchButton" type="Panel"]
 anchor_right = 1.0
