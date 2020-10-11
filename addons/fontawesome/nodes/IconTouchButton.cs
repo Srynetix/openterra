@@ -20,6 +20,22 @@ public class IconTouchButton : Panel
     private string _text = "";
     private int _touchIndex = -1;
 
+    public override void _Ready()
+    {
+        RectMinSize = new Vector2(96, 96);
+        SetAnchorsAndMarginsPreset(LayoutPreset.Wide);
+
+        _label = new Label()
+        {
+            Align = Label.AlignEnum.Center,
+            Valign = Label.VAlign.Center
+        };
+        _label.AddFontOverride("font", (DynamicFont)GD.Load("res://addons/fontawesome/resources/FontAwesome32px.tres"));
+        AddChild(_label);
+        _label.SetAnchorsAndMarginsPreset(LayoutPreset.Wide);
+        UpdateLabel();
+    }
+
     public override void _Input(InputEvent @event)
     {
         if (@event is InputEventScreenTouch screenTouch)
@@ -42,18 +58,13 @@ public class IconTouchButton : Panel
         return new Rect2(RectGlobalPosition, RectSize).HasPoint(position);
     }
 
-    public override void _Ready()
-    {
-        _label = GetNode<Label>("Label");
-    }
-
     public override void _Process(float delta)
     {
         UpdateLabel();
 
         if (Pressed)
         {
-            Modulate = Colors.Black;
+            Modulate = Colors.DarkGray;
         }
         else
         {

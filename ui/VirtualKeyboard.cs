@@ -33,7 +33,7 @@ public class VirtualKeyboard : CanvasLayer
         GetNode<CheckButton>("Main/MenuButtons/Col/BottomRow/DebugDrawButton").Connect("toggled", this, nameof(OnDebugDrawToggled));
 
         // Hide arrow and action keys on non-mobile platforms
-        if (!OS.GetName().Match("Android|iOS"))
+        if (OS.GetName() != "Android" && OS.GetName() != "iOS")
         {
             GetNode<Control>("Main/ArrowButtons").Visible = false;
             GetNode<Control>("Main/ActionButtons").Visible = false;
