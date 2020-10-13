@@ -22,5 +22,21 @@ namespace Tiles
             bottomLeft = null;
             bottomRight = null;
         }
+
+        public Tile GetTileAtDirection(Tile.Direction direction)
+        {
+            return direction switch
+            {
+                Tile.Direction.Left => left,
+                Tile.Direction.Up => top,
+                Tile.Direction.Right => right,
+                Tile.Direction.Down => bottom,
+                Tile.Direction.UpLeft => topLeft,
+                Tile.Direction.UpRight => topRight,
+                Tile.Direction.DownLeft => bottomLeft,
+                Tile.Direction.DownRight => bottomRight,
+                _ => null
+            };
+        }
     }
 }

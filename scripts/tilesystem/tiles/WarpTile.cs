@@ -25,7 +25,7 @@ namespace Tiles
             // Get fg tile
             var thisPosition = World.GetTileCurrentGridPosition(this);
             var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.ForegroundOnly);
-            if (fgTile != null && fgTile.Warpable)
+            if (fgTile?.Warpable == true && fgTile.WarpTarget == null && !fgTile.WillExplodeSoon())
             {
                 var tWrap = GetTargetWarp(fgTile.NextDirection);
                 if (tWrap != null)
@@ -36,10 +36,17 @@ namespace Tiles
                 }
                 else
                 {
-                    // Go back
-                    var invertedDirection = fgTile.GetInvertedDirection();
-                    fgTile.WillMoveTowards(invertedDirection);
-                    fgTile.Updated = true;
+                    // Destroy or explode
+                    if (fgTile.CanExplode)
+                    {
+                        fgTile.WillExplode();
+                        fgTile.Updated = true;
+                    }
+                    else
+                    {
+                        fgTile.Pick();
+                        fgTile.Updated = true;
+                    }
                 }
             }
         }
@@ -52,33 +59,32 @@ namespace Tiles
 
         public WarpTile GetTargetWarp(Direction direction)
         {
-            var tiles = GetTree().GetNodesInGroup("warps");
-            var minPosition = float.MaxValue;
-            WarpTile minTile = null;
-
-            foreach (WarpTile tile in tiles)
+            var nextTilePosition = World.GetTileCurrentGridPosition(this);
+            while (true)
             {
-                if (tile == this)
+                WarpTile nextTile = (WarpTile)World.ScanNextTileOfType(nextTilePosition, Type);
+                nextTilePosition = World.GetTileCurrentGridPosition(nextTile);
+                if (nextTile == this)
                 {
-                    // Ignore self
+                    break;
+                }
+
+                var collisionStatus = World.GetTileCollisions(nextTile);
+                if (!nextTile.HasNeighbor(collisionStatus, direction))
+                {
                     continue;
                 }
 
-                var tileStatus = World.GetTileCollisions(tile);
-                if (!tile.CanGoTowards(tileStatus, direction))
-                {
-                    continue;
-                }
-
-                var dist = Position.DistanceSquaredTo(tile.Position);
-                if (dist < minPosition)
-                {
-                    minPosition = dist;
-                    minTile = tile;
-                }
+                return nextTile;
             }
 
-            return minTile;
+            var thisCollisionStatus = World.GetTileCollisions(this);
+            if (HasNeighbor(thisCollisionStatus, direction))
+            {
+                return this;
+            }
+
+            return null;
         }
     }
 }

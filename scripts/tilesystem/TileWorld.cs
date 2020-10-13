@@ -227,6 +227,51 @@ namespace Tiles
             }
         }
 
+        public Tile ScanNextTileOfType(Vector2 tilePosition, string tileType)
+        {
+            // Scan next tile of type from position
+            int tSize = (int)(_gridSize.x * _gridSize.y);
+            int sIdx = (int)(tilePosition.x + (tilePosition.y * _gridSize.x));
+            for (int i = sIdx + 1; i < tSize; ++i)
+            {
+                int tX = i % (int)_gridSize.x;
+                int tY = i / (int)_gridSize.x;
+
+                var bgTile = _backgroundTiles[tY, tX];
+                if (bgTile?.Type == tileType)
+                {
+                    return bgTile;
+                }
+
+                var fgTile = _foregroundTiles[tY, tX];
+                if (fgTile?.Type == tileType)
+                {
+                    return fgTile;
+                }
+            }
+
+            // Rewind
+            for (int i = 0; i <= sIdx; ++i)
+            {
+                int tX = i % (int)_gridSize.x;
+                int tY = i / (int)_gridSize.x;
+
+                var bgTile = _backgroundTiles[tY, tX];
+                if (bgTile?.Type == tileType)
+                {
+                    return bgTile;
+                }
+
+                var fgTile = _foregroundTiles[tY, tX];
+                if (fgTile?.Type == tileType)
+                {
+                    return fgTile;
+                }
+            }
+
+            return null;
+        }
+
         public void UpdateTilePosition(Tile tile)
         {
             // Use previous index
@@ -331,7 +376,7 @@ namespace Tiles
             {
                 if (!tile.Updated && !tile.Destroyed)
                 {
-                    tile.Step();
+                    if (tile.PreStep()) tile.Step();
                     tile.Updated = true;
                 }
             }

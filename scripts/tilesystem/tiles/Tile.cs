@@ -196,8 +196,7 @@ namespace Tiles
             _currentTick = 0;
         }
 
-
-        public bool CanGoTowards(CollisionStatus status, Direction direction)
+        public bool HasNeighbor(CollisionStatus status, Direction direction)
         {
             return direction switch
             {
@@ -224,6 +223,11 @@ namespace Tiles
         {
             MoveState = State.WillMove;
             WarpTarget = target;
+        }
+
+        public bool WillExplodeSoon()
+        {
+            return WillExplodeAtTick != -1;
         }
 
         public void WillExplode(int when = -1)
@@ -261,13 +265,21 @@ namespace Tiles
             NextDirection = Direction.None;
         }
 
-        public virtual void Step()
+        public virtual bool PreStep()
         {
+            // Explosion check
             if (WillExplodeAtTick == World.GameTicks)
             {
                 Explode();
                 WillExplodeAtTick = -1;
+                return false;
             }
+
+            return true;
+        }
+
+        public virtual void Step()
+        {
         }
 
         public virtual void Pick()
@@ -340,7 +352,7 @@ namespace Tiles
 
         public override void _Process(float delta)
         {
-            float weight = (float)_currentTick / (float)StepTicks;
+            float weight = _currentTick / (float)StepTicks;
             Position = _sourcePosition.LinearInterpolate(_targetPosition, weight);
             Rotation = Mathf.Lerp(_sourceRotation, _targetRotation, weight);
             _currentTick = Mathf.Clamp(_currentTick + 1, 0, StepTicks);
