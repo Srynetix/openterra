@@ -5,7 +5,7 @@ namespace Tiles
 {
     public class FallingTile : Tile
     {
-        private bool _wasFalling = false;
+        private int _fallTicks;
 
         public FallingTile()
         {
@@ -44,6 +44,7 @@ namespace Tiles
             sb.AppendFormat("* Can go down:    {0}\n", DebugDrawUtils.ShowBool(CanGoUp(status)));
             sb.AppendFormat("* Can roll left:  {0}\n", DebugDrawUtils.ShowBool(CanRollLeft(status)));
             sb.AppendFormat("* Can roll right: {0}\n", DebugDrawUtils.ShowBool(CanRollRight(status)));
+            sb.AppendFormat("* Fall ticks:     {0}\n", DebugDrawUtils.ShowWithColor(_fallTicks, Colors.Yellow));
             return sb.ToString();
         }
 
@@ -57,10 +58,10 @@ namespace Tiles
 
             if (canGoDown)
             {
-                _wasFalling = true;
+                _fallTicks++;
                 WillMoveTowards(Direction.Down);
             }
-            else if (!canGoDown && _wasFalling)
+            else if (!canGoDown && _fallTicks > 0)
             {
                 // Hit
                 if (!IsLightweight)
@@ -68,32 +69,31 @@ namespace Tiles
                     var bottomTile = status.GetTileAtDirection(Direction.Down);
                     if (bottomTile.CanExplode)
                     {
-                        bottomTile.WillExplode();
-                        bottomTile.Updated = true;
+                        bottomTile.Explode();
                     }
                     else if (IsHeavy && bottomTile.IsFragile)
                     {
                         // Crush
                         bottomTile.Pick();
-                        bottomTile.Updated = true;
+                        WillMoveTowards(Direction.Down);
                     }
                 }
 
-                _wasFalling = false;
+                _fallTicks = 0;
             }
             else if (CanRollLeft(status))
             {
-                _wasFalling = false;
+                _fallTicks = 0;
                 WillMoveTowards(Direction.Left);
             }
             else if (CanRollRight(status))
             {
-                _wasFalling = false;
+                _fallTicks = 0;
                 WillMoveTowards(Direction.Right);
             }
             else
             {
-                _wasFalling = false;
+                _fallTicks = 0;
                 Stop();
             }
         }

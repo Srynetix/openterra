@@ -45,7 +45,7 @@ namespace Tiles
             else if (CanPushUp())
             {
                 var topTile = World.GetNeighborTile(this, Direction.Up);
-                topTile.WillBePushedTowards(Direction.Up);
+                topTile.PushTowards(Direction.Up);
 
                 WillMoveTowards(Direction.Up);
                 return true;

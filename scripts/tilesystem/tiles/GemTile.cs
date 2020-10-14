@@ -10,6 +10,11 @@ namespace Tiles
         {
             Pickable = true;
         }
+
+        public override void BeforePick()
+        {
+            World.PInventory.AddGems(Value);
+        }
     }
 
     public class RubyTile : GemTile

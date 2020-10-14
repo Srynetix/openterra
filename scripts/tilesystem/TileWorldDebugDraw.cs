@@ -74,7 +74,6 @@ namespace Tiles
 
     public class TileWorldDebugDraw : Control
     {
-
         public Tile CurrentDebugTile;
 
         private readonly TileWorld _world;
@@ -83,8 +82,8 @@ namespace Tiles
 
         public TileWorldDebugDraw(TileWorld world)
         {
-            _world = world;
             Name = "TileWorldDebugDraw";
+            _world = world;
             MouseFilter = MouseFilterEnum.Ignore;
         }
 

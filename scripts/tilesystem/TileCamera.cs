@@ -12,8 +12,8 @@ namespace Tiles
 
         public TileCamera(TileWorld world)
         {
-            _world = world;
             Name = "TileCamera";
+            _world = world;
             LimitLeft = 0;
             LimitTop = 0;
             SmoothingEnabled = true;

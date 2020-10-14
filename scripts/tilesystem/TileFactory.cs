@@ -29,6 +29,16 @@ namespace Tiles
                 "YellowKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Yellow },
                 "RedKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Red },
                 "BlueKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Blue },
+                // Doors
+                "GreenDoor" => new DoorTile() { KeyColor = KeyTile.KeyColorEnum.Green },
+                "YellowDoor" => new DoorTile() { KeyColor = KeyTile.KeyColorEnum.Yellow },
+                "RedDoor" => new DoorTile() { KeyColor = KeyTile.KeyColorEnum.Red },
+                "BlueDoor" => new DoorTile() { KeyColor = KeyTile.KeyColorEnum.Blue },
+                // Gates
+                "GreenGate" => new GateTile() { KeyColor = KeyTile.KeyColorEnum.Green },
+                "YellowGate" => new GateTile() { KeyColor = KeyTile.KeyColorEnum.Yellow },
+                "RedGate" => new GateTile() { KeyColor = KeyTile.KeyColorEnum.Red },
+                "BlueGate" => new GateTile() { KeyColor = KeyTile.KeyColorEnum.Blue },
                 // Crates
                 "Crate" => new CrateTile(),
                 "CrateLR" => new CrateTile() { PushDirectionLock = Tile.PushDirectionLockEnum.Horizontal },

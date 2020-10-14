@@ -51,6 +51,11 @@ namespace Tiles
             get => _playerInput;
         }
 
+        public PlayerInventory PInventory
+        {
+            get => _playerInventory;
+        }
+
         public VirtualKeyboard VKeyboard;
 
         private int _physicsTicks;
@@ -59,6 +64,7 @@ namespace Tiles
         private TileWorldDebugDraw _debugDraw;
         private TileCamera _camera;
         private PlayerInputHandler _playerInput;
+        private PlayerInventory _playerInventory;
 
         private Vector2 _gridSize;
         private Tile[,] _backgroundTiles;
@@ -127,6 +133,10 @@ namespace Tiles
             // Connect player input
             _playerInput = new PlayerInputHandler(this);
             AddChild(_playerInput);
+
+            // Connect player inventory
+            _playerInventory = (PlayerInventory)GD.Load<PackedScene>("res://ui/PlayerInventory.tscn").Instance();
+            AddChild(_playerInventory);
         }
 
         private void UnsetTileAtPosition(Tile tile, Vector2 pos)
@@ -318,11 +328,13 @@ namespace Tiles
             cellNode.TargetRotation = cellNode.Rotation;
             cellNode.TargetPosition = cellNode.Position;
 
-            var cellSprite = new Sprite();
-            cellSprite.Name = "Sprite";
-            cellSprite.Texture = tex;
-            cellSprite.RegionEnabled = true;
-            cellSprite.RegionRect = tileRect;
+            var cellSprite = new Sprite
+            {
+                Name = "Sprite",
+                Texture = tex,
+                RegionEnabled = true,
+                RegionRect = tileRect
+            };
             cellNode.AddChild(cellSprite);
             TileContainer.AddChild(cellNode);
 

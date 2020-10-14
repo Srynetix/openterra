@@ -56,6 +56,14 @@ namespace Tiles
             Vertical
         }
 
+        public enum KeyColorEnum
+        {
+            Green,
+            Yellow,
+            Blue,
+            Red
+        }
+
         public static Direction[] AllDirections = {
             Direction.Left,
             Direction.Right,
@@ -111,13 +119,14 @@ namespace Tiles
         /// <summary>Next direction.</summary>
         public Direction NextDirection;
 
-        public WarpTile WarpTarget;
+        public Tile WarpTarget;
         public int WillExplodeAtTick = -1;
 
         public bool Picked;
         public bool Destroyed;
         public int Priority;
         public bool Warpable;
+        public bool IsGate;
 
         /// <summary>Step ticks</summary>
         public int StepTicks = 10;
@@ -209,6 +218,36 @@ namespace Tiles
             };
         }
 
+        public virtual bool CanBePicked()
+        {
+            return Pickable;
+        }
+
+        public virtual bool CanBePassedThrough(Tile source, Tile.Direction direction)
+        {
+            if (source.Player && CanBePicked()) return true;
+
+            if (!source.Player)
+            {
+                return PassthroughMode == PassthroughModeEnum.All;
+            }
+
+            return PassthroughMode != PassthroughModeEnum.Nothing;
+        }
+
+        public bool CanFallCheck()
+        {
+            if (!CanFall) return false;
+
+            var neighbor = World.GetNeighborTile(this, Direction.Down);
+            if (neighbor == null)
+            {
+                return true;
+            }
+
+            return neighbor.CanBePassedThrough(this, Direction.Down);
+        }
+
         public virtual bool CanBePushedTowards(Tile pusher, Direction direction)
         {
             if (!Movable)
@@ -220,14 +259,27 @@ namespace Tiles
             var neighbor = World.GetNeighborTile(this, direction);
             if (pusher.Type == "Elevator" && direction == Direction.Up)
             {
-                if (Movable && CanFall && neighbor?.IsLightweight != false)
+                if (Movable && CanFall)
                 {
-                    return true;
+                    if (neighbor != null)
+                    {
+                        return neighbor.CanBePushedTowards(this, direction);
+                    }
+                    else
+                    {
+                        return true;
+                    }
                 }
             }
 
             // Can not push up a tile that can fall, unless its lightweight
             if (direction == Direction.Up && CanFall && !IsLightweight)
+            {
+                return false;
+            }
+
+            // Can not push sides an object that can fall down
+            if ((direction == Direction.Left || direction == Direction.Right) && CanFallCheck())
             {
                 return false;
             }
@@ -245,19 +297,20 @@ namespace Tiles
                     return false;
                 }
 
+                // Check neighbor
                 if (neighbor == null)
                 {
                     return true;
                 }
                 else
                 {
-                    if (!neighbor.IsLightweight)
+                    if (IsLightweight && neighbor.IsLightweight)
                     {
-                        return neighbor.PassthroughMode == PassthroughModeEnum.All;
+                        return neighbor.CanBePushedTowards(this, direction);
                     }
                     else
                     {
-                        return neighbor.CanBePushedTowards(this, direction);
+                        return neighbor.CanBePassedThrough(this, direction);
                     }
                 }
             }
@@ -265,15 +318,15 @@ namespace Tiles
             return false;
         }
 
-        public void WillBePushedTowards(Direction direction)
+        public void PushTowards(Direction direction)
         {
             var neighbor = World.GetNeighborTile(this, direction);
             if (neighbor?.CanBePushedTowards(this, direction) == true)
             {
-                neighbor.WillBePushedTowards(direction);
+                neighbor.PushTowards(direction);
             }
 
-            WillMoveTowards(direction);
+            MoveTowards(direction);
             Updated = true;
         }
 
@@ -282,16 +335,25 @@ namespace Tiles
             return GetNode<Sprite>("Sprite");
         }
 
+        public void MoveTowards(Direction direction)
+        {
+            WillMoveTowards(direction);
+            Move();
+            Updated = true;
+        }
+
         public void WillMoveTowards(Direction direction)
         {
             MoveState = State.WillMove;
             NextDirection = direction;
         }
 
-        public void WillWarpTo(WarpTile target)
+        public void WillWarpTo(Tile target, Direction direction)
         {
             MoveState = State.WillMove;
+            NextDirection = direction;
             WarpTarget = target;
+            Updated = true;
         }
 
         public bool WillExplodeSoon()
@@ -307,11 +369,13 @@ namespace Tiles
             }
 
             WillExplodeAtTick = when;
+            Updated = true;
         }
 
         public void Explode()
         {
             World.SpawnExplosionAtTile(this);
+            Updated = true;
         }
 
         public Direction GetInvertedDirection()
@@ -351,9 +415,12 @@ namespace Tiles
         {
         }
 
+        public virtual void BeforePick() { }
+
         public virtual void Pick()
         {
             Stop();
+            BeforePick();
             Updated = true;
             World.RemoveTile(this);
         }
@@ -368,7 +435,7 @@ namespace Tiles
             if (WarpTarget != null)
             {
                 var tWTile = World.GetNeighborTile(WarpTarget, NextDirection);
-                if (tWTile?.PassthroughMode == PassthroughModeEnum.Nothing)
+                if (tWTile?.CanBePassedThrough(this, NextDirection) == false)
                 {
                     Stop();
                     WarpTarget = null;
@@ -385,7 +452,7 @@ namespace Tiles
             {
                 // Detect tile
                 var tTile = World.GetNeighborTile(this, NextDirection);
-                if (tTile?.PassthroughMode == PassthroughModeEnum.Nothing)
+                if (tTile?.CanBePassedThrough(this, NextDirection) == false)
                 {
                     Stop();
                     return;

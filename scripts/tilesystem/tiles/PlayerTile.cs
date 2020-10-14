@@ -9,6 +9,7 @@ namespace Tiles
             Player = true;
             Warpable = true;
             CanExplode = true;
+            Priority = 2;
         }
 
         public override void _Ready()
@@ -20,7 +21,7 @@ namespace Tiles
         protected bool CanGoTowards(Direction direction)
         {
             var neighbor = World.GetNeighborTile(this, direction);
-            return neighbor?.PassthroughMode != PassthroughModeEnum.Nothing || neighbor?.Pickable != false;
+            return neighbor == null || (neighbor?.CanBePassedThrough(this, direction) == true);
         }
 
         protected bool CanPushTowards(Direction direction)
@@ -88,21 +89,27 @@ namespace Tiles
             {
                 if (CanGoTowards(playerDirection))
                 {
-                    if (!World.PlayerInput.Action.Pressed)
-                    {
-                        WillMoveTowards(playerDirection);
-                    }
-
                     var neighbor = World.GetNeighborTile(this, playerDirection);
-                    if (neighbor?.Pickable == true)
+                    if (neighbor?.CanBePicked() == true)
                     {
                         neighbor?.Pick();
+                    }
+
+                    if (neighbor?.IsGate == true)
+                    {
+                        // Handle warp
+                        WillWarpTo(neighbor, playerDirection);
+                    }
+
+                    if (!World.PlayerInput.Action.Pressed)
+                    {
+                        MoveTowards(playerDirection);
                     }
                 }
                 else if (CanPushTowards(playerDirection))
                 {
                     var tile = World.GetNeighborTile(this, playerDirection);
-                    tile.WillBePushedTowards(playerDirection);
+                    tile.PushTowards(playerDirection);
 
                     if (!World.PlayerInput.Action.Pressed)
                     {

@@ -31,8 +31,7 @@ namespace Tiles
                 if (tWrap != null)
                 {
                     // Send to target warp
-                    fgTile.WillWarpTo(tWrap);
-                    fgTile.Updated = true;
+                    fgTile.WillWarpTo(tWrap, fgTile.NextDirection);
                 }
                 else
                 {
@@ -40,12 +39,10 @@ namespace Tiles
                     if (fgTile.CanExplode)
                     {
                         fgTile.WillExplode();
-                        fgTile.Updated = true;
                     }
                     else
                     {
                         fgTile.Pick();
-                        fgTile.Updated = true;
                     }
                 }
             }

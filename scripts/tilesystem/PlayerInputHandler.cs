@@ -43,6 +43,7 @@ namespace Tiles
 
         public PlayerInputHandler(TileWorld world)
         {
+            Name = "PlayerInputHandler";
             World = world;
 
             // Create keys
