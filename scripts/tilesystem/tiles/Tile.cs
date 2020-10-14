@@ -34,13 +34,6 @@ namespace Tiles
             DownRight
         }
 
-        public enum ExternalAction
-        {
-            None,
-            Pushed,
-            Picked
-        }
-
         public enum RollDirectionEnum
         {
             None,
@@ -54,6 +47,13 @@ namespace Tiles
             Nothing,
             PlayerOnly,
             All
+        }
+
+        public enum PushDirectionLockEnum
+        {
+            None,
+            Horizontal,
+            Vertical
         }
 
         public static Direction[] AllDirections = {
@@ -78,6 +78,10 @@ namespace Tiles
         public bool CanExplode;
         public bool CanRotate;
         public bool Indestructible;
+        public bool IsHeavy;
+        public bool IsLightweight;
+        public bool IsFragile;
+        public PushDirectionLockEnum PushDirectionLock;
 
         /// <summary>Is controlled</summary>
         public bool Controlled;
@@ -144,8 +148,6 @@ namespace Tiles
             }
         }
 
-        public ExternalAction NextExternalAction;
-
         public Vector2 SourcePosition
         {
             get => _sourcePosition;
@@ -173,7 +175,6 @@ namespace Tiles
 
         public TileWorld World { get; set; }
         public bool Updated { get; set; }
-        public Direction PushDirection;
 
         protected Vector2 _sourcePosition;
         protected Vector2 _targetPosition;
@@ -206,6 +207,74 @@ namespace Tiles
                 Direction.Down => status.bottom == null,
                 _ => false,
             };
+        }
+
+        public virtual bool CanBePushedTowards(Tile pusher, Direction direction)
+        {
+            if (!Movable)
+            {
+                return false;
+            }
+
+            // Elevator special case
+            var neighbor = World.GetNeighborTile(this, direction);
+            if (pusher.Type == "Elevator" && direction == Direction.Up)
+            {
+                if (Movable && CanFall && neighbor?.IsLightweight != false)
+                {
+                    return true;
+                }
+            }
+
+            // Can not push up a tile that can fall, unless its lightweight
+            if (direction == Direction.Up && CanFall && !IsLightweight)
+            {
+                return false;
+            }
+
+            // Normal case
+            if (Movable && MoveState != State.WillMove)
+            {
+                // Check lock
+                if (PushDirectionLock == PushDirectionLockEnum.Vertical && (direction == Direction.Left || direction == Direction.Right))
+                {
+                    return false;
+                }
+                else if (PushDirectionLock == PushDirectionLockEnum.Horizontal && (direction == Direction.Up || direction == Direction.Down))
+                {
+                    return false;
+                }
+
+                if (neighbor == null)
+                {
+                    return true;
+                }
+                else
+                {
+                    if (!neighbor.IsLightweight)
+                    {
+                        return neighbor.PassthroughMode == PassthroughModeEnum.All;
+                    }
+                    else
+                    {
+                        return neighbor.CanBePushedTowards(this, direction);
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        public void WillBePushedTowards(Direction direction)
+        {
+            var neighbor = World.GetNeighborTile(this, direction);
+            if (neighbor?.CanBePushedTowards(this, direction) == true)
+            {
+                neighbor.WillBePushedTowards(direction);
+            }
+
+            WillMoveTowards(direction);
+            Updated = true;
         }
 
         public Sprite GetSprite()
@@ -401,13 +470,11 @@ namespace Tiles
 
     public class HintTile : BackgroundTile { }
 
-    public class RockTile : FallingTile { }
-
-    public class GemTile : FallingTile
+    public class RockTile : FallingTile
     {
-        public GemTile()
+        public RockTile()
         {
-            Pickable = true;
+            IsHeavy = true;
         }
     }
 
@@ -419,15 +486,6 @@ namespace Tiles
         }
     }
 
-    public class RubyTile : GemTile
-    {
-    }
-    public class DiamondTile : GemTile
-    {
-    }
-    public class EmeraldTile : GemTile
-    {
-    }
     public class EggTile : FallingTile { }
 
     public class SteelWallTile : WallTile

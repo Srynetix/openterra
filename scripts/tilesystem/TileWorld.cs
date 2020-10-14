@@ -78,17 +78,21 @@ namespace Tiles
             _gameTicks = 0;
 
             // Black background
-            var bgColor = new ColorRect();
-            bgColor.Name = "BGColor";
-            bgColor.Color = Colors.Black;
-            bgColor.MouseFilter = Control.MouseFilterEnum.Ignore;
+            var bgColor = new ColorRect
+            {
+                Name = "BGColor",
+                Color = Colors.Black,
+                MouseFilter = Control.MouseFilterEnum.Ignore
+            };
             AddChild(bgColor);
 
             // Check for TileContainer
             if (TileContainer == null)
             {
-                TileContainer = new Node2D();
-                TileContainer.Name = "TileContainer";
+                TileContainer = new Node2D
+                {
+                    Name = "TileContainer"
+                };
                 AddChild(TileContainer);
             }
 

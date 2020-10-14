@@ -21,21 +21,17 @@ namespace Tiles
             return status.bottom == null;
         }
 
-        protected bool CanPushUp(CollisionStatus status)
+        protected bool CanPushUp()
         {
-            if (status.top != null)
+            var neighbor = World.GetNeighborTile(this, Direction.Up);
+            if (neighbor != null)
             {
-                if (status.top.Movable && status.top.CanFall)
-                {
-                    var topStatus = World.GetTileCollisions(status.top);
-                    if (topStatus.top == null)
-                    {
-                        return true;
-                    }
-                }
+                return neighbor.CanBePushedTowards(this, Direction.Up);
             }
-
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
         private bool TryUp(CollisionStatus status)
@@ -46,11 +42,10 @@ namespace Tiles
                 _lastDirection = NextDirection;
                 return true;
             }
-            else if (CanPushUp(status))
+            else if (CanPushUp())
             {
-                var topTile = status.top;
-                topTile.WillMoveTowards(Direction.Up);
-                topTile.Updated = true;
+                var topTile = World.GetNeighborTile(this, Direction.Up);
+                topTile.WillBePushedTowards(Direction.Up);
 
                 WillMoveTowards(Direction.Up);
                 return true;
@@ -92,7 +87,7 @@ namespace Tiles
             var sb = new StringBuilder();
             sb.AppendFormat("* Last direction: {0}\n", DebugDrawUtils.ShowTileDirection(_lastDirection));
             sb.AppendFormat("* Can go up:      {0}\n", DebugDrawUtils.ShowBool(CanGoUp(status)));
-            sb.AppendFormat("* Can push up:    {0}\n", DebugDrawUtils.ShowBool(CanPushUp(status)));
+            sb.AppendFormat("* Can push up:    {0}\n", DebugDrawUtils.ShowBool(CanPushUp()));
             sb.AppendFormat("* Can go down:    {0}\n", DebugDrawUtils.ShowBool(CanGoUp(status)));
             return sb.ToString();
         }

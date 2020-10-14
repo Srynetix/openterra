@@ -5,6 +5,8 @@ namespace Tiles
 {
     public class FallingTile : Tile
     {
+        private bool _wasFalling = false;
+
         public FallingTile()
         {
             Warpable = true;
@@ -51,21 +53,47 @@ namespace Tiles
 
             // Check collisions
             var status = World.GetTileCollisions(this);
+            var canGoDown = CanGoDown(status);
 
-            if (CanGoDown(status))
+            if (canGoDown)
             {
+                _wasFalling = true;
                 WillMoveTowards(Direction.Down);
+            }
+            else if (!canGoDown && _wasFalling)
+            {
+                // Hit
+                if (!IsLightweight)
+                {
+                    var bottomTile = status.GetTileAtDirection(Direction.Down);
+                    if (bottomTile.CanExplode)
+                    {
+                        bottomTile.WillExplode();
+                        bottomTile.Updated = true;
+                    }
+                    else if (IsHeavy && bottomTile.IsFragile)
+                    {
+                        // Crush
+                        bottomTile.Pick();
+                        bottomTile.Updated = true;
+                    }
+                }
+
+                _wasFalling = false;
             }
             else if (CanRollLeft(status))
             {
+                _wasFalling = false;
                 WillMoveTowards(Direction.Left);
             }
             else if (CanRollRight(status))
             {
+                _wasFalling = false;
                 WillMoveTowards(Direction.Right);
             }
             else
             {
+                _wasFalling = false;
                 Stop();
             }
         }

@@ -17,29 +17,23 @@ namespace Tiles
             AddToGroup("players");
         }
 
-        protected bool CanGoTowards(CollisionStatus status, Direction direction)
+        protected bool CanGoTowards(Direction direction)
         {
-            var neighbor = status.GetTileAtDirection(direction);
+            var neighbor = World.GetNeighborTile(this, direction);
             return neighbor?.PassthroughMode != PassthroughModeEnum.Nothing || neighbor?.Pickable != false;
         }
 
-        protected bool CanPushTowards(CollisionStatus status, Direction direction)
+        protected bool CanPushTowards(Direction direction)
         {
-            var neighbor = status.GetTileAtDirection(direction);
-            if (neighbor?.Movable == true && neighbor?.MoveState != State.WillMove)
+            var neighbor = World.GetNeighborTile(this, direction);
+            if (neighbor != null)
             {
-                var tNeighbor = World.GetNeighborTile(neighbor, direction);
-                if (tNeighbor != null)
-                {
-                    return tNeighbor.PassthroughMode == PassthroughModeEnum.All;
-                }
-                else
-                {
-                    return true;
-                }
+                return neighbor.CanBePushedTowards(this, direction);
             }
-
-            return false;
+            else
+            {
+                return false;
+            }
         }
 
         public override void EndMoveCallback()
@@ -92,25 +86,23 @@ namespace Tiles
 
             if (playerDirection != Direction.None)
             {
-                var status = World.GetTileCollisions(this);
-                if (CanGoTowards(status, playerDirection))
+                if (CanGoTowards(playerDirection))
                 {
                     if (!World.PlayerInput.Action.Pressed)
                     {
                         WillMoveTowards(playerDirection);
                     }
 
-                    var neighbor = status.GetTileAtDirection(playerDirection);
+                    var neighbor = World.GetNeighborTile(this, playerDirection);
                     if (neighbor?.Pickable == true)
                     {
                         neighbor?.Pick();
                     }
                 }
-                else if (CanPushTowards(status, playerDirection))
+                else if (CanPushTowards(playerDirection))
                 {
-                    var tile = status.GetTileAtDirection(playerDirection);
-                    tile.WillMoveTowards(playerDirection);
-                    tile.Updated = true;
+                    var tile = World.GetNeighborTile(this, playerDirection);
+                    tile.WillBePushedTowards(playerDirection);
 
                     if (!World.PlayerInput.Action.Pressed)
                     {
@@ -142,10 +134,10 @@ namespace Tiles
         public override string GenerateTileDebugInfo(CollisionStatus status)
         {
             var sb = new StringBuilder();
-            sb.AppendFormat("* Can go up:    {0,-30} - Can push up:    {1,-30}\n", DebugDrawUtils.ShowBool(CanGoTowards(status, Direction.Up)), DebugDrawUtils.ShowBool(CanPushTowards(status, Direction.Up)));
-            sb.AppendFormat("* Can go down:  {0,-30} - Can push down:  {1,-30}\n", DebugDrawUtils.ShowBool(CanGoTowards(status, Direction.Down)), DebugDrawUtils.ShowBool(CanPushTowards(status, Direction.Down)));
-            sb.AppendFormat("* Can go left:  {0,-30} - Can push left:  {1,-30}\n", DebugDrawUtils.ShowBool(CanGoTowards(status, Direction.Left)), DebugDrawUtils.ShowBool(CanPushTowards(status, Direction.Left)));
-            sb.AppendFormat("* Can go right: {0,-30} - Can push right: {1,-30}\n", DebugDrawUtils.ShowBool(CanGoTowards(status, Direction.Right)), DebugDrawUtils.ShowBool(CanPushTowards(status, Direction.Right)));
+            sb.AppendFormat("* Can go up:    {0,-30} - Can push up:    {1,-30}\n", DebugDrawUtils.ShowBool(CanGoTowards(Direction.Up)), DebugDrawUtils.ShowBool(CanPushTowards(Direction.Up)));
+            sb.AppendFormat("* Can go down:  {0,-30} - Can push down:  {1,-30}\n", DebugDrawUtils.ShowBool(CanGoTowards(Direction.Down)), DebugDrawUtils.ShowBool(CanPushTowards(Direction.Down)));
+            sb.AppendFormat("* Can go left:  {0,-30} - Can push left:  {1,-30}\n", DebugDrawUtils.ShowBool(CanGoTowards(Direction.Left)), DebugDrawUtils.ShowBool(CanPushTowards(Direction.Left)));
+            sb.AppendFormat("* Can go right: {0,-30} - Can push right: {1,-30}\n", DebugDrawUtils.ShowBool(CanGoTowards(Direction.Right)), DebugDrawUtils.ShowBool(CanPushTowards(Direction.Right)));
             return sb.ToString();
         }
     }

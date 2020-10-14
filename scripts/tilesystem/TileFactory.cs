@@ -24,6 +24,16 @@ namespace Tiles
                 "Bomb" => new BombTile(),
                 "SteelWall" => new SteelWallTile(),
                 "Explosion" => new ExplosionTile(),
+                // Keys
+                "GreenKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Green },
+                "YellowKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Yellow },
+                "RedKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Red },
+                "BlueKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Blue },
+                // Crates
+                "Crate" => new CrateTile(),
+                "CrateLR" => new CrateTile() { PushDirectionLock = Tile.PushDirectionLockEnum.Horizontal },
+                "CrateUD" => new CrateTile() { PushDirectionLock = Tile.PushDirectionLockEnum.Vertical },
+                // Walls
                 "ExtendingWallLR" => new ExtendingWallTile
                 {
                     ExtensionDirection = ExtendingWallTile.ExtensionDirectionEnum.LeftRight
