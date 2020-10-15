@@ -97,26 +97,29 @@ namespace Tiles
             // bgColor.MouseFilter = Control.MouseFilterEnum.Ignore;
             // AddChild(bgColor);
 
-            _infoLabel = new RichTextLabel();
-            _infoLabel.Name = "InfoLabel";
+            _infoLabel = new RichTextLabel
+            {
+                Name = "InfoLabel",
+                RectMinSize = size * new Vector2(1, 0.5f),
+                RectPosition = new Vector2(12, 12),
+                BbcodeEnabled = true,
+                BbcodeText = GenerateInfoText(),
+                MouseFilter = MouseFilterEnum.Ignore
+            };
             _infoLabel.AddFontOverride("normal_font", Assets.SimpleDefaultFont.Monospace);
             _infoLabel.AddFontOverride("bold_font", Assets.SimpleDefaultFont.Monospace.CloneWithSize(20));
-            _infoLabel.RectMinSize = size * new Vector2(1, 0.5f);
-            _infoLabel.RectPosition = new Vector2(12, 12);
-            _infoLabel.BbcodeEnabled = true;
-            _infoLabel.BbcodeText = GenerateInfoText();
-            _infoLabel.MouseFilter = Control.MouseFilterEnum.Ignore;
             AddChild(_infoLabel);
 
-            _cellLabel = new RichTextLabel();
-            _cellLabel.Name = "CellLabel";
+            _cellLabel = new RichTextLabel
+            {
+                Name = "CellLabel",
+                RectMinSize = size * new Vector2(1, 0.5f),
+                RectPosition = (size * new Vector2(0, 0.25f)) + new Vector2(12, 12),
+                BbcodeEnabled = true,
+                BbcodeText = GenerateCellText(),
+                MouseFilter = MouseFilterEnum.Ignore
+            };
             _cellLabel.AddFontOverride("normal_font", Assets.SimpleDefaultFont.Monospace);
-            _cellLabel.RectMinSize = size * new Vector2(1, 0.5f);
-            _cellLabel.RectPosition = (size * new Vector2(0, 0.25f)) + new Vector2(12, 12);
-            _cellLabel.BbcodeEnabled = true;
-            _cellLabel.BbcodeText = GenerateCellText();
-            _cellLabel.Modulate = Colors.White.WithAlpha(255);
-            _cellLabel.MouseFilter = Control.MouseFilterEnum.Ignore;
             AddChild(_cellLabel);
         }
 

@@ -18,6 +18,12 @@ namespace Tiles
             AddToGroup("players");
         }
 
+        protected bool CanActionTowards(Direction direction)
+        {
+            var neighbor = World.GetNeighborTile(this, direction);
+            return neighbor?.IsActionable == true;
+        }
+
         protected bool CanGoTowards(Direction direction)
         {
             var neighbor = World.GetNeighborTile(this, direction);
@@ -95,15 +101,30 @@ namespace Tiles
                         neighbor?.Pick();
                     }
 
-                    if (neighbor?.IsGate == true)
-                    {
-                        // Handle warp
-                        WillWarpTo(neighbor, playerDirection);
-                    }
-
                     if (!World.PlayerInput.Action.Pressed)
                     {
-                        MoveTowards(playerDirection);
+                        if (neighbor?.IsGate == true)
+                        {
+                            // Handle warp
+                            WillWarpTo(neighbor, playerDirection);
+                        }
+                        else if (neighbor?.IsSwitch == true)
+                        {
+                            // Handle back
+                            var n = World.GetNeighborTile(neighbor, playerDirection);
+                            if (n?.CanBePassedThrough(this, playerDirection) != false)
+                            {
+                                WillWarpTo(neighbor, playerDirection);
+                            }
+                            else
+                            {
+                                WillWarpTo(neighbor, World.GetInvertedDirection(playerDirection));
+                            }
+                        }
+                        else
+                        {
+                            MoveTowards(playerDirection);
+                        }
                     }
                 }
                 else if (CanPushTowards(playerDirection))
@@ -115,6 +136,11 @@ namespace Tiles
                     {
                         WillMoveTowards(playerDirection);
                     }
+                }
+                else if (CanActionTowards(playerDirection))
+                {
+                    var tile = World.GetNeighborTile(this, playerDirection);
+                    tile.DoAction();
                 }
             }
             else

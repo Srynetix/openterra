@@ -21,7 +21,6 @@ namespace Tiles
                 "Dynamite" => new DynamiteTile(),
                 "Hint" => new HintTile(),
                 "MarbleFloor" => new MarbleFloorTile(),
-                "RoundedWall" => new RoundedWallTile(),
                 "Bomb" => new BombTile(),
                 "SteelWall" => new SteelWallTile(),
                 "Explosion" => new ExplosionTile(),
@@ -30,6 +29,8 @@ namespace Tiles
                 "DisabledBlueBarrier" => new BarrierTile() { Active = false, BarrierColor = Tile.BarrierColorEnum.Blue },
                 "ActivePinkBarrier" => new BarrierTile() { Active = true, BarrierColor = Tile.BarrierColorEnum.Pink },
                 "DisabledPinkBarrier" => new BarrierTile() { Active = false, BarrierColor = Tile.BarrierColorEnum.Pink },
+                "BlueBarrierSwitch" => new BarrierSwitchTile() { BarrierColor = Tile.BarrierColorEnum.Blue },
+                "PinkBarrierSwitch" => new BarrierSwitchTile() { BarrierColor = Tile.BarrierColorEnum.Pink },
                 // Keys
                 "GreenKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Green },
                 "YellowKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Yellow },
@@ -57,7 +58,7 @@ namespace Tiles
                 "PortHorizontal" => new TwoWayPortTile() { Horizontal = true },
                 "PortVertical" => new TwoWayPortTile() { Horizontal = false },
                 "Port4Way" => new FourWayPortTile(),
-                // Walls
+                // Extending wall
                 "ExtendingWallLR" => new ExtendingWallTile
                 {
                     ExtensionDirection = ExtendingWallTile.ExtensionDirectionEnum.LeftRight
@@ -70,14 +71,22 @@ namespace Tiles
                 {
                     ExtensionDirection = ExtendingWallTile.ExtensionDirectionEnum.FourWay
                 },
-                "LeftRoundedWall" => new RoundedWallTile
+                // Walls
+                "OneTimePassage" => new OneTimePassageTile(),
+                "FragileWall" => new FragileWallTile(),
+                "StarBlock" => new StarBlockTile(),
+                "TopRoundedWall" => new RoundedWallTile(),
+                "TopLeftRoundedWall" => new RoundedWallTile
                 {
                     RollDirection = Tile.RollDirectionEnum.Left
                 },
-                "RightRoundedWall" => new RoundedWallTile
+                "TopRightRoundedWall" => new RoundedWallTile
                 {
                     RollDirection = Tile.RollDirectionEnum.Right
                 },
+                // Exits
+                "ExitClosed" => new ExitTile { ExitType = Tile.ExitTypeEnum.Normal },
+                "HardExitClosed" => new ExitTile { ExitType = Tile.ExitTypeEnum.Hard },
                 "Slimey" => new SlimeyTile(),
                 "Elevator" => new ElevatorTile(),
                 "Warp" => new WarpTile(),

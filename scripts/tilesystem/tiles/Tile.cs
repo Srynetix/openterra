@@ -1,5 +1,4 @@
 using Godot;
-using System.Text;
 
 namespace Tiles
 {
@@ -70,6 +69,12 @@ namespace Tiles
             Pink
         }
 
+        public enum ExitTypeEnum
+        {
+            Normal,
+            Hard
+        }
+
         public static Direction[] AllDirections = {
             Direction.Left,
             Direction.Right,
@@ -79,6 +84,13 @@ namespace Tiles
             Direction.UpRight,
             Direction.DownLeft,
             Direction.DownRight,
+        };
+
+        public static Direction[] FourDirections = {
+            Direction.Left,
+            Direction.Right,
+            Direction.Up,
+            Direction.Down,
         };
 
         /// <summary>Tile type.</summary>
@@ -133,6 +145,8 @@ namespace Tiles
         public int Priority;
         public bool Warpable;
         public bool IsGate;
+        public bool IsSwitch;
+        public bool IsActionable;
 
         /// <summary>Step ticks</summary>
         public int StepTicks = 10;
@@ -197,6 +211,7 @@ namespace Tiles
         protected float _targetRotation;
         protected int _currentTick;
         protected RollDirectionEnum _rollDirection;
+        protected Sprite _sprite;
 
         public Tile()
         {
@@ -240,6 +255,8 @@ namespace Tiles
 
             return PassthroughMode != PassthroughModeEnum.Nothing;
         }
+
+        public virtual void DoAction() { }
 
         public bool CanFallCheck()
         {
@@ -396,6 +413,7 @@ namespace Tiles
 
         public override void _Ready()
         {
+            _sprite = GetNode<Sprite>("Sprite");
         }
 
         public virtual void Stop()
@@ -441,7 +459,7 @@ namespace Tiles
             if (WarpTarget != null)
             {
                 var tWTile = World.GetNeighborTile(WarpTarget, NextDirection);
-                if (tWTile?.CanBePassedThrough(this, NextDirection) == false)
+                if (tWTile?.CanBePassedThrough(this, NextDirection) == false && tWTile != this)
                 {
                     Stop();
                     WarpTarget = null;
@@ -450,6 +468,7 @@ namespace Tiles
                 else
                 {
                     // Teleport
+                    Position = WarpTarget.Position;
                     newTargetPosition = WarpTarget.Position + (offset * directionVector);
                     WarpTarget = null;
                 }
@@ -561,34 +580,11 @@ namespace Tiles
 
     public class EggTile : FallingTile { }
 
-    public class SteelWallTile : WallTile
-    {
-        public SteelWallTile()
-        {
-            Indestructible = true;
-        }
-    }
-
     public class DirtTile : StaticTile
     {
         public DirtTile()
         {
             Pickable = true;
-        }
-    }
-    public class WallTile : StaticTile { }
-    public class RoundedWallTile : WallTile
-    {
-        public RoundedWallTile()
-        {
-            RollDirection = RollDirectionEnum.Both;
-        }
-
-        public override string GenerateTileDebugInfo(CollisionStatus status)
-        {
-            var sb = new StringBuilder();
-            sb.AppendFormat("* Roll direction: {0}\n", DebugDrawUtils.ShowWithColor(RollDirection, Colors.Yellow));
-            return sb.ToString();
         }
     }
 

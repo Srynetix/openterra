@@ -5,6 +5,9 @@ namespace Tiles
 {
     public class PlayerInventory : CanvasLayer
     {
+        [Signal]
+        public delegate void GemsUpdated(int quantity);
+
         public int Gems
         {
             get => _gems;
@@ -34,6 +37,8 @@ namespace Tiles
         {
             _gems += quantity;
             UpdateGemValue();
+
+            EmitSignal(nameof(GemsUpdated), _gems);
         }
 
         public bool HasKeyColor(Tile.KeyColorEnum color)

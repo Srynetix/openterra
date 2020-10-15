@@ -30,6 +30,7 @@ script = ExtResource( 1 )
 [node name="Main" type="MarginContainer" parent="."]
 anchor_right = 1.0
 margin_bottom = 32.0
+mouse_filter = 2
 theme = ExtResource( 2 )
 custom_constants/margin_right = 10
 custom_constants/margin_top = 10
@@ -44,6 +45,7 @@ margin_left = 10.0
 margin_top = 10.0
 margin_right = 1014.0
 margin_bottom = 42.0
+mouse_filter = 2
 alignment = 2
 __meta__ = {
 "_edit_use_anchors_": false
@@ -53,10 +55,12 @@ __meta__ = {
 margin_left = 696.0
 margin_right = 860.0
 margin_bottom = 32.0
+mouse_filter = 2
 
 [node name="Icon" type="TextureRect" parent="Main/TopBar/GemStats"]
 margin_right = 32.0
 margin_bottom = 32.0
+mouse_filter = 2
 texture = SubResource( 1 )
 stretch_mode = 4
 
@@ -72,10 +76,12 @@ text = "0"
 margin_left = 864.0
 margin_right = 1004.0
 margin_bottom = 32.0
+mouse_filter = 2
 
 [node name="BlueKey" type="TextureRect" parent="Main/TopBar/KeyStats"]
 margin_right = 32.0
 margin_bottom = 32.0
+mouse_filter = 2
 texture = SubResource( 2 )
 stretch_mode = 4
 
@@ -83,6 +89,7 @@ stretch_mode = 4
 margin_left = 36.0
 margin_right = 68.0
 margin_bottom = 32.0
+mouse_filter = 2
 texture = SubResource( 3 )
 stretch_mode = 4
 
@@ -90,6 +97,7 @@ stretch_mode = 4
 margin_left = 72.0
 margin_right = 104.0
 margin_bottom = 32.0
+mouse_filter = 2
 texture = SubResource( 4 )
 stretch_mode = 4
 
@@ -97,5 +105,6 @@ stretch_mode = 4
 margin_left = 108.0
 margin_right = 140.0
 margin_bottom = 32.0
+mouse_filter = 2
 texture = SubResource( 5 )
 stretch_mode = 4

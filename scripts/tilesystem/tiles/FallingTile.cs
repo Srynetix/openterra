@@ -17,33 +17,41 @@ namespace Tiles
             Priority = 1;
         }
 
-        protected bool CanGoUp(CollisionStatus status)
+        protected bool CanGoUp()
         {
-            return status.top == null || status.top.PassthroughMode == PassthroughModeEnum.All;
+            var top = World.GetNeighborTile(this, Direction.Up);
+            return top?.CanBePassedThrough(this, Direction.Up) != false;
         }
 
-        protected bool CanGoDown(CollisionStatus status)
+        protected bool CanGoDown()
         {
-            return status.bottom == null || status.bottom.PassthroughMode == PassthroughModeEnum.All;
+            var bottom = World.GetNeighborTile(this, Direction.Down);
+            return bottom?.CanBePassedThrough(this, Direction.Down) != false;
         }
 
-        protected bool CanRollLeft(CollisionStatus status)
+        protected bool CanRollLeft()
         {
-            return status.bottom?.MakeRollLeft == true && status.bottom.MoveState == State.Stopped && status.left == null && status.bottomLeft == null;
+            var bottom = World.GetNeighborTile(this, Direction.Down);
+            var left = World.GetNeighborTile(this, Direction.Left);
+            var bottomLeft = World.GetNeighborTile(this, Direction.DownLeft);
+            return bottom?.MakeRollLeft == true && bottom.MoveState == State.Stopped && left == null && bottomLeft == null;
         }
 
-        protected bool CanRollRight(CollisionStatus status)
+        protected bool CanRollRight()
         {
-            return status.bottom?.MakeRollRight == true && status.bottom.MoveState == State.Stopped && status.right == null && status.bottomRight == null;
+            var bottom = World.GetNeighborTile(this, Direction.Down);
+            var right = World.GetNeighborTile(this, Direction.Right);
+            var bottomRight = World.GetNeighborTile(this, Direction.DownRight);
+            return bottom?.MakeRollRight == true && bottom.MoveState == State.Stopped && right == null && bottomRight == null;
         }
 
         public override string GenerateTileDebugInfo(CollisionStatus status)
         {
             var sb = new StringBuilder();
-            sb.AppendFormat("* Can go up:      {0}\n", DebugDrawUtils.ShowBool(CanGoUp(status)));
-            sb.AppendFormat("* Can go down:    {0}\n", DebugDrawUtils.ShowBool(CanGoUp(status)));
-            sb.AppendFormat("* Can roll left:  {0}\n", DebugDrawUtils.ShowBool(CanRollLeft(status)));
-            sb.AppendFormat("* Can roll right: {0}\n", DebugDrawUtils.ShowBool(CanRollRight(status)));
+            sb.AppendFormat("* Can go up:      {0}\n", DebugDrawUtils.ShowBool(CanGoUp()));
+            sb.AppendFormat("* Can go down:    {0}\n", DebugDrawUtils.ShowBool(CanGoUp()));
+            sb.AppendFormat("* Can roll left:  {0}\n", DebugDrawUtils.ShowBool(CanRollLeft()));
+            sb.AppendFormat("* Can roll right: {0}\n", DebugDrawUtils.ShowBool(CanRollRight()));
             sb.AppendFormat("* Fall ticks:     {0}\n", DebugDrawUtils.ShowWithColor(_fallTicks, Colors.Yellow));
             return sb.ToString();
         }
@@ -53,8 +61,7 @@ namespace Tiles
             base.Step();
 
             // Check collisions
-            var status = World.GetTileCollisions(this);
-            var canGoDown = CanGoDown(status);
+            var canGoDown = CanGoDown();
 
             if (canGoDown)
             {
@@ -66,7 +73,7 @@ namespace Tiles
                 // Hit
                 if (!IsLightweight)
                 {
-                    var bottomTile = status.GetTileAtDirection(Direction.Down);
+                    var bottomTile = World.GetNeighborTile(this, Direction.Down);
                     if (bottomTile.CanExplode)
                     {
                         bottomTile.Explode();
@@ -81,12 +88,12 @@ namespace Tiles
 
                 _fallTicks = 0;
             }
-            else if (CanRollLeft(status))
+            else if (CanRollLeft())
             {
                 _fallTicks = 0;
                 WillMoveTowards(Direction.Left);
             }
-            else if (CanRollRight(status))
+            else if (CanRollRight())
             {
                 _fallTicks = 0;
                 WillMoveTowards(Direction.Right);

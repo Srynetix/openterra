@@ -15,6 +15,9 @@ namespace Tiles
     {
         public TileMap TileMap;
         public Node2D TileContainer;
+        public int TimeLimit = -1;
+        public int GemsForNormalExit = 5;
+        public int GemsForHardExit = 10;
 
         public int GameSpeed { set; get; } = 20;
 
@@ -65,6 +68,8 @@ namespace Tiles
         private TileCamera _camera;
         private PlayerInputHandler _playerInput;
         private PlayerInventory _playerInventory;
+        private bool _normalExitsOpened;
+        private bool _hardExitsOpened;
 
         private Vector2 _gridSize;
         private Tile[,] _backgroundTiles;
@@ -116,8 +121,10 @@ namespace Tiles
             _camera.ScanPlayers();
 
             // Debug draw
-            var canvasLayer = new CanvasLayer();
-            canvasLayer.Name = "DebugDrawCanvasLayer";
+            var canvasLayer = new CanvasLayer
+            {
+                Name = "DebugDrawCanvasLayer"
+            };
             AddChild(canvasLayer);
             _debugDraw = new TileWorldDebugDraw(this);
             canvasLayer.AddChild(_debugDraw);
@@ -136,6 +143,7 @@ namespace Tiles
 
             // Connect player inventory
             _playerInventory = (PlayerInventory)GD.Load<PackedScene>("res://ui/PlayerInventory.tscn").Instance();
+            _playerInventory.Connect(nameof(PlayerInventory.GemsUpdated), this, nameof(OnGemsUpdated));
             AddChild(_playerInventory);
         }
 
@@ -240,6 +248,30 @@ namespace Tiles
             }
         }
 
+        public List<Tile> ScanAllTilesOfType(string tileType)
+        {
+            var tiles = new List<Tile>();
+            for (int j = 0; j < _gridSize.y; ++j)
+            {
+                for (int i = 0; i < _gridSize.x; ++i)
+                {
+                    var bgTile = _backgroundTiles[j, i];
+                    if (bgTile?.Type == tileType)
+                    {
+                        tiles.Add(bgTile);
+                    }
+
+                    var fgTile = _foregroundTiles[j, i];
+                    if (fgTile?.Type == tileType)
+                    {
+                        tiles.Add(fgTile);
+                    }
+                }
+            }
+
+            return tiles;
+        }
+
         public Tile ScanNextTileOfType(Vector2 tilePosition, string tileType)
         {
             // Scan next tile of type from position
@@ -295,6 +327,22 @@ namespace Tiles
                 UnsetTileAtPosition(tile, lastPos);
                 SetTileAtPosition(tile, curPos);
                 _tilesIndex[tile] = curPos;
+            }
+        }
+
+        public void ToggleBarriersState(Tile.BarrierColorEnum barrierColor)
+        {
+            foreach (BarrierTile tile in GetTree().GetNodesInGroup(barrierColor.ToString() + "_barrier"))
+            {
+                tile.Active = !tile.Active;
+            }
+        }
+
+        public void OpenExits(Tile.ExitTypeEnum exitType)
+        {
+            foreach (ExitTile tile in GetTree().GetNodesInGroup(exitType.ToString() + "_exit"))
+            {
+                tile.Opened = true;
             }
         }
 
@@ -383,6 +431,22 @@ namespace Tiles
                 {
                     tile.Move();
                 }
+            }
+        }
+
+        private void OnGemsUpdated(int gems)
+        {
+            // Exits check
+            if (!_normalExitsOpened && GemsForNormalExit <= gems)
+            {
+                OpenExits(Tile.ExitTypeEnum.Normal);
+                _normalExitsOpened = true;
+            }
+
+            if (!_hardExitsOpened && GemsForHardExit <= gems)
+            {
+                OpenExits(Tile.ExitTypeEnum.Hard);
+                _hardExitsOpened = true;
             }
         }
 

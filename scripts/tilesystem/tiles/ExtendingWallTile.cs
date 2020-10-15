@@ -16,10 +16,6 @@ namespace Tiles
         private bool _hasExpanded;
         private int _tickCount;
 
-        public ExtendingWallTile()
-        {
-        }
-
         public override void Step()
         {
             base.Step();
