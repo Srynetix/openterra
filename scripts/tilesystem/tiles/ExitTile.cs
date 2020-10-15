@@ -18,7 +18,7 @@ namespace Tiles
 
         public ExitTile()
         {
-            Background = true;
+            TileLayer = TileLayerEnum.Background;
         }
 
         public override void _Ready()
@@ -37,7 +37,7 @@ namespace Tiles
         {
             base.Step();
             var thisPosition = World.GetTileCurrentGridPosition(this);
-            var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.ForegroundOnly);
+            var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.MiddleOnly);
             if (fgTile?.Player == true)
             {
                 World.RemoveTile(fgTile);

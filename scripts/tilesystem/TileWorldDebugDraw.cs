@@ -91,12 +91,6 @@ namespace Tiles
         {
             var size = GetViewportRect().Size;
 
-            // var bgColor = new ColorRect();
-            // bgColor.Color = Colors.Black.WithAlpha(128);
-            // bgColor.RectMinSize = size;
-            // bgColor.MouseFilter = Control.MouseFilterEnum.Ignore;
-            // AddChild(bgColor);
-
             _infoLabel = new RichTextLabel
             {
                 Name = "InfoLabel",
@@ -158,7 +152,7 @@ namespace Tiles
             sb.AppendFormat("* Target position: {0}\n", tile.TargetPosition);
             sb.AppendFormat("* Target rotation: {0}\n", tile.TargetRotation);
             sb.AppendFormat("* Cell Position:   {0}\n", _world.GetTileCurrentGridPosition(tile));
-            sb.AppendFormat("* Background:      {0}\n", DebugDrawUtils.ShowBool(tile.Background));
+            sb.AppendFormat("* Tile layer:      {0}\n", DebugDrawUtils.ShowWithColor(tile.TileLayer, Colors.Yellow));
             sb.AppendFormat("* State:           {0}\n", DebugDrawUtils.ShowTileState(tile.MoveState));
             sb.AppendFormat("* Direction:       {0}\n", DebugDrawUtils.ShowTileDirection(tile.NextDirection));
             sb.Append(GenerateCollisionDebugInfo(status));
@@ -197,19 +191,40 @@ namespace Tiles
                 var tilePosition = _world.TileMap.WorldToMap(mouseEvent.Position + topLeftPosition);
 
                 var tFgTile = _world.GetTileAtGridPosition(tilePosition, TilePickEnum.ForegroundOnly);
+                var tMdTile = _world.GetTileAtGridPosition(tilePosition, TilePickEnum.MiddleOnly);
                 var tBgTile = _world.GetTileAtGridPosition(tilePosition, TilePickEnum.BackgroundOnly);
 
-                if (CurrentDebugTile == tFgTile && tBgTile != null)
+                if (CurrentDebugTile == tFgTile && tMdTile != null)
+                {
+                    SetCurrentDebugTile(tMdTile);
+                }
+                else if (CurrentDebugTile == tFgTile && tBgTile != null)
                 {
                     SetCurrentDebugTile(tBgTile);
+                }
+                else if (CurrentDebugTile == tMdTile && tBgTile != null)
+                {
+                    SetCurrentDebugTile(tBgTile);
+                }
+                else if (CurrentDebugTile == tMdTile && tFgTile != null)
+                {
+                    SetCurrentDebugTile(tFgTile);
                 }
                 else if (CurrentDebugTile == tBgTile && tFgTile != null)
                 {
                     SetCurrentDebugTile(tFgTile);
                 }
+                else if (CurrentDebugTile == tBgTile && tMdTile != null)
+                {
+                    SetCurrentDebugTile(tMdTile);
+                }
                 else if (tFgTile != null)
                 {
                     SetCurrentDebugTile(tFgTile);
+                }
+                else if (tMdTile != null)
+                {
+                    SetCurrentDebugTile(tMdTile);
                 }
                 else if (tBgTile != null)
                 {
@@ -222,7 +237,7 @@ namespace Tiles
             }
         }
 
-        private void SetCurrentDebugTile(Tile tile)
+        public void SetCurrentDebugTile(Tile tile)
         {
             if (CurrentDebugTile != null)
             {

@@ -8,7 +8,15 @@ namespace Tiles
     {
         ForegroundFirst,
         BackgroundOnly,
+        MiddleOnly,
         ForegroundOnly
+    }
+
+    public enum TileLayerEnum
+    {
+        Background,
+        Middle,
+        Foreground
     }
 
     public class TileWorld : Node2D
@@ -72,9 +80,14 @@ namespace Tiles
         private bool _hardExitsOpened;
 
         private Vector2 _gridSize;
-        private Tile[,] _backgroundTiles;
-        private Tile[,] _foregroundTiles;
+        private Dictionary<TileLayerEnum, Tile[,]> _tiles;
         private Dictionary<Tile, Vector2> _tilesIndex;
+
+        public static List<TileLayerEnum> AllLayers = new List<TileLayerEnum> {
+            TileLayerEnum.Background,
+            TileLayerEnum.Middle,
+            TileLayerEnum.Foreground,
+        };
 
         public TileWorld()
         {
@@ -152,29 +165,15 @@ namespace Tiles
             int x = (int)pos.x;
             int y = (int)pos.y;
 
-            if (tile.Background)
+            var layer = tile.TileLayer;
+            var tTile = _tiles[layer][y, x];
+            if (tTile != tile)
             {
-                var tTile = _backgroundTiles[y, x];
-                if (tTile != tile)
-                {
-                    GD.PrintErr("Unsetting mismatching tile ", pos, " : Expecting ", tile.Name, ", found ", tTile?.Name);
-                }
-                else
-                {
-                    _backgroundTiles[y, x] = null;
-                }
+                GD.PrintErr("Unsetting mismatching tile ", pos, " : Expecting ", tile.Name, ", found ", tTile?.Name);
             }
             else
             {
-                var tTile = _foregroundTiles[y, x];
-                if (tTile != tile)
-                {
-                    GD.PrintErr("Unsetting mismatching tile ", pos, " : Expecting ", tile.Name, ", found ", tTile?.Name);
-                }
-                else
-                {
-                    _foregroundTiles[y, x] = null;
-                }
+                _tiles[layer][y, x] = null;
             }
         }
 
@@ -183,31 +182,23 @@ namespace Tiles
             int x = (int)pos.x;
             int y = (int)pos.y;
 
-            if (tile.Background)
+            var layer = tile.TileLayer;
+            var tTile = _tiles[layer][y, x];
+            if (tTile != null)
             {
-                var tTile = _backgroundTiles[y, x];
-                if (tTile != null)
-                {
-                    GD.PrintErr("Setting tile in a non-empty space ", pos, " : Setting ", tile.Name, ", found ", tTile.Name);
-                }
-                _backgroundTiles[y, x] = tile;
+                GD.PrintErr("Setting tile in a non-empty space ", pos, " : Setting ", tile.Name, ", found ", tTile.Name);
             }
-            else
-            {
-                var tTile = _foregroundTiles[y, x];
-                if (tTile != null)
-                {
-                    GD.PrintErr("Setting tile in a non-empty space ", pos, " : Setting ", tile.Name, ", found ", tTile.Name);
-                }
-                _foregroundTiles[y, x] = tile;
-            }
+            _tiles[layer][y, x] = tile;
         }
 
         public void SpawnExplosionAtTile(Tile tile)
         {
             var cellPosition = GetTileCurrentGridPosition(tile);
             tile.Updated = true;
-            RemoveTile(tile);
+            foreach (Tile t in ListTilesAtGridPosition(cellPosition))
+            {
+                RemoveTile(t);
+            }
 
             // Spawn explosion
             var eTile = CreateTile("Explosion", cellPosition);
@@ -255,16 +246,13 @@ namespace Tiles
             {
                 for (int i = 0; i < _gridSize.x; ++i)
                 {
-                    var bgTile = _backgroundTiles[j, i];
-                    if (bgTile?.Type == tileType)
+                    foreach (TileLayerEnum tileLayer in AllLayers)
                     {
-                        tiles.Add(bgTile);
-                    }
-
-                    var fgTile = _foregroundTiles[j, i];
-                    if (fgTile?.Type == tileType)
-                    {
-                        tiles.Add(fgTile);
+                        var tile = _tiles[tileLayer][j, i];
+                        if (tile?.Type == tileType)
+                        {
+                            tiles.Add(tile);
+                        }
                     }
                 }
             }
@@ -282,16 +270,13 @@ namespace Tiles
                 int tX = i % (int)_gridSize.x;
                 int tY = i / (int)_gridSize.x;
 
-                var bgTile = _backgroundTiles[tY, tX];
-                if (bgTile?.Type == tileType)
+                foreach (TileLayerEnum tileLayer in AllLayers)
                 {
-                    return bgTile;
-                }
-
-                var fgTile = _foregroundTiles[tY, tX];
-                if (fgTile?.Type == tileType)
-                {
-                    return fgTile;
+                    var tile = _tiles[tileLayer][tY, tX];
+                    if (tile?.Type == tileType)
+                    {
+                        return tile;
+                    }
                 }
             }
 
@@ -301,16 +286,13 @@ namespace Tiles
                 int tX = i % (int)_gridSize.x;
                 int tY = i / (int)_gridSize.x;
 
-                var bgTile = _backgroundTiles[tY, tX];
-                if (bgTile?.Type == tileType)
+                foreach (TileLayerEnum tileLayer in AllLayers)
                 {
-                    return bgTile;
-                }
-
-                var fgTile = _foregroundTiles[tY, tX];
-                if (fgTile?.Type == tileType)
-                {
-                    return fgTile;
+                    var tile = _tiles[tileLayer][tY, tX];
+                    if (tile?.Type == tileType)
+                    {
+                        return tile;
+                    }
                 }
             }
 
@@ -386,14 +368,7 @@ namespace Tiles
             TileContainer.AddChild(cellNode);
 
             // Set tiles
-            if (cellNode.Background)
-            {
-                _backgroundTiles[(int)cellPosition.y, (int)cellPosition.x] = cellNode;
-            }
-            else
-            {
-                _foregroundTiles[(int)cellPosition.y, (int)cellPosition.x] = cellNode;
-            }
+            _tiles[cellNode.TileLayer][(int)cellPosition.y, (int)cellPosition.x] = cellNode;
 
             // Index
             _tilesIndex[cellNode] = cellPosition;
@@ -403,8 +378,12 @@ namespace Tiles
         private void MapCellsToObjects()
         {
             _gridSize = TileMap.GetUsedRect().Size;
-            _backgroundTiles = new Tile[(int)_gridSize.y, (int)_gridSize.x];
-            _foregroundTiles = new Tile[(int)_gridSize.y, (int)_gridSize.x];
+            _tiles = new Dictionary<TileLayerEnum, Tile[,]>
+            {
+                [TileLayerEnum.Background] = new Tile[(int)_gridSize.y, (int)_gridSize.x],
+                [TileLayerEnum.Middle] = new Tile[(int)_gridSize.y, (int)_gridSize.x],
+                [TileLayerEnum.Foreground] = new Tile[(int)_gridSize.y, (int)_gridSize.x]
+            };
             _tilesIndex = new Dictionary<Tile, Vector2>();
 
             foreach (Vector2 cellPosition in TileMap.GetUsedCells())
@@ -493,14 +472,18 @@ namespace Tiles
 
         private void GameStep()
         {
-            var orderedBgTiles = OrderTilesByPriority(_backgroundTiles);
-            var orderedFgTiles = OrderTilesByPriority(_foregroundTiles);
+            var orderedBgTiles = OrderTilesByPriority(_tiles[TileLayerEnum.Background]);
+            var orderedMdTiles = OrderTilesByPriority(_tiles[TileLayerEnum.Middle]);
+            var orderedFgTiles = OrderTilesByPriority(_tiles[TileLayerEnum.Foreground]);
 
             ResetTickOnTiles(orderedBgTiles);
+            ResetTickOnTiles(orderedMdTiles);
             ResetTickOnTiles(orderedFgTiles);
             ApplyStepOnTiles(orderedBgTiles);
+            ApplyStepOnTiles(orderedMdTiles);
             ApplyStepOnTiles(orderedFgTiles);
             ApplyMoveOnTiles(orderedBgTiles);
+            ApplyMoveOnTiles(orderedMdTiles);
             ApplyMoveOnTiles(orderedFgTiles);
         }
 
@@ -554,18 +537,27 @@ namespace Tiles
                 return null;
             }
 
-            if (pickEnum != TilePickEnum.BackgroundOnly)
+            if (pickEnum != TilePickEnum.BackgroundOnly && pickEnum != TilePickEnum.MiddleOnly)
             {
-                Tile fTile = _foregroundTiles[(int)gridPosition.y, (int)gridPosition.x];
+                Tile fTile = _tiles[TileLayerEnum.Foreground][(int)gridPosition.y, (int)gridPosition.x];
                 if (fTile != null)
                 {
                     return fTile;
                 }
             }
 
-            if (pickEnum != TilePickEnum.ForegroundOnly)
+            if (pickEnum != TilePickEnum.ForegroundOnly && pickEnum != TilePickEnum.BackgroundOnly)
             {
-                Tile bTile = _backgroundTiles[(int)gridPosition.y, (int)gridPosition.x];
+                Tile fTile = _tiles[TileLayerEnum.Middle][(int)gridPosition.y, (int)gridPosition.x];
+                if (fTile != null)
+                {
+                    return fTile;
+                }
+            }
+
+            if (pickEnum != TilePickEnum.ForegroundOnly && pickEnum != TilePickEnum.MiddleOnly)
+            {
+                Tile bTile = _tiles[TileLayerEnum.Background][(int)gridPosition.y, (int)gridPosition.x];
                 if (bTile != null)
                 {
                     return bTile;
@@ -579,9 +571,11 @@ namespace Tiles
         {
             var tiles = new List<Tile>();
             var fgTile = GetTileAtGridPosition(gridPosition, TilePickEnum.ForegroundOnly);
+            var mdTile = GetTileAtGridPosition(gridPosition, TilePickEnum.MiddleOnly);
             var bgTile = GetTileAtGridPosition(gridPosition, TilePickEnum.BackgroundOnly);
 
             if (fgTile != null) tiles.Add(fgTile);
+            if (mdTile != null) tiles.Add(mdTile);
             if (bgTile != null) tiles.Add(bgTile);
             return tiles;
         }
@@ -603,6 +597,7 @@ namespace Tiles
             _debugDraw.Visible = pressed;
             _debugDraw.SetProcess(pressed);
             _debugDraw.SetProcessUnhandledInput(pressed);
+            _debugDraw.SetCurrentDebugTile(null);
         }
 
         public void RestartLevel()

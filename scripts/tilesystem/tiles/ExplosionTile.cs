@@ -4,6 +4,11 @@ namespace Tiles
 {
     public class ExplosionTile : StaticTile
     {
+        public ExplosionTile()
+        {
+            TileLayer = TileLayerEnum.Foreground;
+        }
+
         public override void _Process(float delta)
         {
             base._Process(delta);

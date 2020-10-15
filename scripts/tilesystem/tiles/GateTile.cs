@@ -6,7 +6,7 @@ namespace Tiles
 
         public GateTile()
         {
-            Background = true;
+            TileLayer = TileLayerEnum.Background;
             IsGate = true;
         }
 

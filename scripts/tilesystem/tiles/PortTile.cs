@@ -6,7 +6,8 @@ namespace Tiles
 
         public PortTile()
         {
-            Background = true;
+            TileLayer = TileLayerEnum.Background;
+            ZIndex = 2;
             IsGate = true;
         }
 

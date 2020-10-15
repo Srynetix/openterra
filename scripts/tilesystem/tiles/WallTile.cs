@@ -44,7 +44,7 @@ namespace Tiles
 
         public OneTimePassageTile()
         {
-            Background = true;
+            TileLayer = TileLayerEnum.Background;
             ZIndex = 0;
         }
 
@@ -59,7 +59,7 @@ namespace Tiles
             if (Closed) return;
 
             var thisPosition = World.GetTileCurrentGridPosition(this);
-            var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.ForegroundOnly);
+            var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.MiddleOnly);
             if (fgTile != null)
             {
                 Closed = true;

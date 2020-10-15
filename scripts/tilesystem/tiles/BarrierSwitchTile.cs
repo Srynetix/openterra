@@ -11,7 +11,7 @@ namespace Tiles
 
         public BarrierSwitchTile()
         {
-            Background = true;
+            TileLayer = TileLayerEnum.Background;
             ZIndex = 0;
         }
 
@@ -24,7 +24,7 @@ namespace Tiles
         {
             base.Step();
             var thisPosition = World.GetTileCurrentGridPosition(this);
-            var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.ForegroundOnly);
+            var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.MiddleOnly);
             if (fgTile != null)
             {
                 // Check toggle loop

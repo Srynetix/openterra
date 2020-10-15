@@ -8,7 +8,7 @@ namespace Tiles
 
         public WarpTile()
         {
-            Background = true;
+            TileLayer = TileLayerEnum.Background;
             IsWarp = true;
         }
 
@@ -24,7 +24,7 @@ namespace Tiles
 
             // Get fg tile
             var thisPosition = World.GetTileCurrentGridPosition(this);
-            var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.ForegroundOnly);
+            var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.MiddleOnly);
             if (fgTile?.Warpable == true && fgTile.WarpTarget == null && !fgTile.WillExplodeSoon())
             {
                 var tWrap = GetTargetWarp(fgTile.NextDirection);
@@ -38,7 +38,7 @@ namespace Tiles
                     // Destroy or explode
                     if (fgTile.CanExplode)
                     {
-                        fgTile.WillExplode();
+                        fgTile.Explode();
                     }
                     else
                     {

@@ -18,7 +18,7 @@ namespace Tiles
 
         public BarrierTile()
         {
-            Background = true;
+            TileLayer = TileLayerEnum.Background;
             Indestructible = true;
             ZIndex = 0;
         }

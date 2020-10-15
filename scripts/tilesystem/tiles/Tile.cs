@@ -123,8 +123,8 @@ namespace Tiles
 
         public bool IsWarp;
 
-        /// <summary>Background.</summary>
-        public bool Background;
+        /// <summary>Tile layer.</summary>
+        public TileLayerEnum TileLayer = TileLayerEnum.Middle;
 
         /// <summary>Is player.</summary>
         public bool Player;
@@ -546,7 +546,7 @@ namespace Tiles
     {
         public BackgroundTile()
         {
-            Background = true;
+            TileLayer = TileLayerEnum.Background;
             ZIndex = 0;
             PassthroughMode = PassthroughModeEnum.All;
         }
