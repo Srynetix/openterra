@@ -64,6 +64,12 @@ namespace Tiles
             Red
         }
 
+        public enum BarrierColorEnum
+        {
+            Blue,
+            Pink
+        }
+
         public static Direction[] AllDirections = {
             Direction.Left,
             Direction.Right,

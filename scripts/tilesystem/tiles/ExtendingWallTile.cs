@@ -38,8 +38,7 @@ namespace Tiles
                 if (status.top == null)
                 {
                     var tPos = World.GetNeighborPosition(this, Direction.Up);
-                    var idx = World.TileMap.TileSet.FindTileByName("ExtendingWallUD");
-                    var tile = World.CreateTile(idx, tPos);
+                    var tile = World.CreateTile("ExtendingWallUD", tPos);
                     tile.NextDirection = Direction.Up;
                 }
 
@@ -47,8 +46,7 @@ namespace Tiles
                 if (status.bottom == null)
                 {
                     var tPos = World.GetNeighborPosition(this, Direction.Down);
-                    var idx = World.TileMap.TileSet.FindTileByName("ExtendingWallUD");
-                    var tile = World.CreateTile(idx, tPos);
+                    var tile = World.CreateTile("ExtendingWallUD", tPos);
                     tile.NextDirection = Direction.Down;
                 }
             }
@@ -59,8 +57,7 @@ namespace Tiles
                 if (status.left == null)
                 {
                     var tPos = World.GetNeighborPosition(this, Direction.Left);
-                    var idx = World.TileMap.TileSet.FindTileByName("ExtendingWallLR");
-                    var tile = World.CreateTile(idx, tPos);
+                    var tile = World.CreateTile("ExtendingWallLR", tPos);
                     tile.NextDirection = Direction.Left;
                 }
 
@@ -68,8 +65,7 @@ namespace Tiles
                 if (status.right == null)
                 {
                     var tPos = World.GetNeighborPosition(this, Direction.Right);
-                    var idx = World.TileMap.TileSet.FindTileByName("ExtendingWallLR");
-                    var tile = World.CreateTile(idx, tPos);
+                    var tile = World.CreateTile("ExtendingWallLR", tPos);
                     tile.NextDirection = Direction.Right;
                 }
             }

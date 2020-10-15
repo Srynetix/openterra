@@ -202,8 +202,7 @@ namespace Tiles
             RemoveTile(tile);
 
             // Spawn explosion
-            var explosionIdx = TileMap.TileSet.FindTileByName("Explosion");
-            var eTile = CreateTile(explosionIdx, cellPosition);
+            var eTile = CreateTile("Explosion", cellPosition);
 
             // Get neighbor tiles
             foreach (Tile.Direction dir in Tile.AllDirections)
@@ -236,7 +235,7 @@ namespace Tiles
 
                 if (shouldCreateTile)
                 {
-                    CreateTile(explosionIdx, tPos);
+                    CreateTile("Explosion", tPos);
                 }
             }
         }
@@ -312,9 +311,9 @@ namespace Tiles
             tile.QueueFree();
         }
 
-        public Tile CreateTile(int idx, Vector2 cellPosition)
+        public Tile CreateTile(string tileName, Vector2 cellPosition)
         {
-            string tileName = TileMap.TileSet.TileGetName(idx);
+            int idx = TileMap.TileSet.FindTileByName(tileName);
             Rect2 tileRect = TileMap.TileSet.TileGetRegion(idx);
             Texture tex = TileMap.TileSet.TileGetTexture(idx);
 
@@ -363,7 +362,8 @@ namespace Tiles
             foreach (Vector2 cellPosition in TileMap.GetUsedCells())
             {
                 int idx = TileMap.GetCellv(cellPosition);
-                CreateTile(idx, cellPosition);
+                string name = TileMap.TileSet.TileGetName(idx);
+                CreateTile(name, cellPosition);
             }
         }
 

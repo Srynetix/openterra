@@ -49,8 +49,8 @@ namespace Tiles
                     if (tTile == null)
                     {
                         // Spawn bomb
-                        var idx = World.TileMap.TileSet.FindTileByName("Dynamite");
-                        var bomb = (DynamiteTile)World.CreateTile(idx, tPos);
+                        var bomb = (DynamiteTile)World.CreateTile("Dynamite", tPos);
+                        bomb.Active = true;
                         bomb.WillExplode(World.GameTicks + 8);
                     }
                 }

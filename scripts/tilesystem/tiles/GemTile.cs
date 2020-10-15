@@ -1,5 +1,3 @@
-using Godot;
-
 namespace Tiles
 {
     public class GemTile : FallingTile
@@ -14,6 +12,19 @@ namespace Tiles
         public override void BeforePick()
         {
             World.PInventory.AddGems(Value);
+        }
+    }
+
+    public class GemsInDirtTile : StaticTile
+    {
+        public GemsInDirtTile()
+        {
+            Pickable = true;
+        }
+
+        public override void BeforePick()
+        {
+            World.PInventory.AddGems(2);
         }
     }
 

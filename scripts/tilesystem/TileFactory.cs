@@ -14,6 +14,7 @@ namespace Tiles
                 "Ruby" => new RubyTile(),
                 "Emerald" => new EmeraldTile(),
                 "Diamond" => new DiamondTile(),
+                "SmallGems" => new GemsInDirtTile(),
                 "Egg" => new EggTile(),
                 "Dirt" => new DirtTile(),
                 "Wall" => new WallTile(),
@@ -24,6 +25,11 @@ namespace Tiles
                 "Bomb" => new BombTile(),
                 "SteelWall" => new SteelWallTile(),
                 "Explosion" => new ExplosionTile(),
+                // Barriers
+                "ActiveBlueBarrier" => new BarrierTile() { Active = true, BarrierColor = Tile.BarrierColorEnum.Blue },
+                "DisabledBlueBarrier" => new BarrierTile() { Active = false, BarrierColor = Tile.BarrierColorEnum.Blue },
+                "ActivePinkBarrier" => new BarrierTile() { Active = true, BarrierColor = Tile.BarrierColorEnum.Pink },
+                "DisabledPinkBarrier" => new BarrierTile() { Active = false, BarrierColor = Tile.BarrierColorEnum.Pink },
                 // Keys
                 "GreenKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Green },
                 "YellowKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Yellow },
@@ -43,6 +49,14 @@ namespace Tiles
                 "Crate" => new CrateTile(),
                 "CrateLR" => new CrateTile() { PushDirectionLock = Tile.PushDirectionLockEnum.Horizontal },
                 "CrateUD" => new CrateTile() { PushDirectionLock = Tile.PushDirectionLockEnum.Vertical },
+                // Ports
+                "PortUp" => new PortTile() { PortDirection = Tile.Direction.Up },
+                "PortDown" => new PortTile() { PortDirection = Tile.Direction.Down },
+                "PortLeft" => new PortTile() { PortDirection = Tile.Direction.Left },
+                "PortRight" => new PortTile() { PortDirection = Tile.Direction.Right },
+                "PortHorizontal" => new TwoWayPortTile() { Horizontal = true },
+                "PortVertical" => new TwoWayPortTile() { Horizontal = false },
+                "Port4Way" => new FourWayPortTile(),
                 // Walls
                 "ExtendingWallLR" => new ExtendingWallTile
                 {
