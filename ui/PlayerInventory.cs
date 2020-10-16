@@ -8,7 +8,7 @@ namespace Tiles
         [Signal]
         public delegate void GemsUpdated(int quantity);
 
-        public Level Level;
+        public TileWorld World;
         public int Gems
         {
             get => _gems;
@@ -31,8 +31,11 @@ namespace Tiles
 
         public override void _Ready()
         {
+            World.Connect(nameof(TileWorld.TimeUpdated), this, nameof(UpdateTime));
+
             UpdateKeyColors();
             UpdateGemValue();
+            UpdateTime(0);
         }
 
         public void AddGems(int quantity)
@@ -71,7 +74,12 @@ namespace Tiles
 
         public void UpdateGemValue()
         {
-            GetNode<Label>("Main/TopBar/GemStats/Value").Text = _gems.ToString() + " / " + Level.GemsForNormalExit.ToString();
+            GetNode<Label>("Main/TopBar/GemStats/Value").Text = _gems.ToString() + " / " + World.TileMap.GemsForNormalExit.ToString();
+        }
+
+        private void UpdateTime(int value)
+        {
+            GetNode<Label>("Main/TopBar/TimeStats/Value").Text = Mathf.Max(World.TileMap.TimeLimit - value, 0).ToString();
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Tiles
 
         public ExitTile()
         {
-            TileLayer = TileLayerEnum.Background;
+            TileLayer = TileLayerEnum.Foreground;
         }
 
         public override void _Ready()
@@ -36,11 +36,11 @@ namespace Tiles
         public override void Step()
         {
             base.Step();
-            var thisPosition = World.GetTileCurrentGridPosition(this);
-            var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.MiddleOnly);
-            if (fgTile?.Player == true)
+
+            var tile = GetOverlappingTile(TileLayerEnum.Middle);
+            if (tile?.Player == true)
             {
-                World.RemoveTile(fgTile);
+                tile.Pick();
             }
         }
 

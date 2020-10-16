@@ -21,6 +21,8 @@ namespace Tiles
 
     public class TileWorld : Node2D
     {
+        [Signal] public delegate void TimeUpdated(int value);
+
         public Level TileMap;
         public Node2D TileContainer;
 
@@ -64,6 +66,11 @@ namespace Tiles
             get => _playerInventory;
         }
 
+        public int ElapsedTime
+        {
+            get => _elapsedTime;
+        }
+
         public VirtualKeyboard VKeyboard;
 
         private int _physicsTicks;
@@ -79,6 +86,8 @@ namespace Tiles
         private Vector2 _gridSize;
         private Dictionary<TileLayerEnum, Tile[,]> _tiles;
         private Dictionary<Tile, Vector2> _tilesIndex;
+
+        private int _elapsedTime;
 
         public static List<TileLayerEnum> AllLayers = new List<TileLayerEnum> {
             TileLayerEnum.Background,
@@ -154,8 +163,11 @@ namespace Tiles
             // Connect player inventory
             _playerInventory = (PlayerInventory)GD.Load<PackedScene>("res://ui/PlayerInventory.tscn").Instance();
             _playerInventory.Connect(nameof(PlayerInventory.GemsUpdated), this, nameof(OnGemsUpdated));
-            _playerInventory.Level = TileMap;
+            _playerInventory.World = this;
             AddChild(_playerInventory);
+
+            // Manual gems update
+            OnGemsUpdated(0);
         }
 
         private void UnsetTileAtPosition(Tile tile, Vector2 pos)
@@ -529,40 +541,37 @@ namespace Tiles
 
         public Tile GetTileAtGridPosition(Vector2 gridPosition, TilePickEnum pickEnum = TilePickEnum.ForegroundFirst)
         {
+            if (pickEnum != TilePickEnum.BackgroundOnly && pickEnum != TilePickEnum.MiddleOnly)
+            {
+                var tile = GetTileAtGridPositionAtLayer(gridPosition, TileLayerEnum.Foreground);
+                if (tile != null) return tile;
+            }
+
+            if (pickEnum != TilePickEnum.ForegroundOnly && pickEnum != TilePickEnum.BackgroundOnly)
+            {
+                var tile = GetTileAtGridPositionAtLayer(gridPosition, TileLayerEnum.Middle);
+                if (tile != null) return tile;
+
+            }
+
+            if (pickEnum != TilePickEnum.ForegroundOnly && pickEnum != TilePickEnum.MiddleOnly)
+            {
+                var tile = GetTileAtGridPositionAtLayer(gridPosition, TileLayerEnum.Background);
+                if (tile != null) return tile;
+            }
+
+            return null;
+        }
+
+        public Tile GetTileAtGridPositionAtLayer(Vector2 gridPosition, TileLayerEnum layer)
+        {
             if (gridPosition.x < 0 || gridPosition.x >= _gridSize.x || gridPosition.y < 0 || gridPosition.y >= _gridSize.y)
             {
                 // Out of bounds
                 return null;
             }
 
-            if (pickEnum != TilePickEnum.BackgroundOnly && pickEnum != TilePickEnum.MiddleOnly)
-            {
-                Tile fTile = _tiles[TileLayerEnum.Foreground][(int)gridPosition.y, (int)gridPosition.x];
-                if (fTile != null)
-                {
-                    return fTile;
-                }
-            }
-
-            if (pickEnum != TilePickEnum.ForegroundOnly && pickEnum != TilePickEnum.BackgroundOnly)
-            {
-                Tile fTile = _tiles[TileLayerEnum.Middle][(int)gridPosition.y, (int)gridPosition.x];
-                if (fTile != null)
-                {
-                    return fTile;
-                }
-            }
-
-            if (pickEnum != TilePickEnum.ForegroundOnly && pickEnum != TilePickEnum.MiddleOnly)
-            {
-                Tile bTile = _tiles[TileLayerEnum.Background][(int)gridPosition.y, (int)gridPosition.x];
-                if (bTile != null)
-                {
-                    return bTile;
-                }
-            }
-
-            return null;
+            return _tiles[layer][(int)gridPosition.y, (int)gridPosition.x];
         }
 
         public List<Tile> ListTilesAtGridPosition(Vector2 gridPosition)
@@ -663,6 +672,13 @@ namespace Tiles
             {
                 GameStep();
                 _gameTicks++;
+
+                // One second each 4 ticks
+                if (_gameTicks % 8 == 0)
+                {
+                    _elapsedTime++;
+                    EmitSignal(nameof(TimeUpdated), _elapsedTime);
+                }
             }
         }
     }

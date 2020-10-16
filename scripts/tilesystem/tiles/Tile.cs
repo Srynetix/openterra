@@ -147,6 +147,7 @@ namespace Tiles
         public bool IsGate;
         public bool IsSwitch;
         public bool IsActionable;
+        public bool TrappedInSand;
 
         /// <summary>Step ticks</summary>
         public int StepTicks = 10;
@@ -157,23 +158,7 @@ namespace Tiles
             set
             {
                 _rollDirection = value;
-                switch (_rollDirection)
-                {
-                    case RollDirectionEnum.None:
-                        MakeRollLeft = MakeRollRight = false;
-                        break;
-                    case RollDirectionEnum.Left:
-                        MakeRollLeft = true;
-                        MakeRollRight = false;
-                        break;
-                    case RollDirectionEnum.Right:
-                        MakeRollLeft = false;
-                        MakeRollRight = true;
-                        break;
-                    case RollDirectionEnum.Both:
-                        MakeRollLeft = MakeRollRight = true;
-                        break;
-                }
+                UpdateRollDirection();
             }
         }
 
@@ -200,6 +185,11 @@ namespace Tiles
                 _sourceRotation = Rotation;
                 _targetRotation = value;
             }
+        }
+
+        public Vector2 TilePosition
+        {
+            get => World.GetTileCurrentGridPosition(this);
         }
 
         public TileWorld World { get; set; }
@@ -369,6 +359,7 @@ namespace Tiles
         {
             MoveState = State.WillMove;
             NextDirection = direction;
+            Updated = true;
         }
 
         public void WillWarpTo(Tile target, Direction direction)
@@ -420,6 +411,7 @@ namespace Tiles
         {
             MoveState = State.Stopped;
             NextDirection = Direction.None;
+            Updated = true;
         }
 
         public virtual bool PreStep()
@@ -521,6 +513,37 @@ namespace Tiles
             if (WillExplodeAtTick == World.GameTicks)
             {
                 Modulate = Colors.Red;
+            }
+        }
+
+        public Tile GetOverlappingTile(TileLayerEnum layer)
+        {
+            return World.GetTileAtGridPositionAtLayer(TilePosition, layer);
+        }
+
+        public Tile GetNeighborAtDirection(Direction direction)
+        {
+            return World.GetNeighborTile(this, direction);
+        }
+
+        private void UpdateRollDirection()
+        {
+            switch (_rollDirection)
+            {
+                case RollDirectionEnum.None:
+                    MakeRollLeft = MakeRollRight = false;
+                    break;
+                case RollDirectionEnum.Left:
+                    MakeRollLeft = true;
+                    MakeRollRight = false;
+                    break;
+                case RollDirectionEnum.Right:
+                    MakeRollLeft = false;
+                    MakeRollRight = true;
+                    break;
+                case RollDirectionEnum.Both:
+                    MakeRollLeft = MakeRollRight = true;
+                    break;
             }
         }
     }

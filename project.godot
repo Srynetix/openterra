@@ -22,7 +22,9 @@ config/icon="res://icon.png"
 [display]
 
 window/stretch/mode="2d"
-window/stretch/aspect="keep_height"
+window/stretch/aspect="expand"
+window/size/width.Android=768
+window/size/height.Android=450
 
 [editor_plugins]
 

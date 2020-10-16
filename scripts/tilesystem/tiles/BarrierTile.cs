@@ -35,6 +35,23 @@ namespace Tiles
             return !Active;
         }
 
+        public override void Step()
+        {
+            base.Step();
+
+            if (!Active) return;
+
+            var tile = GetOverlappingTile(TileLayerEnum.Middle);
+            if (tile?.CanExplode == true)
+            {
+                tile.Explode();
+            }
+            else if (tile != null)
+            {
+                tile.Pick();
+            }
+        }
+
         private void UpdateTileSprite()
         {
             if (_sprite != null)

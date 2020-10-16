@@ -60,6 +60,13 @@ namespace Tiles
         {
             base.Step();
 
+            if (TrappedInSand)
+            {
+                _fallTicks = 0;
+                Stop();
+                return;
+            }
+
             // Check collisions
             var canGoDown = CanGoDown();
 
