@@ -8,7 +8,7 @@ public class TestLevel : Node2D
 {
     [Export] public int GameSpeed = 10;
 
-    private List<TileMap> _tileMaps;
+    private List<Level> _levels;
     private TileWorld _tileWorld;
     private OptionButton _optionButton;
     private Button _loadButton;
@@ -18,11 +18,11 @@ public class TestLevel : Node2D
         _optionButton = GetNode<OptionButton>("CanvasLayer/Main/Row/OptionButton");
         _loadButton = GetNode<Button>("CanvasLayer/Main/Row/Button");
         _loadButton.Connect("pressed", this, nameof(LoadCurrentTilemap));
-        _tileMaps = ListTileMaps();
+        _levels = ListLevels();
 
-        foreach (TileMap tMap in _tileMaps)
+        foreach (Level level in _levels)
         {
-            _optionButton.AddItem(tMap.Name);
+            _optionButton.AddItem(level.Name);
         }
         _optionButton.Select(0);
         LoadCurrentTilemap();
@@ -33,7 +33,7 @@ public class TestLevel : Node2D
         var selectedIdx = _optionButton.Selected;
         if (selectedIdx == -1) return;
 
-        var tileMap = _tileMaps[_optionButton.Selected];
+        var tileMap = _levels[_optionButton.Selected];
         if (_tileWorld != null)
         {
             RemoveChild(_tileWorld);
@@ -48,9 +48,9 @@ public class TestLevel : Node2D
         AddChild(_tileWorld);
     }
 
-    private List<TileMap> ListTileMaps()
+    private List<Level> ListLevels()
     {
-        var tilemaps = GetNode<Node2D>("TileMaps");
-        return tilemaps.GetChildren().Cast<TileMap>().ToList();
+        var levels = GetNode<Node2D>("Levels");
+        return levels.GetChildren().Cast<Level>().ToList();
     }
 }

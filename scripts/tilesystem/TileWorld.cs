@@ -21,11 +21,8 @@ namespace Tiles
 
     public class TileWorld : Node2D
     {
-        public TileMap TileMap;
+        public Level TileMap;
         public Node2D TileContainer;
-        public int TimeLimit = -1;
-        public int GemsForNormalExit = 5;
-        public int GemsForHardExit = 10;
 
         public int GameSpeed { set; get; } = 20;
 
@@ -157,6 +154,7 @@ namespace Tiles
             // Connect player inventory
             _playerInventory = (PlayerInventory)GD.Load<PackedScene>("res://ui/PlayerInventory.tscn").Instance();
             _playerInventory.Connect(nameof(PlayerInventory.GemsUpdated), this, nameof(OnGemsUpdated));
+            _playerInventory.Level = TileMap;
             AddChild(_playerInventory);
         }
 
@@ -416,13 +414,13 @@ namespace Tiles
         private void OnGemsUpdated(int gems)
         {
             // Exits check
-            if (!_normalExitsOpened && GemsForNormalExit <= gems)
+            if (!_normalExitsOpened && TileMap.GemsForNormalExit <= gems)
             {
                 OpenExits(Tile.ExitTypeEnum.Normal);
                 _normalExitsOpened = true;
             }
 
-            if (!_hardExitsOpened && GemsForHardExit <= gems)
+            if (!_hardExitsOpened && TileMap.GemsForHardExit <= gems)
             {
                 OpenExits(Tile.ExitTypeEnum.Hard);
                 _hardExitsOpened = true;

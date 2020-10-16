@@ -8,6 +8,7 @@ namespace Tiles
         [Signal]
         public delegate void GemsUpdated(int quantity);
 
+        public Level Level;
         public int Gems
         {
             get => _gems;
@@ -31,6 +32,7 @@ namespace Tiles
         public override void _Ready()
         {
             UpdateKeyColors();
+            UpdateGemValue();
         }
 
         public void AddGems(int quantity)
@@ -69,7 +71,7 @@ namespace Tiles
 
         public void UpdateGemValue()
         {
-            GetNode<Label>("Main/TopBar/GemStats/Value").Text = _gems.ToString();
+            GetNode<Label>("Main/TopBar/GemStats/Value").Text = _gems.ToString() + " / " + Level.GemsForNormalExit.ToString();
         }
     }
 }
