@@ -20,14 +20,11 @@ namespace Tiles
 
         public override void Step()
         {
-            base.Step();
-
             // Get fg tile
-            var thisPosition = World.GetTileCurrentGridPosition(this);
-            var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.MiddleOnly);
+            var fgTile = GetOverlappingTile(TileLayerEnum.Middle);
             if (fgTile?.Warpable == true && fgTile.WarpTarget == null && !fgTile.WillExplodeSoon())
             {
-                var tWrap = GetTargetWarp(fgTile.NextDirection);
+                var tWrap = GetTargetWarp(fgTile, fgTile.NextDirection);
                 if (tWrap != null)
                 {
                     // Send to target warp
@@ -54,30 +51,32 @@ namespace Tiles
             Modulate = Colors.White.LinearInterpolate(Colors.LightBlue, _t);
         }
 
-        public WarpTile GetTargetWarp(Direction direction)
+        public WarpTile GetTargetWarp(Tile source, Direction direction)
         {
-            var nextTilePosition = World.GetTileCurrentGridPosition(this);
+            var nextTilePosition = TilePosition;
             while (true)
             {
                 WarpTile nextTile = (WarpTile)World.ScanNextTileOfType(nextTilePosition, Type);
-                nextTilePosition = World.GetTileCurrentGridPosition(nextTile);
+                nextTilePosition = nextTile.TilePosition;
                 if (nextTile == this)
                 {
                     break;
                 }
 
-                var collisionStatus = World.GetTileCollisions(nextTile);
-                if (!nextTile.HasNeighbor(collisionStatus, direction))
+                var neighborTile = nextTile.GetNeighborAtDirection(direction);
+                if (neighborTile?.CanBePassedThrough(source, direction) == false)
                 {
+                    // If neighbor can not be passed through, continue
                     continue;
                 }
 
                 return nextTile;
             }
 
-            var thisCollisionStatus = World.GetTileCollisions(this);
-            if (HasNeighbor(thisCollisionStatus, direction))
+            var thisNeighborTile = GetNeighborAtDirection(direction);
+            if (thisNeighborTile?.CanBePassedThrough(source, direction) != false)
             {
+                // Select this warp if accessible
                 return this;
             }
 

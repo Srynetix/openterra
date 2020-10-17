@@ -22,9 +22,7 @@ namespace Tiles
 
         public override void Step()
         {
-            base.Step();
-            var thisPosition = World.GetTileCurrentGridPosition(this);
-            var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.MiddleOnly);
+            var fgTile = GetOverlappingTile(TileLayerEnum.Middle);
             if (fgTile != null)
             {
                 // Check toggle loop
@@ -40,7 +38,7 @@ namespace Tiles
                 _lastSwitchTick = World.GameTicks;
                 _lastSwitchTile = fgTile;
 
-                var n = World.GetNeighborTile(this, fgTile.NextDirection);
+                var n = GetNeighborAtDirection(fgTile.NextDirection);
                 if (n?.CanBePassedThrough(fgTile, fgTile.NextDirection) != false)
                 {
                     fgTile.MoveTowards(fgTile.NextDirection);

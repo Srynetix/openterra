@@ -21,15 +21,12 @@ namespace Tiles
 
         public override void Step()
         {
-            base.Step();
-
             var tile = GetTrappedTile();
             if (tile?.TrappedInSand == false)
             {
                 tile.TrappedInSand = true;
                 tile.Stop();
             }
-
             else if (tile?.TrappedInSand == true)
             {
                 // Check neighbor

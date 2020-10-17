@@ -27,11 +27,11 @@ namespace Tiles
             }
 
             _tickCount = 0;
-            var status = World.GetTileCollisions(this);
             if (ExtensionDirection == ExtensionDirectionEnum.UpDown || ExtensionDirection == ExtensionDirectionEnum.FourWay)
             {
                 // Expand up
-                if (status.top == null)
+                var top = GetNeighborAtDirection(Direction.Up);
+                if (top == null)
                 {
                     var tPos = World.GetNeighborPosition(this, Direction.Up);
                     var tile = World.CreateTile("ExtendingWallUD", tPos);
@@ -39,7 +39,8 @@ namespace Tiles
                 }
 
                 // Expand down
-                if (status.bottom == null)
+                var bottom = GetNeighborAtDirection(Direction.Down);
+                if (bottom == null)
                 {
                     var tPos = World.GetNeighborPosition(this, Direction.Down);
                     var tile = World.CreateTile("ExtendingWallUD", tPos);
@@ -50,7 +51,8 @@ namespace Tiles
             if (ExtensionDirection == ExtensionDirectionEnum.LeftRight || ExtensionDirection == ExtensionDirectionEnum.FourWay)
             {
                 // Expand left
-                if (status.left == null)
+                var left = GetNeighborAtDirection(Direction.Left);
+                if (left == null)
                 {
                     var tPos = World.GetNeighborPosition(this, Direction.Left);
                     var tile = World.CreateTile("ExtendingWallLR", tPos);
@@ -58,7 +60,8 @@ namespace Tiles
                 }
 
                 // Expand right
-                if (status.right == null)
+                var right = GetNeighborAtDirection(Direction.Right);
+                if (right == null)
                 {
                     var tPos = World.GetNeighborPosition(this, Direction.Right);
                     var tile = World.CreateTile("ExtendingWallLR", tPos);
@@ -75,7 +78,7 @@ namespace Tiles
             }
 
             var source = _targetPosition - (World.GetDirectionVector(NextDirection) * World.TileMap.CellSize.x);
-            float weight = (float)_currentTick / (float)StepTicks;
+            float weight = _currentTick / (float)StepTicks;
             Position = source.LinearInterpolate(_targetPosition, weight);
             _currentTick = Mathf.Clamp(_currentTick + 1, 0, StepTicks);
 

@@ -55,11 +55,9 @@ namespace Tiles
 
         public override void Step()
         {
-            base.Step();
             if (Closed) return;
 
-            var thisPosition = World.GetTileCurrentGridPosition(this);
-            var fgTile = World.GetTileAtGridPosition(thisPosition, TilePickEnum.MiddleOnly);
+            var fgTile = GetOverlappingTile(TileLayerEnum.Middle);
             if (fgTile != null)
             {
                 Closed = true;
@@ -97,22 +95,20 @@ namespace Tiles
             _willBreak = true;
             foreach (Direction direction in FourDirections)
             {
-                var tile = World.GetNeighborTile(this, direction);
+                var tile = GetNeighborAtDirection(direction);
                 if (tile is FragileWallTile fTile && fTile._breakAtTick == -1)
                 {
                     fTile.WillBreakWall();
                 }
             }
 
-            var pos = World.GetTileCurrentGridPosition(this);
+            var pos = TilePosition;
             World.RemoveTile(this);
             World.CreateTile("Explosion", pos);
         }
 
         public override void Step()
         {
-            base.Step();
-
             if (_breakAtTick == World.GameTicks)
             {
                 BreakWall();

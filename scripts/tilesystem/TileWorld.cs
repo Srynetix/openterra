@@ -528,9 +528,9 @@ namespace Tiles
             return TileMap.WorldToMap(pos);
         }
 
-        public Tile GetNeighborTile(Tile current, Tile.Direction direction)
+        public Tile GetNeighborTile(Tile current, Tile.Direction direction, TilePickEnum pickEnum = TilePickEnum.ForegroundFirst)
         {
-            return GetTileAtGridPosition(GetNeighborPosition(current, direction));
+            return GetTileAtGridPosition(GetNeighborPosition(current, direction), pickEnum);
         }
 
         public Vector2 GetNeighborPosition(Tile current, Tile.Direction direction)

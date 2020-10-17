@@ -17,7 +17,6 @@ namespace Tiles
 
         public override void Step()
         {
-            base.Step();
             Pick();
         }
     }

@@ -11,14 +11,14 @@ namespace Tiles
             RollDirection = RollDirectionEnum.Both;
         }
 
-        protected bool CanGoUp(CollisionStatus status)
+        protected bool CanGoUp()
         {
-            return status.top == null;
+            return GetNeighborAtDirection(Direction.Up) == null;
         }
 
-        protected bool CanGoDown(CollisionStatus status)
+        protected bool CanGoDown()
         {
-            return status.bottom == null;
+            return GetNeighborAtDirection(Direction.Down) == null;
         }
 
         protected bool CanPushUp()
@@ -34,9 +34,9 @@ namespace Tiles
             }
         }
 
-        private bool TryUp(CollisionStatus status)
+        private bool TryUp()
         {
-            if (CanGoUp(status))
+            if (CanGoUp())
             {
                 WillMoveTowards(Direction.Up);
                 _lastDirection = NextDirection;
@@ -54,9 +54,9 @@ namespace Tiles
             return false;
         }
 
-        private bool TryDown(CollisionStatus status)
+        private bool TryDown()
         {
-            if (CanGoDown(status))
+            if (CanGoDown())
             {
                 WillMoveTowards(Direction.Down);
                 _lastDirection = NextDirection;
@@ -71,14 +71,13 @@ namespace Tiles
             base.Step();
 
             // Check collisions
-            var status = World.GetTileCollisions(this);
             if (_lastDirection == Direction.Up)
             {
-                if (!TryUp(status) && !TryDown(status)) Stop();
+                if (!TryUp() && !TryDown()) Stop();
             }
             else if (_lastDirection == Direction.Down)
             {
-                if (!TryDown(status) && !TryUp(status)) Stop();
+                if (!TryDown() && !TryUp()) Stop();
             }
         }
 
@@ -86,9 +85,9 @@ namespace Tiles
         {
             var sb = new StringBuilder();
             sb.AppendFormat("* Last direction: {0}\n", DebugDrawUtils.ShowTileDirection(_lastDirection));
-            sb.AppendFormat("* Can go up:      {0}\n", DebugDrawUtils.ShowBool(CanGoUp(status)));
+            sb.AppendFormat("* Can go up:      {0}\n", DebugDrawUtils.ShowBool(CanGoUp()));
             sb.AppendFormat("* Can push up:    {0}\n", DebugDrawUtils.ShowBool(CanPushUp()));
-            sb.AppendFormat("* Can go down:    {0}\n", DebugDrawUtils.ShowBool(CanGoUp(status)));
+            sb.AppendFormat("* Can go down:    {0}\n", DebugDrawUtils.ShowBool(CanGoUp()));
             return sb.ToString();
         }
     }

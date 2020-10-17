@@ -19,29 +19,29 @@ namespace Tiles
 
         protected bool CanGoUp()
         {
-            var top = World.GetNeighborTile(this, Direction.Up);
+            var top = GetNeighborAtDirection(Direction.Up);
             return top?.CanBePassedThrough(this, Direction.Up) != false;
         }
 
         protected bool CanGoDown()
         {
-            var bottom = World.GetNeighborTile(this, Direction.Down);
+            var bottom = GetNeighborAtDirection(Direction.Down);
             return bottom?.CanBePassedThrough(this, Direction.Down) != false;
         }
 
         protected bool CanRollLeft()
         {
-            var bottom = World.GetNeighborTile(this, Direction.Down);
-            var left = World.GetNeighborTile(this, Direction.Left);
-            var bottomLeft = World.GetNeighborTile(this, Direction.DownLeft);
+            var bottom = GetNeighborAtDirection(Direction.Down);
+            var left = GetNeighborAtDirection(Direction.Left);
+            var bottomLeft = GetNeighborAtDirection(Direction.DownLeft);
             return bottom?.MakeRollLeft == true && bottom.MoveState == State.Stopped && left == null && bottomLeft == null;
         }
 
         protected bool CanRollRight()
         {
-            var bottom = World.GetNeighborTile(this, Direction.Down);
-            var right = World.GetNeighborTile(this, Direction.Right);
-            var bottomRight = World.GetNeighborTile(this, Direction.DownRight);
+            var bottom = GetNeighborAtDirection(Direction.Down);
+            var right = GetNeighborAtDirection(Direction.Right);
+            var bottomRight = GetNeighborAtDirection(Direction.DownRight);
             return bottom?.MakeRollRight == true && bottom.MoveState == State.Stopped && right == null && bottomRight == null;
         }
 
@@ -80,7 +80,7 @@ namespace Tiles
                 // Hit
                 if (!IsLightweight)
                 {
-                    var bottomTile = World.GetNeighborTile(this, Direction.Down);
+                    var bottomTile = GetNeighborAtDirection(Direction.Down);
                     if (bottomTile.CanExplode)
                     {
                         bottomTile.Explode();

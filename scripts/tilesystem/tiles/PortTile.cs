@@ -20,7 +20,7 @@ namespace Tiles
         {
             if (!CheckDirection(direction)) return false;
 
-            var neighbor = World.GetNeighborTile(this, direction);
+            var neighbor = GetNeighborAtDirection(direction);
             if (neighbor?.CanBePassedThrough(source, direction) != false)
             {
                 return source.Player;

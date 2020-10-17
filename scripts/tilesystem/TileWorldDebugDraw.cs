@@ -148,12 +148,12 @@ namespace Tiles
             var sb = new StringBuilder();
             var status = _world.GetTileCollisions(tile);
             sb.AppendFormat("* Tile:            {0} ({1})\n", tile.Type, tile.GetType());
+            sb.AppendFormat("* Name:            {0}\n", tile.Name);
             sb.AppendFormat("* Position:        {0}\n", tile.Position);
             sb.AppendFormat("* Target position: {0}\n", tile.TargetPosition);
             sb.AppendFormat("* Target rotation: {0}\n", tile.TargetRotation);
             sb.AppendFormat("* Cell Position:   {0}\n", _world.GetTileCurrentGridPosition(tile));
             sb.AppendFormat("* Tile layer:      {0}\n", DebugDrawUtils.ShowWithColor(tile.TileLayer, Colors.Yellow));
-            sb.AppendFormat("* State:           {0}\n", DebugDrawUtils.ShowTileState(tile.MoveState));
             sb.AppendFormat("* Direction:       {0}\n", DebugDrawUtils.ShowTileDirection(tile.NextDirection));
             sb.Append(GenerateCollisionDebugInfo(status));
 

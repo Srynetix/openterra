@@ -217,18 +217,6 @@ namespace Tiles
             _currentTick = 0;
         }
 
-        public bool HasNeighbor(CollisionStatus status, Direction direction)
-        {
-            return direction switch
-            {
-                Direction.Left => status.left == null,
-                Direction.Right => status.right == null,
-                Direction.Up => status.top == null,
-                Direction.Down => status.bottom == null,
-                _ => false,
-            };
-        }
-
         public virtual bool CanBePicked()
         {
             return Pickable;
@@ -521,9 +509,9 @@ namespace Tiles
             return World.GetTileAtGridPositionAtLayer(TilePosition, layer);
         }
 
-        public Tile GetNeighborAtDirection(Direction direction)
+        public Tile GetNeighborAtDirection(Direction direction, TilePickEnum pickEnum = TilePickEnum.ForegroundFirst)
         {
-            return World.GetNeighborTile(this, direction);
+            return World.GetNeighborTile(this, direction, pickEnum);
         }
 
         private void UpdateRollDirection()

@@ -20,19 +20,19 @@ namespace Tiles
 
         protected bool CanActionTowards(Direction direction)
         {
-            var neighbor = World.GetNeighborTile(this, direction);
+            var neighbor = GetNeighborAtDirection(direction);
             return neighbor?.IsActionable == true;
         }
 
         protected bool CanGoTowards(Direction direction)
         {
-            var neighbor = World.GetNeighborTile(this, direction);
+            var neighbor = GetNeighborAtDirection(direction);
             return neighbor == null || (neighbor?.CanBePassedThrough(this, direction) == true);
         }
 
         protected bool CanPushTowards(Direction direction)
         {
-            var neighbor = World.GetNeighborTile(this, direction);
+            var neighbor = GetNeighborAtDirection(direction);
             if (neighbor != null)
             {
                 return neighbor.CanBePushedTowards(this, direction);
@@ -95,7 +95,7 @@ namespace Tiles
             {
                 if (CanGoTowards(playerDirection))
                 {
-                    var neighbor = World.GetNeighborTile(this, playerDirection);
+                    var neighbor = GetNeighborAtDirection(playerDirection);
                     if (neighbor?.CanBePicked() == true)
                     {
                         neighbor?.Pick();
@@ -111,7 +111,7 @@ namespace Tiles
                         else if (neighbor?.IsSwitch == true)
                         {
                             // Handle back
-                            var n = World.GetNeighborTile(neighbor, playerDirection);
+                            var n = neighbor.GetNeighborAtDirection(playerDirection);
                             if (n?.CanBePassedThrough(this, playerDirection) != false)
                             {
                                 WillWarpTo(neighbor, playerDirection);
@@ -129,7 +129,7 @@ namespace Tiles
                 }
                 else if (CanPushTowards(playerDirection))
                 {
-                    var tile = World.GetNeighborTile(this, playerDirection);
+                    var tile = GetNeighborAtDirection(playerDirection);
                     tile.PushTowards(playerDirection);
 
                     if (!World.PlayerInput.Action.Pressed)
@@ -139,7 +139,7 @@ namespace Tiles
                 }
                 else if (CanActionTowards(playerDirection))
                 {
-                    var tile = World.GetNeighborTile(this, playerDirection);
+                    var tile = GetNeighborAtDirection(playerDirection);
                     tile.DoAction();
                 }
             }

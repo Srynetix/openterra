@@ -35,8 +35,6 @@ namespace Tiles
 
         public override void Step()
         {
-            base.Step();
-
             var tile = GetOverlappingTile(TileLayerEnum.Middle);
             if (tile?.Player == true)
             {
