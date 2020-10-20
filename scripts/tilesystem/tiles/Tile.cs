@@ -319,6 +319,16 @@ namespace Tiles
             return false;
         }
 
+        public Direction GetRandomDirection() {
+            return (int)GD.RandRange(0, 4) switch {
+                0 => Direction.Left,
+                1 => Direction.Right,
+                2 => Direction.Up,
+                3 => Direction.Down,
+                _ => Direction.None
+            };
+        }
+
         public void PushTowards(Direction direction)
         {
             var neighbor = World.GetNeighborTile(this, direction);

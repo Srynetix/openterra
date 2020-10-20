@@ -85,6 +85,7 @@ namespace Tiles
                     RollDirection = Tile.RollDirectionEnum.Right
                 },
                 "Quicksand" => new QuicksandTile(),
+                "Flowstone" => new FlowstoneTile(),
                 // Exits
                 "ExitClosed" => new ExitTile { ExitType = Tile.ExitTypeEnum.Normal },
                 "HardExitClosed" => new ExitTile { ExitType = Tile.ExitTypeEnum.Hard },

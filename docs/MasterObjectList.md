@@ -277,3 +277,82 @@ Is not removed by the munchkin <img src="./tiles/munch.png" width="16" />.
 
 All these can be pushed by players <img src="./tiles/player.png" width="16" />, but only one can be pushed at a time.  
 A player carrying a magnet <img src="./tiles/magnet.png" width="16" /> may also pull these objects.
+
+### ![](./tiles/crate.png) **Crate**
+Can be pushed around by movers <img src="./tiles/mover.png" width="16" /> as well.  
+Players <img src="./tiles/player.png" width="16" /> as well as movers <img src="./tiles/mover.png" width="16" /> can push multiple crates in a row, as long as no other objects are in the way.  
+Keys <img src="./tiles/rkey.png" width="16" /> can be pushed in the same way as crates, so a row of crates and keys can be pushed.  
+When moved into fire <img src="./tiles/fire.png" width="16" />, it disappears but the fire does not.  
+When moved into water <img src="./tiles/water.png" width="16" />, it disappears and changes to water to ice <img src="./tiles/ice.png" width="16" />.  
+A chain of these can be removed by a star trigger <img src="./tiles/strigger.png" width="16" />
+
+### ![](./tiles/hcrate.png) ![](./tiles/vcrate.png) **Directional crate**
+Works just like a crate, except that it can only move in the indicated directions.  
+This also means it can only be cloned <img src="./tiles/dclone.png" width="16" /> in the indicated directions.  
+This means that even on a motion field <img src="./tiles/dmfield.png" width="16" />, the crate can't move sideways to its arrow.  
+When it enters a rotation field <img src="./tiles/ccwrfield.png" width="16" />, it rotates, thus changing into the other kind of directional crate.  
+Deflection fields <img src="./tiles/bdfield.png" width="16" /> move a directional crate just like any other object.
+
+### ![](./tiles/pillow.png) **Pillow**
+Bombs <img src="./tiles/bomb.png" width="16" /> and mines <img src="./tiles/mine.png" width="16" /> will not explode when landing on a pillow.  
+When moved into fire <img src="./tiles/fire.png" width="16" />, it disappears but the fire does not.  
+When moved into water <img src="./tiles/water.png" width="16" />, it disappears and changes the water to a raft <img src="./tiles/raft.png" width="16" />.  
+Falling objects can roll off of pillows.
+
+### ![](./tiles/safe.png) **Safe**
+When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or laser (L), it changes into an egg <img src="./tiles/egg.png" width="16" />.  
+When moved into water <img src="./tiles/water.png" width="16" />, it disappears and changes the water to dirt <img src="./tiles/dirt.png" width="16" />.  
+Ignores fire <img src="./tiles/fire.png" width="16" />.
+
+### ![](./tiles/iblock.png) **Ice block**
+When pushed, it will keep moving at half speed until it hits something.  
+Since it moves at half speed the player <img src="./tiles/player.png" width="16" /> can run around it and halt it again.  
+Not affected by explosions <img src="./tiles/explosion.png" width="16" /> and lasers (L).  
+Ignores water <img src="./tiles/water.png" width="16" />.
+When moved into fire <img src="./tiles/fire.png" width="16" />, it disappears and so does the fire.  
+When moved into ice <img src="./tiles/ice.png" width="16" />, it disappears and adds a fragile wall <img src="./tiles/iwall.png" width="16" /> onto the ice.  
+When hit by a rock <img src="./tiles/rock.png" width="16" />, quantum stone <img src="./tiles/qstone.png" width="16" />, orb <img src="./tiles/orb.png" width="16" /> or bomb <img src="./tiles/bomb.png" width="16" />, it shatters.  
+This even happens when hit in the side by an orb <img src="./tiles/orb.png" width="16" />.  
+Falling objects can roll off of ice blocks.
+
+### ![](./tiles/explosive.png) **Explosive**
+When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or laser (L), it explodes.  
+When hit on top by any falling object, it also explodes.  
+When moved onto ice <img src="./tiles/ice.png" width="16" />, it disappears and so does the ice.  
+When moved onto fire <img src="./tiles/fire.png" width="16" />, it causes a small explosion. This explosion leaves a total of five fires behind.  
+When moved into water <img src="./tiles/water.png" width="16" />, it disappears but the water does not.  
+Triggering the detonator <img src="./tiles/detonator.png" width="16" /> causes all explosives in the level to explode.  
+The activator <img src="./tiles/activator.png" width="16" /> sets off all explosives within its range.  
+Falling objects can roll off of explosives.
+
+### ![](./tiles/mover.png) **Mover**
+Cannot be pushed or pulled.  
+Starts either moving in a certain direction, or stationary.  
+When moving, it keeps moving in that direction until it hits something, then it stops.  
+If whatever was in front of it is removed, it will start moving again.  
+Note that if it was pushing something and was blocked, and the object blocking the push is removed, it will not start pushing again of its own accord.  
+When it moves into water <img src="./tiles/water.png" width="16" />, it disappears but the water does not.  
+Falling objects can roll off of movers, but only if the mover is not currently moving.  
+Several switches <img src="./tiles/lmswitch.png" width="16" /> <img src="./tiles/fmswitch.png" width="16" /> <img src="./tiles/smswitch.png" width="16" /> exist that cause all movers to move in a certain direction.
+
+### ![](./tiles/elevator.png) **Elevator**
+Cannot be pushed or pulled.  
+Moves upward until it hits something, then downward until it hits something, then back up, etc.  
+Can push one falling object upward. The object will only roll off if it can no longer move upward.  
+When it moves into water <img src="./tiles/water.png" width="16" />, it disappears but the water does not.  
+If it hits a creature while moving downward, causes that creature to explode.  
+If it hits an egg <img src="./tiles/egg.png" width="16" /> while moving downward, the egg opens, revealing a diamond <img src="./tiles/diamond.png" width="16" />.
+
+### ![](./tiles/balloon.png) **Balloon**
+Can only be pushed or pulled to the left and to the right.  
+Moves upward whenever possible.  
+Can push one falling object upward. The object will only roll off if it can no longer move upward.  
+When directly under two falling objects, the balloon will move down.  
+When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or laser (L), it causes a small explosion.  
+Ignores glue <img src="./tiles/glue.png" width="16" />.  
+When moved onto fire <img src="./tiles/fire.png" width="16" />, it causes a small explosion <img src="./tiles/explosion.png" width="16" />.  
+The activator <img src="./tiles/activator.png" width="16" /> causes all balloons within range to explode.  
+When moved into water <img src="./tiles/water.png" width="16" />, it disappears but the water does not.  
+When moving upward into a spike <img src="./tiles/spike.png" width="16" />, it disappears but the spike does not.  
+If pushing a bomb <img src="./tiles/bomb.png" width="16" /> or mine <img src="./tiles/mine.png" width="16" /> into a spike <img src="./tiles/spike.png" width="16" />, it will cause the bomb or mine to explode.  
+When directly under a conveyor <img src="./tiles/ycbelt.png" width="16" />, it will move in the direction opposite to the conveyor's.
