@@ -356,3 +356,112 @@ When moved into water <img src="./tiles/water.png" width="16" />, it disappears 
 When moving upward into a spike <img src="./tiles/spike.png" width="16" />, it disappears but the spike does not.  
 If pushing a bomb <img src="./tiles/bomb.png" width="16" /> or mine <img src="./tiles/mine.png" width="16" /> into a spike <img src="./tiles/spike.png" width="16" />, it will cause the bomb or mine to explode.  
 When directly under a conveyor <img src="./tiles/ycbelt.png" width="16" />, it will move in the direction opposite to the conveyor's.
+
+## Falling objects
+
+All falling objects move down whenever possible.  
+Falling objects will roll off one another. This means that if one rock is on top of another and both are stationary, the top rock will roll to the side if the tile diagonally down is free.  
+If an object can roll both to the left and to the right, il will roll to the left.  
+Falling objects may also roll of the following: pillow <img src="./tiles/pillow.png" width="16" />, ice block <img src="./tiles/iblock.png" width="16" />, explosive <img src="./tiles/explosive.png" width="16" />, rounded wall <img src="./tiles/trwall.png" width="16" />, conveyor <img src="./tiles/rcbelt.png" width="16" />, skull <img src="./tiles/skull.png" width="16" /> and spike <img src="./tiles/spike.png" width="16" />.  
+All falling objects can be pushed by players <img src="./tiles/player.png" width="16" />, but only one can be pushed at a time and they can only be pushed to the left and to the right.  
+A player carrying a magnet <img src="./tiles/magnet.png" width="16" /> may also pull these objects, again only to the left and to the right. Yes, you can pull diamonds <img src="./tiles/diamond.png" width="16" />.  
+Gems cannot be pushed, rather thet are picked up by the player. They may, however, be pulled.  
+Keys <img src="./tiles/ykey.png" width="16" /> can only be moved if the player already carries a key of that color, they are picked up otherwise.  
+If a falling object is stuck in glue <img src="./tiles/glue.png" width="16" /> or a trap <img src="./tiles/trap.png" width="16" />, it can be pushed down.  
+Falling objects held in glue <img src="./tiles/glue.png" width="16" /> can be dislodged by droiing a rock <img src="./tiles/rock.png" width="16" />, quantum stone <img src="./tiles/qstone.png" width="16" /> or orb <img src="./tiles/orb.png" width="16" /> on them.  
+Falling objects ignore fire <img src="./tiles/fire.png" width="16" />, with the exception of bombs <img src="./tiles/bomb.png" width="16" /> and mines <img src="./tiles/mine.png" width="16" />, which explode instead.  
+When a falling object enters water <img src="./tiles/water.png" width="16" />, it disappears but the water does not.
+When it falls onto a transmuter <img src="./tiles/brtrans.png" width="16" />, a falling objects moves through and changes to something else.  
+If the tile velow a transmuter is blocked, it disappears instead.  
+When it falls onto a duplicator <img src="./tiles/dup.png" width="16" />, two versions of that same object will roll out to either side, unless blocked.  
+Note that the object must fall onto a transmuter or duplicator for it to be effective.  
+Firedrakes <img src="./tiles/firedrake.png" width="16" /> remove falling objects when they run into them, with the exception of rubies <img src="./tiles/ruby.png" width="16" /> and keys <img src="./tiles/ykey.png" width="16" />.
+
+### ![](./tiles/rock.png) **Rock**
+Transmutes to a diamond <img src="./tiles/diamond.png" width="16" />.  
+When it falls onto a fragile wall <img src="./tiles/fwall.png" width="16" /> <img src="./tiles/iwall.png" width="16" />, emerald <img src="./tiles/emerald.png" width="16" /> or ice block <img src="./tiles/iblock.png" width="16" />, it removes taht and falls through.  
+When it falls onto an egg <img src="./tiles/egg.png" width="16" />, the egg breaks and opens, revealing a diamond <img src="./tiles/diamond.png" width="16" />.  
+When it falls on a falling object stuck in glue <img src="./tiles/glue.png" width="16" />, it pushes that object down.  
+Can move through quicksand <img src="./tiles/qsand.png" width="16" /> at half speed, but cannot be pushed in or out of it.
+
+### ![](./tiles/qstone.png) **Quantum stone**
+Whenever it falls onto something and could roll off both to the left and to the right, it will split into two identical quantum stones and one will roll in each way.  
+When hit by a rock <img src="./tiles/rock.png" width="16" /> or orb <img src="./tiles/orb.png" width="16" />, it will also split in two if there's space for that; the falling object will land in between the quantum stone and its duplicate.  
+When one quantum stone hits another, the lower one will split if there's room. If not, the upper one may split.  
+Transmutes to an emerald <img src="./tiles/emerald.png" width="16" />.  
+When its falls onto a fragile wall <img src="./tiles/fwall.png" width="16" /> <img src="./tiles/iwall.png" width="16" />, emerald <img src="./tiles/emerald.png" width="16" /> or ice block <img src="./tiles/iblock.png" width="16" />, it removes that and falls through.  
+When it falls onto an egg <img src="./tiles/egg.png" width="16" />, the egg breaks and opens, revealing a diamond <img src="./tiles/diamond.png" width="16" />.  
+When it falls on a falling object stuck in glue <img src="./tiles/glue.png" width="16" />, it pushes that object down.
+
+### ![](./tiles/orb.png) **Orb**
+When pushed to the side, will keep moving on its own.  
+If it hits a wall while rolling, it bounces back and rolls in the other direction.  
+If it hits a creature while rolling, it will kill said creature. That includes you <img src="./tiles/player.png" width="16" />.  
+If it rolls off a ledge it will fall down and continue rolling once it hits the ground, unless it lands in a corner. It will not bounce after falling.  
+Will not fall through transmuters <img src="./tiles/brtrans.png" width="16" />.  
+When it falls onto a fragile wall <img src="./tiles/fwall.png" width="16" /> <img src="./tiles/iwall.png" width="16" />, emerald <img src="./tiles/emerald.png" width="16" /> or ice block <img src="./tiles/iblock.png" width="16" />, it removes that and fall through.  
+When it falls onto an egg <img src="./tiles/egg.png" width="16" />, or rolls into it from the side, the egg opens to reveal a diamond <img src="./tiles/diamond.png" width="16" />.  
+When it rolls into an emerald <img src="./tiles/emerald.png" width="16" /> or ice block <img src="./tiles/iblock.png" width="16" /> from the side, that object is destroyed and the orb bounces back.  
+When it falls on a falling object stuck in glue <img src="./tiles/glue.png" width="16" />, it pushes that object down.  
+If an orb rolls into one or more stationary orbs, the first one will stay in place and the one at the other end will start rolling.
+
+### ![](./tiles/diamond.png) **Diamond**
+Can be picked up; it's worth one point towards the gem quota.  
+When picked up, your score increases by a certain amount, which depends on the level you're in.  
+When entering a brown transmuter <img src="./tiles/brtrans.png" width="16" />, changes to an emerald <img src="./tiles/emerald.png" width="16" />.  
+When entering a blue transmuter <img src="./tiles/bltrans.png" width="16" />, changes to a rock <img src="./tiles/rock.png" width="16" />.  
+When hit by a laser (L), it is not removed and instead deflects the laser to the left at a ninety degree angle.  
+
+### ![](./tiles/emerald.png) **Emerald**
+Can be picked up; it's worth three points towards the gem quota.  
+When picked up, your score increases by twice the value of a diamond.  
+When entering a brown transmuter <img src="./tiles/brtrans.png" width="16" />, changes to a rock <img src="./tiles/rock.png" width="16" />.  
+When entering a blue transmuter <img src="./tiles/bltrans.png" width="16" />, changes to a bomb <img src="./tiles/bomb.png" width="16" />.  
+When hit by a laser (L), it is not removed and instead deflects the laser to the right at a ninety degree angle.  
+When a rock <img src="./tiles/rock.png" width="16" />, quantum stone <img src="./tiles/qstone.png" width="16" /> or orb <img src="./tiles/orb.png" width="16" /> falls on top of it, it breaks.  
+It also breaks when an orb <img src="./tiles/orb.png" width="16" /> hits it from the side.
+
+### ![](./tiles/ruby.png) **Ruby**
+Can be picked up; it's worth five points towards the gem quota.  
+When picked up, your score increases by three times the value of a diamond.  
+Transmutes to a red key <img src="./tiles/rkey.png" width="16" />.  
+Laser (L) beams ignore (pass through) rubies.  
+Not affected by explosions <img src="./tiles/explosion.png" width="16" />.  
+Unlike other falling objects, it is not eaten by the firedrake. <img src="./tiles/firedrake.png" width="16" />.  
+An explosion directly adjacent to a ruby sets off a laser beam in the opposite direction.  
+For instance a bomb exploding to the left of a ruby sets off a laser to the right.  
+Whenever a ruby is adjacent to a skull <img src="./tiles/skull.png" width="16" />, the skull fires a laser (L) through the ruby.  
+If the ruby is stationary this will cause a permanent laser beam.  
+If the ruby is in a trap <img src="./tiles/trap.png" width="16" /> at the same moment, the skull will not fire until the trap release button <img src="./tiles/rtrap.png" width="16" /> is pressed.  
+You cannot take the ruby from such a permanent laser beam because it's too hot to touch.  
+Also, other gems and objects will not roll off a hot ruby; just a quaint property of physics!  
+
+### ![](./tiles/egg.png) **Egg**
+Will not fall through brown transmuters <img src="./tiles/brtrans.png" width="16" />.  
+When entering a blue transmuter <img src="./tiles/bltrans.png" width="16" />, hatches to a cryo bird <img src="./tiles/cryo.png" width="16" />.  
+When hit on top by a rock <img src="./tiles/rock.png" width="16" />, quantum stone <img src="./tiles/qstone.png" width="16" /> or elevator <img src="./tiles/elevator.png" width="16" />, it changes into a diamond <img src="./tiles/diamond.png" width="16" />.  
+When hit on top or in the side by an orb <img src="./tiles/orb.png" width="16" />, it changes into a diamond <img src="./tiles/diamond.png" width="16" />.
+
+### ![](./tiles/bomb.png) **Bomb**
+Basically it explodes no matter what; take a look:  
+When hit on top by anything at all, it explodes.   
+Whren it passes through fire <img src="./tiles/fire.png" width="16" />, it explodes.  
+When hit from side by an orb <img src="./tiles/orb.png" width="16" />, it explodes.  
+When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or laser (L), it explodes.  
+When it falls onto a fragile wall <img src="./tiles/fwall.png" width="16" /> <img src="./tiles/iwall.png" width="16" />, it removes that and falls through.  
+When it lands on anything else, other than a pillow <img src="./tiles/pillow.png" width="16" />, it explodes.  
+WHen landing on an ice block <img src="./tiles/iblock.png" width="16" />, it will remove the ice block by shattering it; also it will explode.  
+When it lands on a transmuter <img src="./tiles/brtrans.png" width="16" />, it doesn't transmute but instead explodes.  
+The activator <img src="./tiles/activator.png" width="16" /> causes all bombs within range to explode.  
+When a firedrake <img src="./tiles/firedrake.png" width="16" /> walks into it, it kills the firedrake and explodes.
+
+### ![](./tiles/mine.png) **Mine**
+Transmutes to an emerald <img src="./tiles/emerald.png" width="16" />.  
+When hit on top by anything at all, it explodes.  
+When hit from the side by an orb <img src="./tiles/orb.png" width="16" />, it explodes.  
+When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or a laser (L), it explodes.  
+When it lands on anything else, other than a pillow <img src="./tiles/pillow.png" width="16" />, dirt <img src="./tiles/dirt.png" width="16" /> or dirt with gems <img src="./tiles/gdirt.png" width="16" />, it explodes.  
+The activator <img src="./tiles/activator.png" width="16" /> causes all mines within range to explode.  
+When a firedrake <img src="./tiles/firedrake.png" width="16" /> walks into it, it will explode but the firedrake will escape the explosion.  
+Causes small explosions <img src="./tiles/explosion.png" width="16" /> rather than large ones.  
+Mines, when linked in a chain, explode twice as fast as a chain of bombs.
