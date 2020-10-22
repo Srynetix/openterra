@@ -465,3 +465,65 @@ The activator <img src="./tiles/activator.png" width="16" /> causes all mines wi
 When a firedrake <img src="./tiles/firedrake.png" width="16" /> walks into it, it will explode but the firedrake will escape the explosion.  
 Causes small explosions <img src="./tiles/explosion.png" width="16" /> rather than large ones.  
 Mines, when linked in a chain, explode twice as fast as a chain of bombs.
+
+### ![](./tiles/rkey.png)![](./tiles/ykey.png)![](./tiles/gkey.png)![](./tiles/bkey.png) **Key**
+
+Can be picked up, then can be used to open doors <img src="./tiles/rdoor.png" width="16" /> and pass gates <img src="./tiles/bgate.png" width="16" />.  
+Passing through a door <img src="./tiles/gdoor.png" width="16" /> removes both door and key; passing through a gate <img src="./tiles/ygate.png" width="16" /> removes neither.  
+Keys fall through quicksand <img src="./tiles/qsand.png" width="16" /> at half speed, but cannot be pushed in or out of it.  
+Unlike other falling objects, it is not eaten by the firedrake <img src="./tiles/firedrake.png" width="16" />.  
+Transmutes to a differently colored key:  
+A brown transmuter <img src="./tiles/brtrans.png" width="16" /> changes red to yellow, to green, to blue, to red.  
+A blue transmuter <img src="./tiles/bltrans.png" width="16" /> changes red to blue, to green, to yellow, to red.  
+When landing on a creature (or player <img src="./tiles/player.png" width="16" />), it will not kill it.  
+Landing on a bomb <img src="./tiles/bomb.png" width="16" /> or mine <img src="./tiles/mine.png" width="16" /> still causes it to explode.  
+A player <img src="./tiles/player.png" width="16" /> can only carry one of each color of key.  
+Additional copies of that key are pushed rather than taken. They can even be pushed upward.  
+Players as well as movers <img src="./tiles/mover.png" width="16" /> can push multiple keys and/or crates <img src="./tiles/crate.png" width="16" /> in a row, as long as no other objects are in the way.  
+A player carrying a magnet <img src="./tiles/magnet.png" width="16" /> may also pull a key, of course.
+
+## Triggers
+
+Triggers can be activated by any object moving over them.  
+Some triggers cause objects to slide over them as if they were ice <img src="./tiles/ice.png" width="16" />.  
+This affects even players <img src="./tiles/player.png" width="16" /> carrying skates <img src="./tiles/skates.png" width="16" />.  
+If a trigger is embedded in a wall, it can be activated by a player <img src="./tiles/player.png" width="16" /> or cryo bird <img src="./tiles/cryo.png" width="16" /> running into said wall.  
+
+### ![](./tiles/detonator.png) **Detonator**
+Causes all explosives <img src="./tiles/explosive.png" width="16" /> to explode.  
+Can only be used once. If more explosives <img src="./tiles/explosive.png" width="16" /> appear somehow, another detonator must be used.  
+Acts as a wall; can be triggered by a cryo bird <img src="./tiles/cryo.png" width="16" />.
+
+### ![](./tiles/strigger.png) **Star trigger**
+When triggered, sets of a chain reaction that removes all fragile walls <img src="./tiles/fwall.png" width="16" /> <img src="./tiles/iwall.png" width="16" />, crates <img src="./tiles/crate.png" width="16" /> and walls with embedded objects <img src="./tiles/gemwall.png" width="16" /> that are connected to the star block or each other.  
+Will also remove star triggers in the chain reaction, including itself.  
+The activator <img src="./tiles/activator.png" width="16" /> will activate all star triggers within its range.  
+Acts as a wall; can be triggered by a cryo bird.  
+
+### ![](./tiles/bulb.png) **Bulb**
+When triggered, will attract all seekers <img src="./tiles/seek.png" width="16" /> in the level.  
+Turns itself off when another light build is triggered, or after five seconds.  
+The activator <img src="./tiles/activator.png" width="16" /> will activate a light bulb if within range.  
+If a light bulb is cloned <img src="./tiles/uclone.png" width="16" /> while lit, the clone bulb will not be lit.  
+Acts as a wall; can be triggered by a cryo bird <img src="./tiles/cryo.png" width="16" />.  
+
+### ![](./tiles/save.png) **Save disk**
+When triggered, will save the game.  
+When you dire or abort the level, you will continue from where you last saved the game.  
+Note that you can press F10 to restart the level from the beginning.  
+Acts as a wall and is removed after use.  
+Cannot be triggered by cryo birds <img src="./tiles/cryo.png" width="16" /> or activators <img src="./tiles/activator.png" width="16" />.
+
+### ![](./tiles/umswitch.png)![](./tiles/dmswitch.png)![](./tiles/lmswitch.png)![](./tiles/rmswitch.png) **Mover switch**
+When triggered, causes all movers <img src="./tiles/mover.png" width="16" /> to move in the indicated direction.  
+Laser beams (L) can trigger this switch.
+
+### ![](./tiles/smswitch.png) **Stop switch**
+When triggered, causes all movers <img src="./tiles/mover.png" width="16" /> to stop in their tracks.  
+Laser beams (L) can trigger this switch.
+
+### ![](./tiles/imswitch.png) **Inverter switch**
+When triggered, causes all movers <img src="./tiles/mover.png" width="16" /> to invert direction.  
+Movers that where stationary (because they started that way or because the stop switch was hit) remain stationary.  
+Objects slide over this switch as if it were ice <img src="./tiles/ice.png" width="16" />.  
+Laser beams (L) can trigger this switch.
