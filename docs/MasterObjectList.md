@@ -527,3 +527,211 @@ When triggered, causes all movers <img src="./tiles/mover.png" width="16" /> to 
 Movers that where stationary (because they started that way or because the stop switch was hit) remain stationary.  
 Objects slide over this switch as if it were ice <img src="./tiles/ice.png" width="16" />.  
 Laser beams (L) can trigger this switch.
+
+### ![](./tiles/fmswitch.png) **Imitation switch**
+This switch causes all movers <img src="./tiles/mover.png" width="16" /> to move in whatever direction the object triggering the switch was moving in.  
+For instance if a rock falls down over the switch, all movers will move down.  
+Objects slide over this switch as if it were ice <img src="./tiles/ice.png" width="16" />.
+
+### ![](./tiles/rcswitch.png)![](./tiles/ycswitch.png)![](./tiles/gcswitch.png) **Conveyor switch**
+Switches all conveyor belts of the appropriate color.  
+For red <img src="./tiles/rcbelt.png" width="16" /> and green <img src="./tiles/gcbelt.png" width="16" /> belts, the sequence is off - left - off - right.  
+For yellow belts <img src="./tiles/ycbelt.png" width="16" />, the sequence is off - right - off - left.  
+Note that all conveyor belts start switched off.  
+Objects slide over this switch as if it were ice <img src="./tiles/ice.png" width="16" />.
+
+### ![](./tiles/bbswitch.png)![](./tiles/pbswitch.png) **Barrier switch**
+Toggles all barriers <img src="./tiles/abbarrier.png" width="16" /> <img src="./tiles/dpbarrier.png" width="16" /> of the appropriate color.  
+If an object is over a disabled barrier, it will be destroyed when the barrier is switched on.  
+This causes enemies <img src="./tiles/slimey.png" width="16" />, bombs <img src="./tiles/bomb.png" width="16" /> and the like to explode.  
+Objects slide over this switch as if it were ice <img src="./tiles/ice.png" width="16" />.
+
+### ![](./tiles/hint.png) **Hint box**
+When a player <img src="./tiles/player.png" width="16" /> moves onto this, a hint is displayed on the screen. When the player moves off, the hint is removed.  
+Other objects ignore hint boxes.  
+There are up to eight different hints for each level.
+
+### ![](./tiles/activator.png) **Activator**
+This affects everything within a three-square radius. The area of effect is diamond-shaped.  
+The activator is removed after one use.  
+Barriers <img src="./tiles/abbarrier.png" width="16" /> <img src="./tiles/dpbarrier.png" width="16" /> are toggled.  
+Traps <img src="./tiles/trap.png" width="16" /> are opened, releasing whatever is inside.  
+Light bulbs <img src="./tiles/bulb.png" width="16" />, cloners <img src="./tiles/rclone.png" width="16" /> and star triggers <img src="./tiles/strigger.png" width="16" /> are triggered.  
+Small passages <img src="./tiles/passage.png" width="16" /> are changed to walls.  
+Balloons <img src="./tiles/balloon.png" width="16" />, bombs <img src="./tiles/bomb.png" width="16" />, mines <img src="./tiles/mine.png" width="16" />, explosives <img src="./tiles/explosive.png" width="16" /> and dynamite <img src="./tiles/dynamite.png" width="16" /> explode.  
+Extending walls <img src="./tiles/vexwall.png" width="16" /> and flowstone <img src="./tiles/fstone.png" width="16" /> are removed.
+
+### ![](./tiles/rtrap.png) **Trap release**
+When triggered, opens the first trap <img src="./tiles/trap.png" width="16" /> to the right of the release button. Whatever is in the trap may move out.  
+If no traps are to the button's direct right, the line below is checked and so forth.  
+If the object stuck in the trap doesn't move out immediately, the trap closes again.
+
+### ![](./tiles/uclone.png) ![](./tiles/dclone.png) ![](./tiles/lclone.png) ![](./tiles/rclone.png) **Cloner**
+Acts as if it were a wall.  
+Can be activated by pressing the appropriate clone button <img src="./tiles/cbutton.png" width="16" /> <img src="./tiles/acbutton.png" width="16" />, or by an activator <img src="./tiles/activator.png" width="16" />.  
+When activated, whatever is behind the cloner is duplicated.
+It moves out of the cloner to the front, and continues moving from there if appropriate.  
+This means that ice blocks <img src="./tiles/iblock.png" width="16" /> and movers <img src="./tiles/mover.png" width="16" /> keep moving until stopped.  
+If the front of the clone is blocked, no duplicate will be made.  
+Anything can be cloned, except for floor tiles and clone machines.  
+Tools <img src="./tiles/extinguisher.png" width="16" />
+, dirt <img src="./tiles/dirt.png" width="16" /> and dirt with diamonds <img src="./tiles/gdirt.png" width="16" /> can be further moved by floor tiles such as motion fields <img src="./tiles/dmfield.png" width="16" />, just like most boxes, until they come to a rest.  
+Other objects such as walls remain directly after the clone machine, removing any existing floor tiles.  
+Barriers <img src="./tiles/dbbarrier.png" width="16" /> <img src="./tiles/apbarrier.png" width="16" /> can only be cloned when they are active.  
+If a light bulb <img src="./tiles/bulb.png" width="16" /> is cloned while lit, the clone bulb will not be lit <img src="./tiles/bulb.png" width="16" />.  
+Directional crates <img src="./tiles/vcrate.png" width="16" /> can only be cloned in the indicated directions.  
+Note that if a cryo bird <img src="./tiles/cryo.png" width="16" /> is cloned while holding a tool <img src="./tiles/extinguisher.png" width="16" />, the clone will carry the same tool!  
+Note that if the player <img src="./tiles/player.png" width="16" /> is cloned, all players must still find their way to an exit <img src="./tiles/ncexit.png" width="16" /> in order to complete the level.
+
+### ![](./tiles/cbutton.png) **Clone button**
+When triggered, triggers the first cloner <img src="./tiles/dclone.png" width="16" /> to the right of the release button.  
+Whatever is behind it will be duplicated.  
+If no cloners are to the button's direct right, the line below is checked and so forth.
+
+### ![](./tiles/acbutton.png) **Mass clone button**
+When triggered, activates all cloners in the entire level.
+
+## **Enemies**
+All enemies will explode if a player <img src="./tiles/player.png" width="16" /> is adjacent, thus killing the player. This is a bad thing.  
+A player carrying a shield <img src="./tiles/shield.png" width="16" /> will not cause enemies to explode. The player is also unharmed if the enemy is stuck in a trap <img src="./tiles/trap.png" width="16" /> or glue <img src="./tiles/glue.png" width="16" />.  
+Enemies explode when hit on the head by an elevator <img src="./tiles/elevator.png" width="16" />, any falling object other than a key <img src="./tiles/ykey.png" width="16" />, or in the side by an orb <img src="./tiles/orb.png" width="16" />.  
+Enemies die (but do not explode) when netering water <img src="./tiles/water.png" width="16" /> or fire <img src="./tiles/fire.png" width="16" />.  
+Finally, enemies explode when hit by a laser (L), an explosion <img src="./tiles/explosion.png" width="16" />, or flowstone <img src="./tiles/fstone.png" width="16" />.  
+When an enemy is destroyed in any way, your score increases by an amount which depends on the level you're in.
+
+### ![](./tiles/slimey.png) **Slimey**
+Always turns left if possible. If not, it goes straight.  
+If that's blocked as well, it will turn right, wait a short while and check again.  
+When it enters glue <img src="./tiles/glue.png" width="16" />, it is removed and changes the glue to dirt will small gems <img src="./tiles/gdirt.png" width="16" />.  
+Will change selector tiles <img src="./tiles/selector.png" width="16" /> it walks over.
+
+### ![](./tiles/spider.png) **Spider**
+Always turns right if possible. Ifnot, it goes straight.  
+If that's blocked as well, it will turn left, wait a short while and check again.  
+When it explodes, it leaves nine diamonds <img src="./tiles/diamond.png" width="16" /> behind.  
+Will change selector tiles <img src="./tiles/selector.png" width="16" /> it walks over.  
+Spiders turn corners marginally slower than slimeys.
+
+### ![](./tiles/cryo.png) **Cryo bird**
+Moves straight ahead if possible.  
+If it hits anything, it will attempt to turn left, right if that fails, and back if that fails.  
+Ignores water <img src="./tiles/water.png" width="16" />.  
+When it hits a tool <img src="./tiles/shield.png" width="16" /> or dynamite <img src="./tiles/dynamite.png" width="16" />, it removes it and keeps moving.  
+Upon exploding it leaves the last tool <img src="./tiles/lifebelt.png" width="16" /> it removed behind, if any; previous tools are lost.  
+Note that if a cryo bird is cloned <img src="./tiles/lclone.png" width="16" /> while holding a tool <img src="./tiles/extinguisher.png" width="16" />, the clone will carry the same tool!  
+When it walks into a star <img src="./tiles/strigger.png" width="16" />, detonator <img src="./tiles/detonator.png" width="16" /> or light bulb <img src="./tiles/bulb.png" width="16" /> it will activate it.  
+Will change selector tiles <img src="./tiles/selector.png" width="16" /> it walks over.  
+A chain of cryo birds (and skelwings <img src="./tiles/skelwing.png" width="16" />) explodes really fast.  
+When an egg <img src="./tiles/egg.png" width="16" /> enters a blue transmuter <img src="./tiles/bltrans.png" width="16" />, it hatches to a cryo bird <img src="./tiles/cryo.png" width="16" />
+
+### ![](./tiles/firedrake.png) **Firedrake**
+Moves straight ahead if possible.  
+If it hits anyhting, it will attempt to turn right, left it that fails, and back if that fails.  
+Ignores fire <img src="./tiles/fire.png" width="16" />.  
+When it explodes, it leaves nine rocks <img src="./tiles/rock.png" width="16" /> behind.  
+When it walks into a bomb <img src="./tiles/bomb.png" width="16" /> it will cause it to explode and die itself, as well.  
+When it walks into a mine <img src="./tiles/mine.png" width="16" /> it will cause it to explode but gets out of the explosion <img src="./tiles/explosion.png" width="16" /> range in time.  
+When it hits another falling object, it removes that object and turns as if it hit a wall.  
+Rubies <img src="./tiles/ruby.png" width="16" /> and keys <img src="./tiles/gkey.png" width="16" /> are not removed by the firedrake.  
+Will change selector tiles <img src="./tiles/selector.png" width="16" /> it walks over.
+
+### ![](./tiles/skelwing.png) **Skelwing**
+Moves straight ahead if possible.  
+If it hits anything, it will turn in a unpredictable direction: left, right or back. This appears random but behaves the same way each time a level is played.  
+Upon exploding it leaves a tree-by-three area of objects. These are pre-set in the level and can contain just about anything.  
+Up to eight such sets exist per level; they can be seen by pressing the F3 key.  
+When a skelwing explodes, it advances the counter for the explosion <img src="./tiles/explosion.png" width="16" /> set.  
+Depending on the level, the counter may 1) reset to zero after a set number of explosions, or 2) get permanently set to blank space after a set number of explosions.  
+A chain of skelwings (and/or cryo birds <img src="./tiles/cryo.png" width="16" />) explodes really fast.  
+Destroying a skelwing gives twice as many points as a regular enemy.
+
+### ![](./tiles/seek.png) **Seeker**
+Normally, a seeker moves towards the closest player <img src="./tiles/player.png" width="16" />.  
+When moving diagonally, it alternates horizontal and vertical moves.  
+If a light bulb <img src="./tiles/bulb.png" width="16" /> is lit, it moves towards the bulb instead.  
+Note that light bulbs turn themselves off <img src="./tiles/bulb.png" width="16" /> after five seconds.  
+Ignores ports <img src="./tiles/dport.png" width="16" />, it can move through ports in any direction.  
+Destroying a seeker gives three times as many moints as a regular enemy.  
+All seekers move at half speed.
+
+### ![](./tiles/skull.png) **Skull of Death**
+Doesn't move.  
+Falling objects can roll off in either direction.  
+If a player <img src="./tiles/player.png" width="16" /> is in any cardinal direction with no objects standing in between (except for glass wall and floor tiles), it fires a laser in that direction.  
+Net effect is that if the skull can see a player, that player is dead.  
+Darkened skulls indicate which tiles are visible to the skull. Tread with care.  
+Whenever a ruby <img src="./tiles/ruby.png" width="16" /> is adjacent, fires a laser (L) in that direction.  
+If the ruby is stationary this will cause a permanent laser beam.  
+If the ruby is in a trap <img src="./tiles/trap.png" width="16" /> at the same moment, the skull will not fire until the trap release button <img src="./tiles/rtrap.png" width="16" /> is pressed.  
+You cannot take the ruby <img src="./tiles/ruby.png" width="16" /> from such a permanent laser beam because it's too hot to touch.  
+Does not yield any points when destroyed.
+
+### ![](./tiles/pgem.png) **Poltergeist gem**
+Moves straight ahead if possible.  
+If it hits anything, it will turn in a unpredictable direction: left, right or back. This appears random but behaves the same way each time a level is played.  
+Does not explode when adjacent to a player <img src="./tiles/player.png" width="16" />.  
+When trapped so that it cannot move anywhere, it changes to a diamond <img src="./tiles/diamond.png" width="16" />.  
+Does not yield any points when destroyed.
+
+### ![](./tiles/fstone.png) **Flowstone**
+Slowly duplicates itself in four directions, gradually filling the entire area.  
+Does not explode when adjacent to a player <img src="./tiles/player.png" width="16" />.  
+Other enemies explode when adjacent to flowstone, except for the skull <img src="./tiles/skull.png" width="16" /> and poltergeist <img src="./tiles/pgem.png" width="16" />.  
+This does not apply to enemies stuck in a trap <img src="./tiles/trap.png" width="16" /> or glue <img src="./tiles/glue.png" width="16" />.  
+Ignores dirt <img src="./tiles/dirt.png" width="16" /> and all floor tiles, except for traps <img src="./tiles/trap.png" width="16" />.  
+Even if the flowstone is trapped, it will still destroy adjacent enemies.  
+The activator <img src="./tiles/activator.png" width="16" /> removes all flowstone within its range.  
+Expanding flowstone moves at half speed.  
+Does not yield any points when destroyed.
+
+## Miscellaneous
+
+### ![](./tiles/player.png) **Player**
+That's you.  
+There can be any number of players on the level. They can be cloned <img src="./tiles/lclone.png" width="16" />, too.  
+All players must get to an exit <img src="./tiles/noexit.png" width="16" /> in order to complete th elevel.  
+The hard mode exit <img src="./tiles/hcexit.png" width="16" /> only lets a single player through.
+
+### ![](./tiles/explosion.png) **Explosion**
+Several objects in the game can explode. These include:  
+All creatures other than skulls <img src="./tiles/skull.png" width="16" />, poltergeists <img src="./tiles/pgem.png" width="16" /> and flowstone <img src="./tiles/fstone.png" width="16" />;  
+Bombs <img src="./tiles/bomb.png" width="16" />, mines <img src="./tiles/mine.png" width="16" />, explosives <img src="./tiles/explosive.png" width="16" /> and dynamite <img src="./tiles/dynamite.png" width="16" /> (duh) and balloons <img src="./tiles/balloon.png" width="16" />.  
+Mines <img src="./tiles/mine.png" width="16" /> and balloons <img src="./tiles/balloon.png" width="16" /> cause small explosions.  
+Skelwings <img src="./tiles/skelwing.png" width="16" />, spiders <img src="./tiles/spider.png" width="16" /> and firedrakes <img src="./tiles/firedrake.png" width="16" /> leave stuff behind when they explode.  
+Rubies <img src="./tiles/ruby.png" width="16" />, ice blocks <img src="./tiles/iblock.png" width="16" />, steel wall <img src="./tiles/steelwall.png" width="16" />, doors <img src="./tiles/ydoor.png" width="16" /> and active barriers <img src="./tiles/abbarrier.png" width="16" /> <img src="./tiles/apbarrier.png" width="16" /> are unaffectede by explosions.
+
+### ![](./tiles/explosion.png) **An explosion occurs when such an object...**
+is hit on top by an elevator <img src="./tiles/elevator.png" width="16" />, or any falling object ther than a key <img src="./tiles/bkey.png" width="16" />.  
+is jit in the side by an orb <img src="./tiles/orb.png" width="16" />.  
+is caught in a previous explosion or caught in a laser beam (L).  
+is on top of a barrier <img src="./tiles/dbbarrier.png" width="16" /> <img src="./tiles/apbarrier.png" width="16" /> when it is suddenly activated.  
+is stuck in a teleporter <img src="./tiles/warp.png" width="16" /> when nowhere to go.  
+Bombs <img src="./tiles/bomb.png" width="16" />, mines <img src="./tiles/mine.png" width="16" /> and balloons <img src="./tiles/balloon.png" width="16" /> explode when they move into fire <img src="./tiles/fire.png" width="16" />.  
+Creatures other than poltergeists <img src="./tiles/pgem.png" width="16" /> and flowstone <img src="./tiles/fstone.png" width="16" /> explode when they touch a player <img src="./tiles/player.png" width="16" />.  
+Creatures other than poltergeists <img src="./tiles/pgem.png" width="16" /> and skulls <img src="./tiles/skull.png" width="16" /> explode when they touch flowstone <img src="./tiles/fstone.png" width="16" />.  
+Explosives <img src="./tiles/explosive.png" width="16" /> will explode if the detonator <img src="./tiles/detonator.png" width="16" /> is triggered.  
+Bombs <img src="./tiles/bomb.png" width="16" /> and mines <img src="./tiles/mine.png" width="16" /> will explode if pushed into a spike <img src="./tiles/spike.png" width="16" /> by a balloon <img src="./tiles/balloon.png" width="16" />.  
+Balloons <img src="./tiles/balloon.png" width="16" />, bombs <img src="./tiles/bomb.png" width="16" />, mines <img src="./tiles/mine.png" width="16" />, explosives <img src="./tiles/explosive.png" width="16" /> and dynamite <img src="./tiles/dynamite.png" width="16" /> explode when hit by the activator <img src="./tiles/activator.png" width="16" />.
+
+### (L) **Laser beam**
+Whenever a ruby <img src="./tiles/ruby.png" width="16" /> is adjacent to a skull <img src="./tiles/skull.png" width="16" />, the skull fires a laser (L) in that direction.  
+An explosion <img src="./tiles/explosion.png" width="16" /> directly adjacent to a ruby <img src="./tiles/ruby.png" width="16" /> sets off a laser beam in the opposite direction.  
+Laser beams pass through glass walls <img src="./tiles/glasswall.png" width="16" />, rubies <img src="./tiles/ruby.png" width="16" /> and all floor tiles without effect.  
+A diamond <img src="./tiles/diamond.png" width="16" /> will deflect a laser to the left.  
+An emerald <img src="./tiles/emerald.png" width="16" /> will deflect a laser to the right.  
+Ice blocks <img src="./tiles/iblock.png" width="16" />, steel wall <img src="./tiles/steelwall.png" width="16" /> and active barriers <img src="./tiles/abbarrier.png" width="16" /> <img src="./tiles/apbarrier.png" width="16" /> are unaffected by lasers.  
+Laser beams trigger mover switches <img src="./tiles/rmswitch.png" width="16" /> <img src="./tiles/fmswitch.png" width="16" /> <img src="./tiles/imswitch.png" width="16" /> if they pass over them.
+
+### ![](./tiles/diamond.png) **Bonus points**
+When you complete a level, your score is increased by the Level score. Additionally, the level bonus can be awarded up to three times.  
+Once for completing the level within the time limit.  
+Once more for reaching the special red exit with each player.  
+And once more for collecting the gem quota required for hard level.  
+You'll need all three of these in order to complete a level on hard mode.
+
+### (C) **Speed limits**
+A 'clock tick' is one frame of animation, or the smallest time frame that exists in the game.  
+Every object may move one per clock tick. Most objects move one pixel per clock tick, but some are faster or slower.  
+Whenever the documentation refers to a 'second', this actually means 256 clock ticks.  
+If you set the speed in the menu to normal, 240 clock ticks occur per real-world second, so 16 game seconds equal 15 real seconds.  
+That is, if your monitor refresh rate is detected successfully. Hold down F12 to see the refresh rate.
