@@ -25,36 +25,36 @@ namespace Tiles
                 "SteelWall" => new SteelWallTile(),
                 "Explosion" => new ExplosionTile(),
                 // Barriers
-                "ActiveBlueBarrier" => new BarrierTile() { Active = true, BarrierColor = Tile.BarrierColorEnum.Blue },
-                "DisabledBlueBarrier" => new BarrierTile() { Active = false, BarrierColor = Tile.BarrierColorEnum.Blue },
-                "ActivePinkBarrier" => new BarrierTile() { Active = true, BarrierColor = Tile.BarrierColorEnum.Pink },
-                "DisabledPinkBarrier" => new BarrierTile() { Active = false, BarrierColor = Tile.BarrierColorEnum.Pink },
-                "BlueBarrierSwitch" => new BarrierSwitchTile() { BarrierColor = Tile.BarrierColorEnum.Blue },
-                "PinkBarrierSwitch" => new BarrierSwitchTile() { BarrierColor = Tile.BarrierColorEnum.Pink },
+                "ActiveBlueBarrier" => new BarrierTile() { Active = true, BarrierColor = BarrierColorEnum.Blue },
+                "DisabledBlueBarrier" => new BarrierTile() { Active = false, BarrierColor = BarrierColorEnum.Blue },
+                "ActivePinkBarrier" => new BarrierTile() { Active = true, BarrierColor = BarrierColorEnum.Pink },
+                "DisabledPinkBarrier" => new BarrierTile() { Active = false, BarrierColor = BarrierColorEnum.Pink },
+                "BlueBarrierSwitch" => new BarrierSwitchTile() { BarrierColor = BarrierColorEnum.Blue },
+                "PinkBarrierSwitch" => new BarrierSwitchTile() { BarrierColor = BarrierColorEnum.Pink },
                 // Keys
-                "GreenKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Green },
-                "YellowKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Yellow },
-                "RedKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Red },
-                "BlueKey" => new KeyTile() { KeyColor = KeyTile.KeyColorEnum.Blue },
+                "GreenKey" => new KeyTile() { KeyColor = KeyColorEnum.Green },
+                "YellowKey" => new KeyTile() { KeyColor = KeyColorEnum.Yellow },
+                "RedKey" => new KeyTile() { KeyColor = KeyColorEnum.Red },
+                "BlueKey" => new KeyTile() { KeyColor = KeyColorEnum.Blue },
                 // Doors
-                "GreenDoor" => new DoorTile() { KeyColor = KeyTile.KeyColorEnum.Green },
-                "YellowDoor" => new DoorTile() { KeyColor = KeyTile.KeyColorEnum.Yellow },
-                "RedDoor" => new DoorTile() { KeyColor = KeyTile.KeyColorEnum.Red },
-                "BlueDoor" => new DoorTile() { KeyColor = KeyTile.KeyColorEnum.Blue },
+                "GreenDoor" => new DoorTile() { KeyColor = KeyColorEnum.Green },
+                "YellowDoor" => new DoorTile() { KeyColor = KeyColorEnum.Yellow },
+                "RedDoor" => new DoorTile() { KeyColor = KeyColorEnum.Red },
+                "BlueDoor" => new DoorTile() { KeyColor = KeyColorEnum.Blue },
                 // Gates
-                "GreenGate" => new GateTile() { KeyColor = KeyTile.KeyColorEnum.Green },
-                "YellowGate" => new GateTile() { KeyColor = KeyTile.KeyColorEnum.Yellow },
-                "RedGate" => new GateTile() { KeyColor = KeyTile.KeyColorEnum.Red },
-                "BlueGate" => new GateTile() { KeyColor = KeyTile.KeyColorEnum.Blue },
+                "GreenGate" => new GateTile() { KeyColor = KeyColorEnum.Green },
+                "YellowGate" => new GateTile() { KeyColor = KeyColorEnum.Yellow },
+                "RedGate" => new GateTile() { KeyColor = KeyColorEnum.Red },
+                "BlueGate" => new GateTile() { KeyColor = KeyColorEnum.Blue },
                 // Crates
                 "Crate" => new CrateTile(),
-                "CrateLR" => new CrateTile() { PushDirectionLock = Tile.PushDirectionLockEnum.Horizontal },
-                "CrateUD" => new CrateTile() { PushDirectionLock = Tile.PushDirectionLockEnum.Vertical },
+                "CrateLR" => new CrateTile() { PushDirectionLock = PushDirectionLockEnum.Horizontal },
+                "CrateUD" => new CrateTile() { PushDirectionLock = PushDirectionLockEnum.Vertical },
                 // Ports
-                "PortUp" => new PortTile() { PortDirection = Tile.Direction.Up },
-                "PortDown" => new PortTile() { PortDirection = Tile.Direction.Down },
-                "PortLeft" => new PortTile() { PortDirection = Tile.Direction.Left },
-                "PortRight" => new PortTile() { PortDirection = Tile.Direction.Right },
+                "PortUp" => new PortTile() { PortDirection = Direction.Up },
+                "PortDown" => new PortTile() { PortDirection = Direction.Down },
+                "PortLeft" => new PortTile() { PortDirection = Direction.Left },
+                "PortRight" => new PortTile() { PortDirection = Direction.Right },
                 "PortHorizontal" => new TwoWayPortTile() { Horizontal = true },
                 "PortVertical" => new TwoWayPortTile() { Horizontal = false },
                 "Port4Way" => new FourWayPortTile(),
@@ -78,17 +78,17 @@ namespace Tiles
                 "TopRoundedWall" => new RoundedWallTile(),
                 "TopLeftRoundedWall" => new RoundedWallTile
                 {
-                    RollDirection = Tile.RollDirectionEnum.Left
+                    RollDirection = RollDirectionEnum.Left
                 },
                 "TopRightRoundedWall" => new RoundedWallTile
                 {
-                    RollDirection = Tile.RollDirectionEnum.Right
+                    RollDirection = RollDirectionEnum.Right
                 },
                 "Quicksand" => new QuicksandTile(),
                 "Flowstone" => new FlowstoneTile(),
                 // Exits
-                "ExitClosed" => new ExitTile { ExitType = Tile.ExitTypeEnum.Normal },
-                "HardExitClosed" => new ExitTile { ExitType = Tile.ExitTypeEnum.Hard },
+                "ExitClosed" => new ExitTile { ExitType = ExitTypeEnum.Normal },
+                "HardExitClosed" => new ExitTile { ExitType = ExitTypeEnum.Hard },
                 "Slimey" => new SlimeyTile(),
                 "Elevator" => new ElevatorTile(),
                 "Warp" => new WarpTile(),

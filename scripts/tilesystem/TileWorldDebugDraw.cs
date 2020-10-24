@@ -10,13 +10,13 @@ namespace Tiles
             return value ? ShowWithColor(true, Colors.Green) : ShowWithColor(false, Colors.Red);
         }
 
-        public static string ShowTileState(Tile.State state)
+        public static string ShowTileState(State state)
         {
-            if (state == Tile.State.Stopped)
+            if (state == State.Stopped)
             {
                 return ShowWithColor(state, Colors.Red);
             }
-            else if (state == Tile.State.Moving)
+            else if (state == State.Moving)
             {
                 return ShowWithColor(state, Colors.Green);
             }
@@ -26,9 +26,9 @@ namespace Tiles
             }
         }
 
-        public static string ShowTileDirection(Tile.Direction direction)
+        public static string ShowTileDirection(Direction direction)
         {
-            if (direction == Tile.Direction.None)
+            if (direction == Direction.None)
             {
                 return ShowWithColor(direction, Colors.Red);
             }

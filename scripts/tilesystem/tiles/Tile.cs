@@ -7,74 +7,6 @@ namespace Tiles
     /// </summary>
     public class Tile : Node2D
     {
-        /// <summary>
-        /// Tile state.
-        /// </summary>
-        public enum State
-        {
-            Stopped,
-            WillMove,
-            Moving
-        }
-
-        /// <summary>
-        /// Tile direction.
-        /// </summary>
-        public enum Direction
-        {
-            None,
-            Left,
-            Right,
-            Up,
-            Down,
-            UpLeft,
-            UpRight,
-            DownLeft,
-            DownRight
-        }
-
-        public enum RollDirectionEnum
-        {
-            None,
-            Left,
-            Right,
-            Both
-        }
-
-        public enum PassthroughModeEnum
-        {
-            Nothing,
-            PlayerOnly,
-            All
-        }
-
-        public enum PushDirectionLockEnum
-        {
-            None,
-            Horizontal,
-            Vertical
-        }
-
-        public enum KeyColorEnum
-        {
-            Green,
-            Yellow,
-            Blue,
-            Red
-        }
-
-        public enum BarrierColorEnum
-        {
-            Blue,
-            Pink
-        }
-
-        public enum ExitTypeEnum
-        {
-            Normal,
-            Hard
-        }
-
         public static Direction[] AllDirections = {
             Direction.Left,
             Direction.Right,
@@ -222,7 +154,7 @@ namespace Tiles
             return Pickable;
         }
 
-        public virtual bool CanBePassedThrough(Tile source, Tile.Direction direction)
+        public virtual bool CanBePassedThrough(Tile source, Direction direction)
         {
             if (source.Player && CanBePicked()) return true;
 
@@ -545,78 +477,4 @@ namespace Tiles
             }
         }
     }
-
-    public class StaticTile : Tile
-    {
-        public StaticTile()
-        {
-            Movable = false;
-            Warpable = false;
-        }
-    }
-
-    public class ControlledTile : Tile
-    {
-        public ControlledTile()
-        {
-            Controlled = true;
-        }
-    }
-
-    public class BackgroundTile : StaticTile
-    {
-        public BackgroundTile()
-        {
-            TileLayer = TileLayerEnum.Background;
-            ZIndex = 0;
-            PassthroughMode = PassthroughModeEnum.All;
-        }
-    }
-
-    public class SaveTile : ControlledTile
-    {
-        public SaveTile()
-        {
-            Pickable = true;
-        }
-    }
-
-    public class HintTile : BackgroundTile { }
-
-    public class RockTile : FallingTile
-    {
-        public RockTile()
-        {
-            IsHeavy = true;
-        }
-    }
-
-    public class BombTile : FallingTile
-    {
-        public BombTile()
-        {
-            CanExplode = true;
-        }
-    }
-
-    public class EggTile : FallingTile { }
-
-    public class DirtTile : StaticTile
-    {
-        public DirtTile()
-        {
-            Pickable = true;
-        }
-    }
-
-    public class MarbleFloorTile : BackgroundTile
-    {
-        public MarbleFloorTile()
-        {
-            Indestructible = true;
-            PassthroughMode = PassthroughModeEnum.PlayerOnly;
-        }
-    }
-
-    public class SlimeyTile : ControlledTile { }
 }

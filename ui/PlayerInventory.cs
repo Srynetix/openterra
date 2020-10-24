@@ -15,17 +15,17 @@ namespace Tiles
         }
 
         private int _gems;
-        private readonly Dictionary<Tile.KeyColorEnum, bool> _keys;
+        private readonly Dictionary<KeyColorEnum, bool> _keys;
 
         public PlayerInventory()
         {
             Name = "PlayerInventory";
-            _keys = new Dictionary<Tile.KeyColorEnum, bool>
+            _keys = new Dictionary<KeyColorEnum, bool>
             {
-                [Tile.KeyColorEnum.Blue] = false,
-                [Tile.KeyColorEnum.Green] = false,
-                [Tile.KeyColorEnum.Red] = false,
-                [Tile.KeyColorEnum.Yellow] = false
+                [KeyColorEnum.Blue] = false,
+                [KeyColorEnum.Green] = false,
+                [KeyColorEnum.Red] = false,
+                [KeyColorEnum.Yellow] = false
             };
         }
 
@@ -46,18 +46,18 @@ namespace Tiles
             EmitSignal(nameof(GemsUpdated), _gems);
         }
 
-        public bool HasKeyColor(Tile.KeyColorEnum color)
+        public bool HasKeyColor(KeyColorEnum color)
         {
             return _keys[color];
         }
 
-        public void SetKeyColor(Tile.KeyColorEnum color)
+        public void SetKeyColor(KeyColorEnum color)
         {
             _keys[color] = true;
             UpdateKeyColors();
         }
 
-        public void UnsetKeyColor(Tile.KeyColorEnum color)
+        public void UnsetKeyColor(KeyColorEnum color)
         {
             _keys[color] = false;
             UpdateKeyColors();
@@ -65,7 +65,7 @@ namespace Tiles
 
         public void UpdateKeyColors()
         {
-            foreach (Tile.KeyColorEnum color in _keys.Keys)
+            foreach (KeyColorEnum color in _keys.Keys)
             {
                 var node = GetNode<Control>("Main/TopBar/KeyStats/" + color.ToString() + "Key");
                 node.Visible = _keys[color];

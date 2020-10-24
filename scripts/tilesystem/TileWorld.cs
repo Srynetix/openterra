@@ -4,21 +4,6 @@ using System.Linq;
 
 namespace Tiles
 {
-    public enum TilePickEnum
-    {
-        ForegroundFirst,
-        BackgroundOnly,
-        MiddleOnly,
-        ForegroundOnly
-    }
-
-    public enum TileLayerEnum
-    {
-        Background,
-        Middle,
-        Foreground
-    }
-
     public class TileWorld : Node2D
     {
         [Signal] public delegate void TimeUpdated(int value);
@@ -214,7 +199,7 @@ namespace Tiles
             var eTile = CreateTile("Explosion", cellPosition);
 
             // Get neighbor tiles
-            foreach (Tile.Direction dir in Tile.AllDirections)
+            foreach (Direction dir in Tile.AllDirections)
             {
                 var tPos = GetNeighborPosition(eTile, dir);
                 var tTiles = ListTilesAtGridPosition(tPos);
@@ -322,7 +307,7 @@ namespace Tiles
             }
         }
 
-        public void ToggleBarriersState(Tile.BarrierColorEnum barrierColor)
+        public void ToggleBarriersState(BarrierColorEnum barrierColor)
         {
             foreach (BarrierTile tile in GetTree().GetNodesInGroup(barrierColor.ToString() + "_barrier"))
             {
@@ -330,7 +315,7 @@ namespace Tiles
             }
         }
 
-        public void OpenExits(Tile.ExitTypeEnum exitType)
+        public void OpenExits(ExitTypeEnum exitType)
         {
             foreach (ExitTile tile in GetTree().GetNodesInGroup(exitType.ToString() + "_exit"))
             {
@@ -416,7 +401,7 @@ namespace Tiles
         {
             foreach (Tile tile in tiles)
             {
-                if (tile.MoveState == Tile.State.WillMove && !tile.Destroyed)
+                if (tile.MoveState == State.WillMove && !tile.Destroyed)
                 {
                     tile.Move();
                 }
@@ -428,13 +413,13 @@ namespace Tiles
             // Exits check
             if (!_normalExitsOpened && TileMap.GemsForNormalExit <= gems)
             {
-                OpenExits(Tile.ExitTypeEnum.Normal);
+                OpenExits(ExitTypeEnum.Normal);
                 _normalExitsOpened = true;
             }
 
             if (!_hardExitsOpened && TileMap.GemsForHardExit <= gems)
             {
-                OpenExits(Tile.ExitTypeEnum.Hard);
+                OpenExits(ExitTypeEnum.Hard);
                 _hardExitsOpened = true;
             }
         }
@@ -528,12 +513,12 @@ namespace Tiles
             return TileMap.WorldToMap(pos);
         }
 
-        public Tile GetNeighborTile(Tile current, Tile.Direction direction, TilePickEnum pickEnum = TilePickEnum.ForegroundFirst)
+        public Tile GetNeighborTile(Tile current, Direction direction, TilePickEnum pickEnum = TilePickEnum.ForegroundFirst)
         {
             return GetTileAtGridPosition(GetNeighborPosition(current, direction), pickEnum);
         }
 
-        public Vector2 GetNeighborPosition(Tile current, Tile.Direction direction)
+        public Vector2 GetNeighborPosition(Tile current, Direction direction)
         {
             var pos = current.TargetPosition;
             return TileMap.WorldToMap(pos) + GetDirectionVector(direction);
@@ -612,35 +597,35 @@ namespace Tiles
             GetTree().ReloadCurrentScene();
         }
 
-        public Vector2 GetDirectionVector(Tile.Direction direction)
+        public Vector2 GetDirectionVector(Direction direction)
         {
             return direction switch
             {
-                Tile.Direction.Left => new Vector2(-1, 0),
-                Tile.Direction.Right => new Vector2(1, 0),
-                Tile.Direction.Up => new Vector2(0, -1),
-                Tile.Direction.Down => new Vector2(0, 1),
-                Tile.Direction.UpLeft => new Vector2(-1, -1),
-                Tile.Direction.UpRight => new Vector2(1, -1),
-                Tile.Direction.DownLeft => new Vector2(-1, 1),
-                Tile.Direction.DownRight => new Vector2(1, 1),
+                Direction.Left => new Vector2(-1, 0),
+                Direction.Right => new Vector2(1, 0),
+                Direction.Up => new Vector2(0, -1),
+                Direction.Down => new Vector2(0, 1),
+                Direction.UpLeft => new Vector2(-1, -1),
+                Direction.UpRight => new Vector2(1, -1),
+                Direction.DownLeft => new Vector2(-1, 1),
+                Direction.DownRight => new Vector2(1, 1),
                 _ => new Vector2(0, 0),
             };
         }
 
-        public Tile.Direction GetInvertedDirection(Tile.Direction direction)
+        public Direction GetInvertedDirection(Direction direction)
         {
             return direction switch
             {
-                Tile.Direction.Left => Tile.Direction.Right,
-                Tile.Direction.Right => Tile.Direction.Left,
-                Tile.Direction.Up => Tile.Direction.Down,
-                Tile.Direction.Down => Tile.Direction.Up,
-                Tile.Direction.UpLeft => Tile.Direction.DownRight,
-                Tile.Direction.UpRight => Tile.Direction.DownLeft,
-                Tile.Direction.DownLeft => Tile.Direction.UpRight,
-                Tile.Direction.DownRight => Tile.Direction.UpLeft,
-                _ => Tile.Direction.None,
+                Direction.Left => Direction.Right,
+                Direction.Right => Direction.Left,
+                Direction.Up => Direction.Down,
+                Direction.Down => Direction.Up,
+                Direction.UpLeft => Direction.DownRight,
+                Direction.UpRight => Direction.DownLeft,
+                Direction.DownLeft => Direction.UpRight,
+                Direction.DownRight => Direction.UpLeft,
+                _ => Direction.None,
             };
         }
 
