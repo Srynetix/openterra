@@ -1,7 +1,7 @@
 # Master Object List (extracted from SubTerra I)
 
 The list is divided into the following sections, in that order: *Walls*, *Player passages*, *Floor tiles*, *Tools*, *Movable objects*, *Falling objects*, *Triggers*, *Enemies*, and *Miscellaneous*.  
-Unless noted otherwise, any object can be removed by a laser (L) or explosion <img src="./tiles/explosion.png" width="16" />.
+Unless noted otherwise, any object can be removed by a laser <img src="./tiles/laser.png" width="16" /> or explosion <img src="./tiles/explosion.png" width="16" />.
 Note that there are no such things as illusory objects in the game; everything is exactly what it appears to be. No invisible walls, no secret passages, etc.  
 Nor are there random objects in the game. Note that the skelwing and poltergeist are not in fact random; they behave the same way every time.
 
@@ -20,11 +20,11 @@ If an object can roll both to the left and to the right, it will roll to the lef
 Lasers will pass through rather than destroying it.
 
 ### ![](./tiles/gemwall.png) ![](./tiles/cratewall.png) ![](./tiles/balloonwall.png) ![](./tiles/keywall.png) **Wall with embedded object**
-The embedded object is released when the wall is destroyed by explosion <img src="./tiles/explosion.png" width="16" />, laser (L) or star trigger <img src="./tiles/strigger.png" width="16" />.  
+The embedded object is released when the wall is destroyed by explosion <img src="./tiles/explosion.png" width="16" />, laser <img src="./tiles/laser.png" width="16" /> or star trigger <img src="./tiles/strigger.png" width="16" />.  
 See below for descriptions of the objects inside the wall.
 
 ### ![](./tiles/steelwall.png) **Steel wall**
-Not affected by explosions <img src="./tiles/explosion.png" width="16" /> and lasers (L).  
+Not affected by explosions <img src="./tiles/explosion.png" width="16" /> and lasers <img src="./tiles/laser.png" width="16" />.  
 Note that the border of the level is considered steel wall even if it's usually out of sight.
 
 ### ![](./tiles/hexwall.png) ![](./tiles/vexwall.png) ![](./tiles/fexwall.png) **Extending wall**
@@ -36,8 +36,8 @@ Is affected by traps <img src="./tiles/trap.png" width="16" />; other floor tile
 
 ### ![](./tiles/abbarrier.png) ![](./tiles/dbbarrier.png) ![](./tiles/apbarrier.png) ![](./tiles/dpbarrier.png) **Barriers**
 A barrier may only be passed by any object when it's disabled.  
-An active barrier is not affected by explosions <img src="./tiles/explosion.png" width="16" /> and lasers (L).  
-A disabled barrier is not affected by lasers (L) but may be removed by explosions <img src="./tiles/explosion.png" width="16" />.  
+An active barrier is not affected by explosions <img src="./tiles/explosion.png" width="16" /> and lasers <img src="./tiles/laser.png" width="16" />.  
+A disabled barrier is not affected by lasers <img src="./tiles/laser.png" width="16" /> but may be removed by explosions <img src="./tiles/explosion.png" width="16" />.  
 The switch <img src="./tiles/bbswitch.png" width="16" /> <img src="./tiles/pbswitch.png" width="16" /> toggles all barriers of the appropriate color.  
 The activator <img src="./tiles/activator.png" width="16" /> also toggles all barriers within its radius.  
 If an object is over a disabled barrier, it will be destroyed when the barrier is switched on.
@@ -94,7 +94,7 @@ An egg <img src="./tiles/egg.png" width="16" /> hatches to a cryo bird <img src=
 These may only be passed by players <img src="./tiles/player.png" width="16" />. Other objects treat these as walls.
 
 ### ![](./tiles/marble.png) **Marble**
-Not affected by explosions <img src="./tiles/explosion.png" width="16" />; however, can be removed by lasers (L).  
+Not affected by explosions <img src="./tiles/explosion.png" width="16" />; however, can be removed by lasers <img src="./tiles/laser.png" width="16" />.  
 A player <img src="./tiles/player.png" width="16" /> cannot be harmed in any way while standing on marble, except if the marble is removed by the laser.
 
 ### ![](./tiles/dirt.png) ![](./tiles/gdirt.png) **Dirt**
@@ -108,7 +108,7 @@ The activator <img src="./tiles/activator.png" width="16" /> changes all small p
 If the player <img src="./tiles/player.png" width="16" /> is on the passage when this happens, the player is not harmed.
 
 ### ![](./tiles/rdoor.png) ![](./tiles/ydoor.png) ![](./tiles/gdoor.png) ![](./tiles/bdoor.png) **Doors**
-Doors are not affected by explosions <img src="./tiles/explosion.png" width="16" /> but can be removed by lasers (L).  
+Doors are not affected by explosions <img src="./tiles/explosion.png" width="16" /> but can be removed by lasers <img src="./tiles/laser.png" width="16" />.  
 A player <img src="./tiles/player.png" width="16" /> can pass through a door only while carrying the appropriate key <img src="./tiles/gkey.png" width="16" />.  
 This removes both key and door.
 
@@ -134,7 +134,7 @@ Note that the hard gem quota will be ignored if it is less than the easy gem quo
 
 ## **Floor tiles**
 
-Lasers (L) ignore (that is, pass through) all floor tiles.  
+Lasers <img src="./tiles/laser.png" width="16" /> ignore (that is, pass through) all floor tiles.  
 Extending walls <img src="./tiles/vexwall.png" width="16" /> and flowstone <img src="./tiles/fstone.png" width="16" /> ignore all floor tiles except for traps <img src="./tiles/trap.png" width="16" />.  
 Unless otherwise specified, all objects move over floor tiles normally.  
 Floor tiles are the only objects that cannot be cloned <img src="./tiles/lclone.png" width="16" />
@@ -267,7 +267,7 @@ A player carrying a shield will not cause adjacent enemies to explode.
 A player carrying a magnet may pull any object that can normally be pushed - including gems <img src="./tiles/diamond.png" width="16" /> <img src="./tiles/emerald.png" width="16" />.
 
 ### ![](./tiles/dynamite.png) **Dynamite**
-Explodes when hit by an explosion <img src="./tiles/explosion.png" width="16" />, laser (L) or activator <img src="./tiles/activator.png" width="16" />.  
+Explodes when hit by an explosion <img src="./tiles/explosion.png" width="16" />, laser <img src="./tiles/laser.png" width="16" /> or activator <img src="./tiles/activator.png" width="16" />.  
 Can be dropped by the player <img src="./tiles/player.png" width="16" /> which causes it t explode after three seconds.  
 To drop a bar of dynamite, hold control and press any direction to run away.  
 Flowstone <img src="./tiles/fstone.png" width="16" /> does not grow over dynamite.  
@@ -300,14 +300,14 @@ When moved into water <img src="./tiles/water.png" width="16" />, it disappears 
 Falling objects can roll off of pillows.
 
 ### ![](./tiles/safe.png) **Safe**
-When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or laser (L), it changes into an egg <img src="./tiles/egg.png" width="16" />.  
+When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or laser <img src="./tiles/laser.png" width="16" />, it changes into an egg <img src="./tiles/egg.png" width="16" />.  
 When moved into water <img src="./tiles/water.png" width="16" />, it disappears and changes the water to dirt <img src="./tiles/dirt.png" width="16" />.  
 Ignores fire <img src="./tiles/fire.png" width="16" />.
 
 ### ![](./tiles/iblock.png) **Ice block**
 When pushed, it will keep moving at half speed until it hits something.  
 Since it moves at half speed the player <img src="./tiles/player.png" width="16" /> can run around it and halt it again.  
-Not affected by explosions <img src="./tiles/explosion.png" width="16" /> and lasers (L).  
+Not affected by explosions <img src="./tiles/explosion.png" width="16" /> and lasers <img src="./tiles/laser.png" width="16" />.  
 Ignores water <img src="./tiles/water.png" width="16" />.
 When moved into fire <img src="./tiles/fire.png" width="16" />, it disappears and so does the fire.  
 When moved into ice <img src="./tiles/ice.png" width="16" />, it disappears and adds a fragile wall <img src="./tiles/iwall.png" width="16" /> onto the ice.  
@@ -316,7 +316,7 @@ This even happens when hit in the side by an orb <img src="./tiles/orb.png" widt
 Falling objects can roll off of ice blocks.
 
 ### ![](./tiles/explosive.png) **Explosive**
-When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or laser (L), it explodes.  
+When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or laser <img src="./tiles/laser.png" width="16" />, it explodes.  
 When hit on top by any falling object, it also explodes.  
 When moved onto ice <img src="./tiles/ice.png" width="16" />, it disappears and so does the ice.  
 When moved onto fire <img src="./tiles/fire.png" width="16" />, it causes a small explosion. This explosion leaves a total of five fires behind.  
@@ -348,7 +348,7 @@ Can only be pushed or pulled to the left and to the right.
 Moves upward whenever possible.  
 Can push one falling object upward. The object will only roll off if it can no longer move upward.  
 When directly under two falling objects, the balloon will move down.  
-When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or laser (L), it causes a small explosion.  
+When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or laser <img src="./tiles/laser.png" width="16" />, it causes a small explosion.  
 Ignores glue <img src="./tiles/glue.png" width="16" />.  
 When moved onto fire <img src="./tiles/fire.png" width="16" />, it causes a small explosion <img src="./tiles/explosion.png" width="16" />.  
 The activator <img src="./tiles/activator.png" width="16" /> causes all balloons within range to explode.  
@@ -410,14 +410,14 @@ Can be picked up; it's worth one point towards the gem quota.
 When picked up, your score increases by a certain amount, which depends on the level you're in.  
 When entering a brown transmuter <img src="./tiles/brtrans.png" width="16" />, changes to an emerald <img src="./tiles/emerald.png" width="16" />.  
 When entering a blue transmuter <img src="./tiles/bltrans.png" width="16" />, changes to a rock <img src="./tiles/rock.png" width="16" />.  
-When hit by a laser (L), it is not removed and instead deflects the laser to the left at a ninety degree angle.  
+When hit by a laser <img src="./tiles/laser.png" width="16" />, it is not removed and instead deflects the laser to the left at a ninety degree angle.  
 
 ### ![](./tiles/emerald.png) **Emerald**
 Can be picked up; it's worth three points towards the gem quota.  
 When picked up, your score increases by twice the value of a diamond.  
 When entering a brown transmuter <img src="./tiles/brtrans.png" width="16" />, changes to a rock <img src="./tiles/rock.png" width="16" />.  
 When entering a blue transmuter <img src="./tiles/bltrans.png" width="16" />, changes to a bomb <img src="./tiles/bomb.png" width="16" />.  
-When hit by a laser (L), it is not removed and instead deflects the laser to the right at a ninety degree angle.  
+When hit by a laser <img src="./tiles/laser.png" width="16" />, it is not removed and instead deflects the laser to the right at a ninety degree angle.  
 When a rock <img src="./tiles/rock.png" width="16" />, quantum stone <img src="./tiles/qstone.png" width="16" /> or orb <img src="./tiles/orb.png" width="16" /> falls on top of it, it breaks.  
 It also breaks when an orb <img src="./tiles/orb.png" width="16" /> hits it from the side.
 
@@ -425,12 +425,12 @@ It also breaks when an orb <img src="./tiles/orb.png" width="16" /> hits it from
 Can be picked up; it's worth five points towards the gem quota.  
 When picked up, your score increases by three times the value of a diamond.  
 Transmutes to a red key <img src="./tiles/rkey.png" width="16" />.  
-Laser (L) beams ignore (pass through) rubies.  
+Laser <img src="./tiles/laser.png" width="16" /> beams ignore (pass through) rubies.  
 Not affected by explosions <img src="./tiles/explosion.png" width="16" />.  
 Unlike other falling objects, it is not eaten by the firedrake. <img src="./tiles/firedrake.png" width="16" />.  
 An explosion directly adjacent to a ruby sets off a laser beam in the opposite direction.  
 For instance a bomb exploding to the left of a ruby sets off a laser to the right.  
-Whenever a ruby is adjacent to a skull <img src="./tiles/skull.png" width="16" />, the skull fires a laser (L) through the ruby.  
+Whenever a ruby is adjacent to a skull <img src="./tiles/skull.png" width="16" />, the skull fires a laser <img src="./tiles/laser.png" width="16" /> through the ruby.  
 If the ruby is stationary this will cause a permanent laser beam.  
 If the ruby is in a trap <img src="./tiles/trap.png" width="16" /> at the same moment, the skull will not fire until the trap release button <img src="./tiles/rtrap.png" width="16" /> is pressed.  
 You cannot take the ruby from such a permanent laser beam because it's too hot to touch.  
@@ -447,7 +447,7 @@ Basically it explodes no matter what; take a look:
 When hit on top by anything at all, it explodes.   
 Whren it passes through fire <img src="./tiles/fire.png" width="16" />, it explodes.  
 When hit from side by an orb <img src="./tiles/orb.png" width="16" />, it explodes.  
-When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or laser (L), it explodes.  
+When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or laser <img src="./tiles/laser.png" width="16" />, it explodes.  
 When it falls onto a fragile wall <img src="./tiles/fwall.png" width="16" /> <img src="./tiles/iwall.png" width="16" />, it removes that and falls through.  
 When it lands on anything else, other than a pillow <img src="./tiles/pillow.png" width="16" />, it explodes.  
 WHen landing on an ice block <img src="./tiles/iblock.png" width="16" />, it will remove the ice block by shattering it; also it will explode.  
@@ -459,7 +459,7 @@ When a firedrake <img src="./tiles/firedrake.png" width="16" /> walks into it, i
 Transmutes to an emerald <img src="./tiles/emerald.png" width="16" />.  
 When hit on top by anything at all, it explodes.  
 When hit from the side by an orb <img src="./tiles/orb.png" width="16" />, it explodes.  
-When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or a laser (L), it explodes.  
+When hit by an explosion <img src="./tiles/explosion.png" width="16" /> or a laser <img src="./tiles/laser.png" width="16" />, it explodes.  
 When it lands on anything else, other than a pillow <img src="./tiles/pillow.png" width="16" />, dirt <img src="./tiles/dirt.png" width="16" /> or dirt with gems <img src="./tiles/gdirt.png" width="16" />, it explodes.  
 The activator <img src="./tiles/activator.png" width="16" /> causes all mines within range to explode.  
 When a firedrake <img src="./tiles/firedrake.png" width="16" /> walks into it, it will explode but the firedrake will escape the explosion.  
@@ -516,17 +516,17 @@ Cannot be triggered by cryo birds <img src="./tiles/cryo.png" width="16" /> or a
 
 ### ![](./tiles/umswitch.png)![](./tiles/dmswitch.png)![](./tiles/lmswitch.png)![](./tiles/rmswitch.png) **Mover switch**
 When triggered, causes all movers <img src="./tiles/mover.png" width="16" /> to move in the indicated direction.  
-Laser beams (L) can trigger this switch.
+Laser beams <img src="./tiles/laser.png" width="16" /> can trigger this switch.
 
 ### ![](./tiles/smswitch.png) **Stop switch**
 When triggered, causes all movers <img src="./tiles/mover.png" width="16" /> to stop in their tracks.  
-Laser beams (L) can trigger this switch.
+Laser beams <img src="./tiles/laser.png" width="16" /> can trigger this switch.
 
 ### ![](./tiles/imswitch.png) **Inverter switch**
 When triggered, causes all movers <img src="./tiles/mover.png" width="16" /> to invert direction.  
 Movers that where stationary (because they started that way or because the stop switch was hit) remain stationary.  
 Objects slide over this switch as if it were ice <img src="./tiles/ice.png" width="16" />.  
-Laser beams (L) can trigger this switch.
+Laser beams <img src="./tiles/laser.png" width="16" /> can trigger this switch.
 
 ### ![](./tiles/fmswitch.png) **Imitation switch**
 This switch causes all movers <img src="./tiles/mover.png" width="16" /> to move in whatever direction the object triggering the switch was moving in.  
@@ -596,7 +596,7 @@ All enemies will explode if a player <img src="./tiles/player.png" width="16" />
 A player carrying a shield <img src="./tiles/shield.png" width="16" /> will not cause enemies to explode. The player is also unharmed if the enemy is stuck in a trap <img src="./tiles/trap.png" width="16" /> or glue <img src="./tiles/glue.png" width="16" />.  
 Enemies explode when hit on the head by an elevator <img src="./tiles/elevator.png" width="16" />, any falling object other than a key <img src="./tiles/ykey.png" width="16" />, or in the side by an orb <img src="./tiles/orb.png" width="16" />.  
 Enemies die (but do not explode) when netering water <img src="./tiles/water.png" width="16" /> or fire <img src="./tiles/fire.png" width="16" />.  
-Finally, enemies explode when hit by a laser (L), an explosion <img src="./tiles/explosion.png" width="16" />, or flowstone <img src="./tiles/fstone.png" width="16" />.  
+Finally, enemies explode when hit by a laser <img src="./tiles/laser.png" width="16" />, an explosion <img src="./tiles/explosion.png" width="16" />, or flowstone <img src="./tiles/fstone.png" width="16" />.  
 When an enemy is destroyed in any way, your score increases by an amount which depends on the level you're in.
 
 ### ![](./tiles/slimey.png) **Slimey**
@@ -660,7 +660,7 @@ Falling objects can roll off in either direction.
 If a player <img src="./tiles/player.png" width="16" /> is in any cardinal direction with no objects standing in between (except for glass wall and floor tiles), it fires a laser in that direction.  
 Net effect is that if the skull can see a player, that player is dead.  
 Darkened skulls indicate which tiles are visible to the skull. Tread with care.  
-Whenever a ruby <img src="./tiles/ruby.png" width="16" /> is adjacent, fires a laser (L) in that direction.  
+Whenever a ruby <img src="./tiles/ruby.png" width="16" /> is adjacent, fires a laser <img src="./tiles/laser.png" width="16" /> in that direction.  
 If the ruby is stationary this will cause a permanent laser beam.  
 If the ruby is in a trap <img src="./tiles/trap.png" width="16" /> at the same moment, the skull will not fire until the trap release button <img src="./tiles/rtrap.png" width="16" /> is pressed.  
 You cannot take the ruby <img src="./tiles/ruby.png" width="16" /> from such a permanent laser beam because it's too hot to touch.  
@@ -703,7 +703,7 @@ Rubies <img src="./tiles/ruby.png" width="16" />, ice blocks <img src="./tiles/i
 ### ![](./tiles/explosion.png) **An explosion occurs when such an object...**
 is hit on top by an elevator <img src="./tiles/elevator.png" width="16" />, or any falling object ther than a key <img src="./tiles/bkey.png" width="16" />.  
 is jit in the side by an orb <img src="./tiles/orb.png" width="16" />.  
-is caught in a previous explosion or caught in a laser beam (L).  
+is caught in a previous explosion or caught in a laser beam <img src="./tiles/laser.png" width="16" />.  
 is on top of a barrier <img src="./tiles/dbbarrier.png" width="16" /> <img src="./tiles/apbarrier.png" width="16" /> when it is suddenly activated.  
 is stuck in a teleporter <img src="./tiles/warp.png" width="16" /> when nowhere to go.  
 Bombs <img src="./tiles/bomb.png" width="16" />, mines <img src="./tiles/mine.png" width="16" /> and balloons <img src="./tiles/balloon.png" width="16" /> explode when they move into fire <img src="./tiles/fire.png" width="16" />.  
@@ -713,8 +713,8 @@ Explosives <img src="./tiles/explosive.png" width="16" /> will explode if the de
 Bombs <img src="./tiles/bomb.png" width="16" /> and mines <img src="./tiles/mine.png" width="16" /> will explode if pushed into a spike <img src="./tiles/spike.png" width="16" /> by a balloon <img src="./tiles/balloon.png" width="16" />.  
 Balloons <img src="./tiles/balloon.png" width="16" />, bombs <img src="./tiles/bomb.png" width="16" />, mines <img src="./tiles/mine.png" width="16" />, explosives <img src="./tiles/explosive.png" width="16" /> and dynamite <img src="./tiles/dynamite.png" width="16" /> explode when hit by the activator <img src="./tiles/activator.png" width="16" />.
 
-### (L) **Laser beam**
-Whenever a ruby <img src="./tiles/ruby.png" width="16" /> is adjacent to a skull <img src="./tiles/skull.png" width="16" />, the skull fires a laser (L) in that direction.  
+### <img src="./tiles/laser.png" width="16" /> **Laser beam**
+Whenever a ruby <img src="./tiles/ruby.png" width="16" /> is adjacent to a skull <img src="./tiles/skull.png" width="16" />, the skull fires a laser <img src="./tiles/laser.png" width="16" /> in that direction.  
 An explosion <img src="./tiles/explosion.png" width="16" /> directly adjacent to a ruby <img src="./tiles/ruby.png" width="16" /> sets off a laser beam in the opposite direction.  
 Laser beams pass through glass walls <img src="./tiles/glasswall.png" width="16" />, rubies <img src="./tiles/ruby.png" width="16" /> and all floor tiles without effect.  
 A diamond <img src="./tiles/diamond.png" width="16" /> will deflect a laser to the left.  
@@ -729,9 +729,9 @@ Once more for reaching the special red exit with each player.
 And once more for collecting the gem quota required for hard level.  
 You'll need all three of these in order to complete a level on hard mode.
 
-### (C) **Speed limits**
+### ![](./tiles/clock.png) **Speed limits**
 A 'clock tick' is one frame of animation, or the smallest time frame that exists in the game.  
-Every object may move one per clock tick. Most objects move one pixel per clock tick, but some are faster or slower.  
+Every object may move once per clock tick. Most objects move one pixel per clock tick, but some are faster or slower.  
 Whenever the documentation refers to a 'second', this actually means 256 clock ticks.  
 If you set the speed in the menu to normal, 240 clock ticks occur per real-world second, so 16 game seconds equal 15 real seconds.  
 That is, if your monitor refresh rate is detected successfully. Hold down F12 to see the refresh rate.
