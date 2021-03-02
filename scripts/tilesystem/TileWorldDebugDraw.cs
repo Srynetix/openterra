@@ -107,7 +107,7 @@ namespace Tiles
             _cellLabel = new RichTextLabel
             {
                 Name = "CellLabel",
-                RectMinSize = size * new Vector2(1, 0.5f),
+                RectMinSize = size * new Vector2(1, 0.75f),
                 RectPosition = (size * new Vector2(0, 0.25f)) + new Vector2(12, 12),
                 BbcodeEnabled = true,
                 BbcodeText = GenerateCellText(),
@@ -130,6 +130,7 @@ namespace Tiles
             sb.AppendFormat("* FPS: {0}\n", DebugDrawUtils.ShowFPS(Engine.GetFramesPerSecond()));
             sb.AppendFormat("* Simulation status: {0}\n", DebugDrawUtils.ShowBool(_world.Running));
             sb.AppendFormat("* Ticks elapsed: {0}\n", _world.GameTicks);
+            sb.AppendFormat("* Seconds elapsed: {0}\n", _world.ElapsedTime);
             return sb.ToString();
         }
 
@@ -148,10 +149,14 @@ namespace Tiles
             var sb = new StringBuilder();
             var status = _world.GetTileCollisions(tile);
             sb.AppendFormat("* Tile:            {0} ({1})\n", tile.Type, tile.GetType());
-            sb.AppendFormat("* Name:            {0}\n", tile.Name);
+            sb.AppendFormat("* Name:            {0} (#{1})\n", tile.Name, tile.GetInstanceId());
             sb.AppendFormat("* Position:        {0}\n", tile.Position);
+            sb.AppendFormat("* Rotation:        {0}\n", Mathf.Rad2Deg(tile.Rotation));
+            sb.AppendFormat("* State:           {0}\n", tile.MoveState);
+            sb.AppendFormat("* Last direction:  {0}\n", tile.LastDirection);
+            sb.AppendFormat("* Priority:        {0}\n", tile.Priority);
             sb.AppendFormat("* Target position: {0}\n", tile.TargetPosition);
-            sb.AppendFormat("* Target rotation: {0}\n", tile.TargetRotation);
+            sb.AppendFormat("* Target rotation: {0}\n", Mathf.Rad2Deg(tile.TargetRotation));
             sb.AppendFormat("* Cell Position:   {0}\n", _world.GetTileCurrentGridPosition(tile));
             sb.AppendFormat("* Tile layer:      {0}\n", DebugDrawUtils.ShowWithColor(tile.TileLayer, Colors.Yellow));
             sb.AppendFormat("* Direction:       {0}\n", DebugDrawUtils.ShowTileDirection(tile.NextDirection));

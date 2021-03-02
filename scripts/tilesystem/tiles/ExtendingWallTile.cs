@@ -72,21 +72,21 @@ namespace Tiles
 
         public override void _Process(float delta)
         {
-            if (_hasExpanded)
-            {
-                return;
-            }
+            // if (_hasExpanded)
+            // {
+            //     return;
+            // }
 
-            var source = _targetPosition - (World.GetDirectionVector(NextDirection) * World.TileMap.CellSize.x);
-            float weight = _currentTick / (float)StepTicks;
-            Position = source.LinearInterpolate(_targetPosition, weight);
-            _currentTick = Mathf.Clamp(_currentTick + 1, 0, StepTicks);
+            // var source = _targetPosition - (World.GetDirectionVector(NextDirection) * World.TileMap.CellSize.x);
+            // float weight = _currentTick / (float)StepTicks;
+            // Position = source.LinearInterpolate(_targetPosition, weight);
+            // _currentTick = Mathf.Clamp(_currentTick + 1, 0, StepTicks);
 
-            // Ok
-            if (_currentTick == StepTicks)
-            {
-                _hasExpanded = true;
-            }
+            // // Ok
+            // if (_currentTick == StepTicks)
+            // {
+            //     _hasExpanded = true;
+            // }
         }
 
         public override string GenerateTileDebugInfo(CollisionStatus status)

@@ -6,6 +6,7 @@ namespace Tiles {
     {
         Stopped,
         WillMove,
+        DoneMoving,
         Moving
     }
 

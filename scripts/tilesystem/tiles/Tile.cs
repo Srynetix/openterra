@@ -68,6 +68,7 @@ namespace Tiles
 
         /// <summary>Next direction.</summary>
         public Direction NextDirection;
+        public Direction LastDirection;
 
         public Tile WarpTarget;
         public int WillExplodeAtTick = -1;
@@ -80,9 +81,17 @@ namespace Tiles
         public bool IsSwitch;
         public bool IsActionable;
         public bool TrappedInSand;
+        public bool Moved;
 
         /// <summary>Step ticks</summary>
         public int StepTicks = 10;
+
+        public Vector2 SourcePosition;
+        public Vector2 TargetPosition;
+        public float SourceRotation;
+        public float TargetRotation;
+
+        public int StateMachineIdx;
 
         public RollDirectionEnum RollDirection
         {
@@ -94,31 +103,6 @@ namespace Tiles
             }
         }
 
-        public Vector2 SourcePosition
-        {
-            get => _sourcePosition;
-        }
-
-        public Vector2 TargetPosition
-        {
-            get => _targetPosition;
-            set
-            {
-                _sourcePosition = Position;
-                _targetPosition = value;
-            }
-        }
-
-        public float TargetRotation
-        {
-            get => _targetRotation;
-            set
-            {
-                _sourceRotation = Rotation;
-                _targetRotation = value;
-            }
-        }
-
         public Vector2 TilePosition
         {
             get => World.GetTileCurrentGridPosition(this);
@@ -127,10 +111,6 @@ namespace Tiles
         public TileWorld World { get; set; }
         public bool Updated { get; set; }
 
-        protected Vector2 _sourcePosition;
-        protected Vector2 _targetPosition;
-        protected float _sourceRotation;
-        protected float _targetRotation;
         protected int _currentTick;
         protected RollDirectionEnum _rollDirection;
         protected Sprite _sprite;
@@ -142,11 +122,12 @@ namespace Tiles
 
         public void ResetTick()
         {
-            _targetRotation %= Mathf.Pi * 2;
-            Position = _sourcePosition = _targetPosition;
-            Rotation = _sourceRotation = _targetRotation;
+            // _targetRotation %= Mathf.Pi * 2;
+            // Position = _sourcePosition = _targetPosition;
+            // Rotation = _sourceRotation = _targetRotation;
             Updated = false;
-            _currentTick = 0;
+            Moved = false;
+            // _currentTick = 0;
         }
 
         public virtual bool CanBePicked()
@@ -288,8 +269,15 @@ namespace Tiles
         public void WillMoveTowards(Direction direction)
         {
             MoveState = State.WillMove;
+            LastDirection = direction;
             NextDirection = direction;
+            SourcePosition = Position;
+            TargetPosition = Position + TileUtils.GetDirectionVector(direction) * World.TileMap.CellSize.x;
+            SourceRotation = Rotation;
+            TargetRotation = Rotation + Mathf.Deg2Rad(180);
+            World.UpdateTilePosition(this);
             Updated = true;
+            GD.Print("Node ", Name, " will move towards ", direction);
         }
 
         public void WillWarpTo(Tile target, Direction direction)
@@ -322,14 +310,14 @@ namespace Tiles
             Updated = true;
         }
 
-        public Direction GetInvertedDirection()
+        public Direction GetInvertedNextDirection()
         {
-            return World.GetInvertedDirection(NextDirection);
+            return TileUtils.GetInvertedDirection(NextDirection);
         }
 
-        public Vector2 GetDirectionVector()
+        public Vector2 GetNextDirectionVector()
         {
-            return World.GetDirectionVector(NextDirection);
+            return TileUtils.GetDirectionVector(NextDirection);
         }
 
         public override void _Ready()
@@ -371,57 +359,88 @@ namespace Tiles
             World.RemoveTile(this);
         }
 
+        public override void _Draw() {
+            var color = Colors.LightBlue;
+            var ballSize = 4;
+
+            if (TileUtils.IsDirectionHorizontal(NextDirection)) {
+                var src = new Vector2(-World.TileMap.CellSize.x / 4, 0);
+                var dst = new Vector2(World.TileMap.CellSize.x / 4, 0);
+                DrawLine(src, dst, color);
+
+                if (NextDirection == Direction.Left) {
+                    DrawCircle(src, ballSize, color);
+                } else {
+                    DrawCircle(dst, ballSize, color);
+                }
+            } else if (TileUtils.IsDirectionVertical(NextDirection)) {
+                var src = new Vector2(0, -World.TileMap.CellSize.y / 4);
+                var dst = new Vector2(0, World.TileMap.CellSize.y / 4);
+                DrawLine(src, dst, color);
+
+                if (NextDirection == Direction.Up) {
+                    DrawCircle(src, ballSize, color);
+                } else {
+                    DrawCircle(dst, ballSize, color);
+                }
+            }
+        }
+
         public virtual void Move()
         {
-            var offset = World.TileMap.CellSize.x;
-            var directionVector = GetDirectionVector();
-            var newTargetPosition = TargetPosition + (directionVector * offset);
+            const int offset = 2;
+            var directionVector = GetNextDirectionVector();
+            Position += directionVector * offset;
+
+            // Detect if position is round
+            if (Position == TargetPosition) {
+                MoveState = State.DoneMoving;
+            } else {
+                MoveState = State.Moving;
+            }
+
+            // var newTargetPosition = TargetPosition + (directionVector * offset);
 
             // Use warp?
-            if (WarpTarget != null)
-            {
-                var tWTile = World.GetNeighborTile(WarpTarget, NextDirection);
-                if (tWTile?.CanBePassedThrough(this, NextDirection) == false && tWTile != this)
-                {
-                    Stop();
-                    WarpTarget = null;
-                    return;
-                }
-                else
-                {
-                    // Teleport
-                    Position = WarpTarget.Position;
-                    newTargetPosition = WarpTarget.Position + (offset * directionVector);
-                    WarpTarget = null;
-                }
-            }
-            else
-            {
-                // Detect tile
-                var tTile = World.GetNeighborTile(this, NextDirection);
-                if (tTile?.CanBePassedThrough(this, NextDirection) == false)
-                {
-                    Stop();
-                    return;
-                }
-            }
+            // if (WarpTarget != null)
+            // {
+            //     var tWTile = World.GetNeighborTile(WarpTarget, NextDirection);
+            //     if (tWTile?.CanBePassedThrough(this, NextDirection) == false && tWTile != this)
+            //     {
+            //         Stop();
+            //         WarpTarget = null;
+            //         return;
+            //     }
+            //     else
+            //     {
+            //         // Teleport
+            //         Position = WarpTarget.Position;
+            //         newTargetPosition = WarpTarget.Position + (offset * directionVector);
+            //         WarpTarget = null;
+            //     }
+            // }
+            // else
+            // {
+            //     // Detect tile
+            //     var tTile = World.GetNeighborTile(this, NextDirection);
+            //     if (tTile?.CanBePassedThrough(this, NextDirection) == false)
+            //     {
+            //         Stop();
+            //         return;
+            //     }
+            // }
+
+            // float l1 = (TargetPosition - SourcePosition).LengthSquared();
+            // float l2 = (TargetPosition - Position).LengthSquared();
+            // float c = 1 - (l2 / l1);
 
             // Rotation
-            if (CanRotate && directionVector.y >= 0)
+            if (CanRotate)
             {
-                var rotationOffset = Mathf.Deg2Rad(180);
-                if (directionVector.x == 0)
-                {
-                    TargetRotation += rotationOffset;
-                }
-                else
-                {
-                    TargetRotation += directionVector.x * rotationOffset;
-                }
+                // Rotation += (TargetRotation - SourceRotation) / World.TileMap.CellSize.x;
+                // Rotation = Mathf.Lerp(SourceRotation, TargetRotation, c);
             }
 
-            TargetPosition = newTargetPosition;
-            MoveState = State.Stopped;
             World.UpdateTilePosition(this);
             EndMoveCallback();
         }
@@ -435,10 +454,12 @@ namespace Tiles
 
         public override void _Process(float delta)
         {
-            float weight = _currentTick / (float)StepTicks;
-            Position = _sourcePosition.LinearInterpolate(_targetPosition, weight);
-            Rotation = Mathf.Lerp(_sourceRotation, _targetRotation, weight);
-            _currentTick = Mathf.Clamp(_currentTick + 1, 0, StepTicks);
+            // float weight = _currentTick / (float)StepTicks;
+            // Position = _sourcePosition.LinearInterpolate(_targetPosition, weight);
+            // Rotation = Mathf.Lerp(_sourceRotation, _targetRotation, weight);
+            // _currentTick = Mathf.Clamp(_currentTick + 1, 0, StepTicks);
+
+            Update();
 
             if (WillExplodeAtTick == World.GameTicks)
             {

@@ -6,6 +6,7 @@ using System.Linq;
 
 public class TestLevel : Node2D
 {
+    [Export] public bool StartPaused;
     [Export] public int GameSpeed = 10;
 
     private List<Level> _levels;
@@ -43,7 +44,8 @@ public class TestLevel : Node2D
         _tileWorld = new TileWorld
         {
             TileMap = tileMap,
-            GameSpeed = GameSpeed
+            GameSpeed = GameSpeed,
+            StartPaused = StartPaused
         };
         AddChild(_tileWorld);
     }

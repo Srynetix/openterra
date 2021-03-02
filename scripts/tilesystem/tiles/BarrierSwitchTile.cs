@@ -45,7 +45,7 @@ namespace Tiles
                 }
                 else
                 {
-                    fgTile.MoveTowards(World.GetInvertedDirection(fgTile.NextDirection));
+                    fgTile.MoveTowards(TileUtils.GetInvertedDirection(fgTile.NextDirection));
                 }
             }
         }

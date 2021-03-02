@@ -9,7 +9,7 @@ namespace Tiles
             Player = true;
             Warpable = true;
             CanExplode = true;
-            Priority = 2;
+            Priority = 3;
         }
 
         public override void _Ready()
@@ -47,7 +47,7 @@ namespace Tiles
         {
             if (World.PlayerInput.Bomb.Pressed)
             {
-                var invDir = GetInvertedDirection();
+                var invDir = GetInvertedNextDirection();
                 if (invDir != Direction.None)
                 {
                     var tPos = World.GetNeighborPosition(this, invDir);
@@ -65,7 +65,9 @@ namespace Tiles
 
         public override void Step()
         {
-            base.Step();
+            if (MoveState == State.Moving) {
+                return;
+            }
 
             Direction playerDirection = Direction.None;
             if (World.PlayerInput.Right.Pressed)
@@ -118,12 +120,12 @@ namespace Tiles
                             }
                             else
                             {
-                                WillWarpTo(neighbor, World.GetInvertedDirection(playerDirection));
+                                WillWarpTo(neighbor, TileUtils.GetInvertedDirection(playerDirection));
                             }
                         }
                         else
                         {
-                            MoveTowards(playerDirection);
+                            WillMoveTowards(playerDirection);
                         }
                     }
                 }

@@ -14,7 +14,7 @@ namespace Tiles
             Movable = true;
             CanRotate = true;
             RollDirection = RollDirectionEnum.Both;
-            Priority = 1;
+            Priority = 2;
         }
 
         protected bool CanGoUp()
@@ -60,14 +60,19 @@ namespace Tiles
         {
             base.Step();
 
-            if (TrappedInSand)
-            {
-                _fallTicks = 0;
-                Stop();
+            if (MoveState == State.Moving) {
+                // Moving
+                Updated = true;
                 return;
             }
 
-            // Check collisions
+            // if (TrappedInSand)
+            // {
+            //     _fallTicks = 0;
+            //     Stop();
+            //     return;
+            // }
+
             var canGoDown = CanGoDown();
 
             if (canGoDown)
@@ -75,26 +80,26 @@ namespace Tiles
                 _fallTicks++;
                 WillMoveTowards(Direction.Down);
             }
-            else if (!canGoDown && _fallTicks > 0)
-            {
-                // Hit
-                if (!IsLightweight)
-                {
-                    var bottomTile = GetNeighborAtDirection(Direction.Down);
-                    if (bottomTile.CanExplode)
-                    {
-                        bottomTile.Explode();
-                    }
-                    else if (IsHeavy && bottomTile.IsFragile)
-                    {
-                        // Crush
-                        bottomTile.Pick();
-                        WillMoveTowards(Direction.Down);
-                    }
-                }
+            // else if (!canGoDown && _fallTicks > 0)
+            // {
+            //     // Hit
+            //     // if (!IsLightweight)
+            //     // {
+            //     //     var bottomTile = GetNeighborAtDirection(Direction.Down);
+            //     //     if (bottomTile.CanExplode)
+            //     //     {
+            //     //         bottomTile.Explode();
+            //     //     }
+            //     //     else if (IsHeavy && bottomTile.IsFragile)
+            //     //     {
+            //     //         // Crush
+            //     //         bottomTile.Pick();
+            //     //         WillMoveTowards(Direction.Down);
+            //     //     }
+            //     // }
 
-                _fallTicks = 0;
-            }
+            //     _fallTicks = 0;
+            // }
             else if (CanRollLeft())
             {
                 _fallTicks = 0;
@@ -109,7 +114,55 @@ namespace Tiles
             {
                 _fallTicks = 0;
                 Stop();
+                // StateMachineIdx = (StateMachineIdx + 1) % 3;
             }
+
+            // Check collisions
+            // var canGoDown = CanGoDown();
+
+            // if (StateMachineIdx == 0 && CanRollLeft())
+            // {
+            //     _fallTicks = 0;
+            //     WillMoveTowards(Direction.Left);
+            //     StateMachineIdx = 0;
+            // }
+            // else if (StateMachineIdx == 1 && CanRollRight())
+            // {
+            //     _fallTicks = 0;
+            //     WillMoveTowards(Direction.Right);
+            //     StateMachineIdx = 0;
+            // }
+            // else if (StateMachineIdx == 2 && canGoDown)
+            // {
+            //     _fallTicks++;
+            //     WillMoveTowards(Direction.Down);
+            // }
+            // else if (StateMachineIdx == 2 && !canGoDown && _fallTicks > 0)
+            // {
+            //     // Hit
+            //     if (!IsLightweight)
+            //     {
+            //         var bottomTile = GetNeighborAtDirection(Direction.Down);
+            //         if (bottomTile.CanExplode)
+            //         {
+            //             bottomTile.Explode();
+            //         }
+            //         else if (IsHeavy && bottomTile.IsFragile)
+            //         {
+            //             // Crush
+            //             bottomTile.Pick();
+            //             WillMoveTowards(Direction.Down);
+            //         }
+            //     }
+
+            //     _fallTicks = 0;
+            // }
+            // else
+            // {
+            //     _fallTicks = 0;
+            //     Stop();
+            //     StateMachineIdx = (StateMachineIdx + 1) % 3;
+            // }
         }
     }
 }

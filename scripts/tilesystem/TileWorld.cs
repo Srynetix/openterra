@@ -10,6 +10,7 @@ namespace Tiles
 
         public Level TileMap;
         public Node2D TileContainer;
+        public bool StartPaused;
 
         public int GameSpeed { set; get; } = 20;
 
@@ -153,6 +154,10 @@ namespace Tiles
 
             // Manual gems update
             OnGemsUpdated(0);
+
+            if (StartPaused) {
+                Running = false;
+            }
         }
 
         private void UnsetTileAtPosition(Tile tile, Vector2 pos)
@@ -179,7 +184,7 @@ namespace Tiles
 
             var layer = tile.TileLayer;
             var tTile = _tiles[layer][y, x];
-            if (tTile != null)
+            if (tTile != null && tTile != tile)
             {
                 GD.PrintErr("Setting tile in a non-empty space ", pos, " : Setting ", tile.Name, ", found ", tTile.Name);
             }
@@ -298,12 +303,17 @@ namespace Tiles
         {
             // Use previous index
             var curPos = GetTileCurrentGridPosition(tile);
+            var tgtPos = GetTargetTilePosition(tile);
             var lastPos = _tilesIndex[tile];
             if (lastPos != curPos)
             {
                 UnsetTileAtPosition(tile, lastPos);
                 SetTileAtPosition(tile, curPos);
                 _tilesIndex[tile] = curPos;
+            }
+
+            if (tgtPos != curPos) {
+                SetTileAtPosition(tile, tgtPos);
             }
         }
 
@@ -349,15 +359,16 @@ namespace Tiles
             cellNode.Type = tileName;
             cellNode.Position = (cellPosition * TileMap.CellSize) + (TileMap.CellSize / 2);
             cellNode.StepTicks = GameSpeed;
-            cellNode.TargetRotation = cellNode.Rotation;
             cellNode.TargetPosition = cellNode.Position;
+            cellNode.TargetRotation = 0;
 
             var cellSprite = new Sprite
             {
                 Name = "Sprite",
                 Texture = tex,
                 RegionEnabled = true,
-                RegionRect = tileRect
+                RegionRect = tileRect,
+                ShowBehindParent = true
             };
             cellNode.AddChild(cellSprite);
             TileContainer.AddChild(cellNode);
@@ -397,17 +408,6 @@ namespace Tiles
             }
         }
 
-        private void ApplyMoveOnTiles(List<Tile> tiles)
-        {
-            foreach (Tile tile in tiles)
-            {
-                if (tile.MoveState == State.WillMove && !tile.Destroyed)
-                {
-                    tile.Move();
-                }
-            }
-        }
-
         private void OnGemsUpdated(int gems)
         {
             // Exits check
@@ -428,6 +428,12 @@ namespace Tiles
         {
             foreach (Tile tile in tiles)
             {
+                if (!tile.Moved && (tile.MoveState == State.Moving || tile.MoveState == State.WillMove) && !tile.Destroyed)
+                {
+                    tile.Move();
+                    tile.Moved = true;
+                }
+
                 if (!tile.Updated && !tile.Destroyed)
                 {
                     if (tile.PreStep()) tile.Step();
@@ -442,7 +448,8 @@ namespace Tiles
 
             for (int j = (int)_gridSize.y - 1; j >= 0; --j)
             {
-                for (int i = 0; i < _gridSize.x; ++i)
+                // for (int i = 0; i < _gridSize.x; ++i)
+                for (int i = (int)_gridSize.x - 1; i >= 0; --i)
                 {
                     var tile = tiles[j, i];
                     if (tile != null)
@@ -467,6 +474,8 @@ namespace Tiles
 
         private void GameStep()
         {
+            // GD.Print("*** STEP ***");
+
             var orderedBgTiles = OrderTilesByPriority(_tiles[TileLayerEnum.Background]);
             var orderedMdTiles = OrderTilesByPriority(_tiles[TileLayerEnum.Middle]);
             var orderedFgTiles = OrderTilesByPriority(_tiles[TileLayerEnum.Foreground]);
@@ -474,12 +483,10 @@ namespace Tiles
             ResetTickOnTiles(orderedBgTiles);
             ResetTickOnTiles(orderedMdTiles);
             ResetTickOnTiles(orderedFgTiles);
+
             ApplyStepOnTiles(orderedBgTiles);
             ApplyStepOnTiles(orderedMdTiles);
             ApplyStepOnTiles(orderedFgTiles);
-            ApplyMoveOnTiles(orderedBgTiles);
-            ApplyMoveOnTiles(orderedMdTiles);
-            ApplyMoveOnTiles(orderedFgTiles);
         }
 
         public CollisionStatus GetTileCollisions(Tile current)
@@ -509,8 +516,34 @@ namespace Tiles
 
         public Vector2 GetTileCurrentGridPosition(Tile current)
         {
-            var pos = current.TargetPosition;
-            return TileMap.WorldToMap(pos);
+            var pos = current.Position;
+            var dir = current.NextDirection;
+            var ipos = TileMap.WorldToMap(pos);
+            var cpos = TileMap.MapToWorld(ipos);
+
+            var offset = pos - cpos;
+
+            if (offset.x == 32 && dir == Direction.Right) {
+                ipos.x += 1;
+            }
+
+            if (offset.x == 0 && dir == Direction.Left) {
+                ipos.x -= 1;
+            }
+
+            if (offset.y == 0 && dir == Direction.Up) {
+                ipos.y -= 1;
+            }
+
+            if (offset.y == 32 && dir == Direction.Down) {
+                ipos.y += 1;
+            }
+
+            return ipos;
+        }
+
+        public Vector2 GetTargetTilePosition(Tile current) {
+            return TileMap.WorldToMap(current.TargetPosition);
         }
 
         public Tile GetNeighborTile(Tile current, Direction direction, TilePickEnum pickEnum = TilePickEnum.ForegroundFirst)
@@ -520,8 +553,7 @@ namespace Tiles
 
         public Vector2 GetNeighborPosition(Tile current, Direction direction)
         {
-            var pos = current.TargetPosition;
-            return TileMap.WorldToMap(pos) + GetDirectionVector(direction);
+            return GetTileCurrentGridPosition(current) + TileUtils.GetDirectionVector(direction);
         }
 
         public Tile GetTileAtGridPosition(Vector2 gridPosition, TilePickEnum pickEnum = TilePickEnum.ForegroundFirst)
@@ -536,7 +568,6 @@ namespace Tiles
             {
                 var tile = GetTileAtGridPositionAtLayer(gridPosition, TileLayerEnum.Middle);
                 if (tile != null) return tile;
-
             }
 
             if (pickEnum != TilePickEnum.ForegroundOnly && pickEnum != TilePickEnum.MiddleOnly)
@@ -575,8 +606,15 @@ namespace Tiles
         public void DebugStepForward()
         {
             Running = false;
-            GameStep();
-            _gameTicks++;
+            if (_gameTicks == 0) {
+                GameStep();
+                _gameTicks++;
+            } else {
+                for (int i = 0; i < 4; ++i) {
+                    GameStep();
+                    _gameTicks++;
+                }
+            }
         }
 
         public void DebugToggleRun()
@@ -595,38 +633,6 @@ namespace Tiles
         public void RestartLevel()
         {
             GetTree().ReloadCurrentScene();
-        }
-
-        public Vector2 GetDirectionVector(Direction direction)
-        {
-            return direction switch
-            {
-                Direction.Left => new Vector2(-1, 0),
-                Direction.Right => new Vector2(1, 0),
-                Direction.Up => new Vector2(0, -1),
-                Direction.Down => new Vector2(0, 1),
-                Direction.UpLeft => new Vector2(-1, -1),
-                Direction.UpRight => new Vector2(1, -1),
-                Direction.DownLeft => new Vector2(-1, 1),
-                Direction.DownRight => new Vector2(1, 1),
-                _ => new Vector2(0, 0),
-            };
-        }
-
-        public Direction GetInvertedDirection(Direction direction)
-        {
-            return direction switch
-            {
-                Direction.Left => Direction.Right,
-                Direction.Right => Direction.Left,
-                Direction.Up => Direction.Down,
-                Direction.Down => Direction.Up,
-                Direction.UpLeft => Direction.DownRight,
-                Direction.UpRight => Direction.DownLeft,
-                Direction.DownLeft => Direction.UpRight,
-                Direction.DownRight => Direction.UpLeft,
-                _ => Direction.None,
-            };
         }
 
         public override void _PhysicsProcess(float delta)
@@ -653,18 +659,30 @@ namespace Tiles
                 DebugToggleRun();
             }
 
-            if (Running && _physicsTicks % GameSpeed == 0)
-            {
-                GameStep();
-                _gameTicks++;
+            if (Running) {
+                for (int i = 0; i < 2; ++i) {
+                    GameStep();
+                    _gameTicks++;
+                }
 
-                // One second each 4 ticks
-                if (_gameTicks % 8 == 0)
-                {
+                if (_gameTicks % 120 == 0) {
                     _elapsedTime++;
                     EmitSignal(nameof(TimeUpdated), _elapsedTime);
                 }
             }
+
+            // if (Running && _physicsTicks % GameSpeed == 0)
+            // {
+            //     GameStep();
+            //     _gameTicks++;
+
+            //     // One second each 4 ticks
+            //     if (_gameTicks % 8 == 0)
+            //     {
+            //         _elapsedTime++;
+            //         EmitSignal(nameof(TimeUpdated), _elapsedTime);
+            //     }
+            // }
         }
     }
 }
